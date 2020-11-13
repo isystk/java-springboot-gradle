@@ -113,9 +113,15 @@ $ ./gradlew business::flywayInfo
 #### アプリケーションの起動
 
 ```bash
-$ cd /path/to/kotlin-springboot-sample
-# bootrun web-admin application
+$ cd /path/to/java-springboot-gradle
+# bootrun admin application
 $ ./gradlew web-admin::bootRun
+# bootrun front application
+$ ./gradlew web-front::bootRun
+$ # bootrun batch application
+$ ./gradlew batch::bootRun -Pargs=--job=solrRegistJob
+```
+
 ```
 
 #### 接続先情報

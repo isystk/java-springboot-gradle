@@ -21,25 +21,18 @@ dependencies {
 
   /* spring */
   implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
+//  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
   /* webjars */
-  implementation "org.webjars:webjars-locator:$webjarLocatorVersion"
   implementation "org.webjars:jquery:$jqueryVersion"
   implementation "org.webjars:vue:$webjarVueVersion"
   implementation "org.webjars.npm:lodash:$webjarLodashVersion"
   implementation "org.webjars.npm:axios:$webjarAxiosVersion"
-  /*Barcode*/
-  implementation "com.google.zxing:core:$zxingVersion"
-  implementation "com.google.zxing:javase:$zxingVersion"
-
-  /* math3 */
-  implementation("org.apache.commons:commons-math3:${math3Version}")
 }
 
 test {
   if (System.properties['test.profile'] == 'ci_test') {
-    exclude 'com/isystk/sample/admin/adapter/infra/repository/**'
-    exclude 'com/isystk/sample/admin/adapter/infra/queryservice/**'
+    exclude 'com/isystk/sample/front/adapter/infra/repository/**'
+    exclude 'com/isystk/sample/front/adapter/infra/queryservice/**'
   }
 
   reports {

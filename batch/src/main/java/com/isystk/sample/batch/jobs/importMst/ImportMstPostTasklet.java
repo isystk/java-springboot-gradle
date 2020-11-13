@@ -42,7 +42,7 @@ public class ImportMstPostTasklet extends BaseTasklet<ImportMstPostDto> {
 
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws IOException {
-		val status = super.execute(contribution, chunkContext);
+		RepeatStatus status = super.execute(contribution, chunkContext);
 
 		val context = BatchContextHolder.getContext();
 		val errors = getErrors(context);

@@ -1,0 +1,50 @@
+apply plugin: "org.springframework.boot"
+
+bootJar {
+  launchScript()
+}
+
+bootRun {
+  // プロジェクトプロパティを引数として渡す
+  if (project.hasProperty("args")) {
+    args project.args.split(",")
+  }
+
+  // thymeleafの反映もホットリロードさせる
+  sourceResources sourceSets.main
+}
+
+dependencies {
+
+  implementation project(":business")
+  implementation project(":web")
+
+  /* spring */
+  implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
+  /* webjars */
+  implementation "org.webjars:webjars-locator:$webjarLocatorVersion"
+  implementation "org.webjars:jquery:$jqueryVersion"
+  implementation "org.webjars:vue:$webjarVueVersion"
+  implementation "org.webjars.npm:lodash:$webjarLodashVersion"
+  implementation "org.webjars.npm:axios:$webjarAxiosVersion"
+  /*Barcode*/
+  implementation "com.google.zxing:core:$zxingVersion"
+  implementation "com.google.zxing:javase:$zxingVersion"
+
+  /* math3 */
+  implementation("org.apache.commons:commons-math3:${math3Version}")
+}
+
+test {
+  if (System.properties['test.profile'] == 'ci_test') {
+    exclude 'com/isystk/sample/admin/adapter/infra/repository/**'
+    exclude 'com/isystk/sample/admin/adapter/infra/queryservice/**'
+  }
+
+  reports {
+    junitXml.enabled = false
+    html.enabled = false
+  }
+}
+

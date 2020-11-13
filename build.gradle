@@ -1,0 +1,255 @@
+buildscript {
+  repositories {
+    mavenCentral()
+    jcenter()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+    classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+    classpath("mysql:mysql-connector-java:${mysqlJdbcVersion}")
+    classpath("com.avast.gradle:gradle-docker-compose-plugin:${dockerComposePluginVersion}")
+    classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${detektVersion}")
+    classpath("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${jibPluginVersion}")
+  }
+}
+
+plugins {
+  id "org.flywaydb.flyway" version "${flywayVersion}"
+  id "io.gitlab.arturbosch.detekt" version "${detektVersion}"
+  id "org.seasar.doma.compile" version "${domaCompilerPluginVersion}"
+}
+
+subprojects {
+  apply plugin: "kotlin"
+  apply plugin: "kotlin-spring"
+//  apply plugin: "kotlin-kapt"
+  apply plugin: "io.spring.dependency-management"
+  apply plugin: "jacoco"
+  apply plugin: "com.google.cloud.tools.jib"
+  apply plugin: "org.flywaydb.flyway"
+  apply plugin: "org.seasar.doma.compile"
+
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+
+  compileKotlin {
+    kotlinOptions {
+      freeCompilerArgs = ["-Xjsr305=strict"]
+      jvmTarget = "11"
+    }
+  }
+
+  compileTestKotlin {
+    kotlinOptions {
+      freeCompilerArgs = ["-Xjsr305=strict"]
+      jvmTarget = "11"
+    }
+  }
+  /* enable junit 5 */
+  test {
+    useJUnitPlatform()
+  }
+
+  /* Docker Image */
+  jib {
+    from {
+      image = "adoptopenjdk/openjdk11:alpine-slim"
+    }
+    container {
+      creationTime = "USE_CURRENT_TIMESTAMP"
+      jvmFlags = ['-Duser.timezone=GMT+09']
+      ports = ports = ['8080', '8081']
+    }
+  }
+
+//  kapt {
+//    javacOptions {
+//      // Increase the max count of errors from annotation processors.
+//      // Default is 100.
+//      option("-Xmaxerrs", 500)
+//    }
+//  }
+
+  /* flyway settings */
+  apply from: "$rootDir/datasource.gradle"
+  flyway {
+    url = datasource.url
+    user = datasource.user
+    password = datasource.password
+    placeholderReplacement = false
+    locations = ["filesystem:src/main/resources/db/createTable", "filesystem:src/main/resources/db/insertData"]
+  }
+  /* flyway task */
+  flywayMigrate
+
+  repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://jitpack.io' }
+  }
+
+  dependencyManagement {
+    imports {
+      mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+      mavenBom("com.amazonaws:aws-xray-recorder-sdk-bom:${awsXRayVersion}")
+    }
+  }
+
+  dependencies {
+    /* kotlin */
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+    /* spring */
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutVersion}")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.data:spring-data-elasticsearch")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.session:spring-session-data-redis")
+
+    /* solr */
+    implementation("org.springframework.boot:spring-boot-starter-data-solr")
+
+    /* spring security */
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+
+    /* mysql */
+    runtimeOnly("mysql:mysql-connector-java")
+
+    /* jedis */
+    implementation("redis.clients:jedis:${jedisVersion}")
+
+    /* javax.mail */
+    implementation("javax.mail:mail:1.4")
+
+    /* Doma2 */
+    implementation("org.seasar.doma.boot:doma-spring-boot-starter:$springBootDomaVersion")
+    implementation("org.seasar.doma:doma-kotlin:${domaVersion}")
+//    kapt("org.seasar.doma:doma-processor:${domaVersion}")
+    annotationProcessor("org.seasar.doma:doma-processor:${domaVersion}")
+
+    /* aws sdk */
+    implementation("com.amazonaws:aws-xray-recorder-sdk-core")
+    implementation("com.amazonaws:aws-xray-recorder-sdk-spring")
+    implementation("com.amazonaws:aws-java-sdk-s3:$awsSdkVersion")
+
+    /*ApacheCommons*/
+    implementation("org.apache.commons:commons-lang3:$commonsLang")
+    implementation("commons-io:commons-io:2.6")
+    implementation("org.apache.commons:commons-pool2:2.5.0")
+    implementation("org.apache.commons:commons-compress:1.20")
+    implementation("commons-collections:commons-collections:3.2.2")
+
+    /* modelmapper */
+    implementation("com.github.jmnarloch:modelmapper-spring-boot-starter:1.0.1")
+
+    /* lombok */
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
+    testCompileOnly 'org.projectlombok:lombok:1.18.16'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    /* google */
+    implementation("com.google.guava:guava:28.2-jre")
+
+    /* thumbnailator */
+    implementation("net.coobird:thumbnailator:0.4.11")
+
+    /* csv */
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:$jacksonVersion")
+
+    /* poi */
+    implementation("org.apache.poi:poi-ooxml:4.1.2")
+
+//    /* pdf */
+//    implementation("net.sf.jasperreports:jasperreports:6.4.1")
+
+    implementation("org.apache.tika:tika-core:1.23")
+
+    /* xml */
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
+
+    /* json */
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
+
+    /* test */
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+      exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+    }
+    testImplementation("org.assertj:assertj-core:${assertJVersion}")
+    testImplementation("org.dbunit:dbunit:${dbunitVersion}")
+    testImplementation("com.github.springtestdbunit:spring-test-dbunit:${dbunitSpringVersion}")
+
+    /* mock */
+    testImplementation("io.mockk:mockk:${mockkVersion}")
+    testImplementation("io.mockk:mockk-common:${mockkVersion}")
+
+    /* ulid */
+    implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:${ulidVersion}")
+
+    /* jwt */
+    compile("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
+    runtime("io.jsonwebtoken:jjwt-impl:${jjwtVersion}")
+    runtime("io.jsonwebtoken:jjwt-jackson:${jjwtVersion}")
+
+    /* KMapper */
+    implementation("com.github.ProjectMapK:KMapper:${kmapperVersion}")
+
+    /* flyway */
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
+  }
+}
+
+/* docker-compose */
+apply plugin: "docker-compose"
+
+dockerCompose {
+  useComposeFiles = ["docker/docker-compose.yml"]
+}
+
+tasks.register("nginx") {
+  dependsOn composeUp
+  dockerCompose {
+    startedServices = ['nginx']
+  }
+}
+tasks.register("mysql") {
+  dependsOn composeUp
+  dockerCompose {
+    startedServices = ['mysql']
+  }
+}
+tasks.register("solr") {
+  dependsOn composeUp
+  dockerCompose {
+    startedServices = ['solr']
+  }
+}
+tasks.register("phpmyadmin") {
+  dependsOn composeUp
+  dockerCompose {
+    startedServices = ['phpmyadmingg']
+  }
+}
+tasks.register("mailhog") {
+  dependsOn composeUp
+  dockerCompose {
+    startedServices = ['mailhog']
+  }
+}
+tasks.register("radis") {
+  dependsOn composeUp
+  dockerCompose {
+    startedServices = ['radis']
+  }
+}
+

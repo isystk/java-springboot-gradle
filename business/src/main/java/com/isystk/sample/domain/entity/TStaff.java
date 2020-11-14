@@ -1,9 +1,17 @@
 package com.isystk.sample.domain.entity;
 
-import com.isystk.sample.domain.dto.common.DomaDtoImpl;
-import org.seasar.doma.*;
-
 import java.time.LocalDateTime;
+import org.seasar.doma.Column;
+import org.seasar.doma.Entity;
+import org.seasar.doma.GeneratedValue;
+import org.seasar.doma.GenerationType;
+import org.seasar.doma.Id;
+import org.seasar.doma.Table;
+import org.seasar.doma.Version;
+import com.isystk.sample.domain.dto.common.DomaDtoImpl;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 
@@ -13,6 +21,8 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "t_staff")
+@Getter
+@Setter
 public class TStaff extends DomaDtoImpl {
 
     /** serialVersionUID */
@@ -69,100 +79,4 @@ public class TStaff extends DomaDtoImpl {
     @Version
     @Column(name = "VERSION")
     Long version;
-
-    public Integer getStaffId() {
-        return this.staffId;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public String getFamilyName() {
-        return this.familyName;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getFamilyNameKana() {
-        return this.familyNameKana;
-    }
-
-    public String getNameKana() {
-        return this.nameKana;
-    }
-
-    public LocalDateTime getLastLoginTime() {
-        return this.lastLoginTime;
-    }
-
-    public LocalDateTime getRegistTime() {
-        return this.registTime;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return this.updateTime;
-    }
-
-    public Boolean getDeleteFlg() {
-        return this.deleteFlg;
-    }
-
-    public Long getVersion() {
-        return this.version;
-    }
-
-    public void setStaffId(Integer staffId) {
-        this.staffId = staffId;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setFamilyName(String familyName) {
-        this.familyName = familyName;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setFamilyNameKana(String familyNameKana) {
-        this.familyNameKana = familyNameKana;
-    }
-
-    public void setNameKana(String nameKana) {
-        this.nameKana = nameKana;
-    }
-
-    public void setLastLoginTime(LocalDateTime lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-    public void setRegistTime(LocalDateTime registTime) {
-        this.registTime = registTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public void setDeleteFlg(Boolean deleteFlg) {
-        this.deleteFlg = deleteFlg;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
 }

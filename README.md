@@ -76,16 +76,6 @@ SpringBoot を利用したマルチモジュールのボイラープレートで
 
 ## 💬 Usage
 
-#### InteliJ IDEA のインストール
-```bash
-$ brew cask install intellij-idea-ce
-```
-
-１．必要なプラグインの追加
-Lombok
-
-
-
 #### Gradleのタスク一覧
 
 ```bash
@@ -114,10 +104,13 @@ $ ./gradlew business::flywayInfo
 
 ```bash
 $ cd /path/to/java-springboot-gradle
+
 # bootrun admin application
 $ ./gradlew web-admin::bootRun
+
 # bootrun front application
 $ ./gradlew web-front::bootRun
+
 $ # bootrun batch application
 $ ./gradlew batch::bootRun -Pargs=--job=solrRegistJob
 ```
@@ -125,7 +118,9 @@ $ ./gradlew batch::bootRun -Pargs=--job=solrRegistJob
 ```
 
 #### 接続先情報
-##### テストユーザー test@sample.com / password
+
+##### ログインユーザー
+test@sample.com / password
 
 | 接続先| URL|
 | :-----| :---------------------------------------|
@@ -142,33 +137,25 @@ $ ./gradlew batch::bootRun -Pargs=--job=solrRegistJob
 
 #### ソースのダウンロード
 ```bash
-$ git clone https://github.com/isystk/java-springboot-boilerplate.git
+$ git clone https://github.com/isystk/java-springboot-gradle.git
 ```
 
-#### 必要な設定（Eclipseの場合）
+#### InteliJ IDEA のインストール
+
+```bash
+$ brew cask install intellij-idea-ce
+```
 
 - Lombok pluginをインストールする。
-https://qiita.com/ponsuke0531/items/c2dac01e444f510310ae
+「Preferences - Plugins - Marketplace」から、"Lombok"をインストール後、InteliJを再起動する
 
 - Annotation Processingを有効にする。
-https://doma.readthedocs.io/en/2.5.0/annotation-processing/#eclipse
-
-businessプロジェクトの「プロパティ」－「Javaコンパイラ」－「注釈処理」を有効にする
-ファクトリーパスで「JARの追加」を選択後に以下のJARを追加する
-docker\mysql\doma-gen\lib\doma-2.27.0.jar
-"business\target\classes\com\isystk\sample\domain\dao" 以下に "XXImpl.class"が追加されていれば成功です。
-
-#### Docker APIの有効化
-
-##### Windows10の場合
-* Settings > General > `Expose daemon on tcp://...`をONにする。
-
-##### MacOSXの場合
-* デフォルトで`unix:///var/run/docker.sock`に接続できる。
+「Preferences - Build,Execution,Deployment - Compiler - Annotation Processors」から、
+”Enable annotation processing” を有効にする
 
 ## 🔧 Contribution
 
-1. Fork it ( http://github.com/isystk/java-springboot-boilerplate/fork )
+1. Fork it ( http://github.com/isystk/java-springboot-gradle/fork )
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
@@ -198,7 +185,7 @@ docker\mysql\doma-gen\lib\doma-2.27.0.jar
 
 ## 🎫 Licence
 
-[MIT](https://github.com/isystk/java-springboot-boilerplate/blob/master/LICENSE)
+[MIT](https://github.com/isystk/java-springboot-gradle/blob/master/LICENSE)
 
 ## 👀 Author
 

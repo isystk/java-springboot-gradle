@@ -1,9 +1,17 @@
 package com.isystk.sample.domain.entity;
 
-import com.isystk.sample.domain.dto.common.DomaDtoImpl;
-import org.seasar.doma.*;
-
 import java.time.LocalDateTime;
+import org.seasar.doma.Column;
+import org.seasar.doma.Entity;
+import org.seasar.doma.GeneratedValue;
+import org.seasar.doma.GenerationType;
+import org.seasar.doma.Id;
+import org.seasar.doma.Table;
+import org.seasar.doma.Version;
+import com.isystk.sample.domain.dto.common.DomaDtoImpl;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 
@@ -13,6 +21,8 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "m_mail_template")
+@Getter
+@Setter
 public class MMailTemplate extends DomaDtoImpl {
 
     /** serialVersionUID */
@@ -53,68 +63,4 @@ public class MMailTemplate extends DomaDtoImpl {
     @Version
     @Column(name = "VERSION")
     Long version;
-
-    public Integer getMailTemplateId() {
-        return this.mailTemplateId;
-    }
-
-    public Integer getTemplateDiv() {
-        return this.templateDiv;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getText() {
-        return this.text;
-    }
-
-    public LocalDateTime getRegistTime() {
-        return this.registTime;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return this.updateTime;
-    }
-
-    public Boolean getDeleteFlg() {
-        return this.deleteFlg;
-    }
-
-    public Long getVersion() {
-        return this.version;
-    }
-
-    public void setMailTemplateId(Integer mailTemplateId) {
-        this.mailTemplateId = mailTemplateId;
-    }
-
-    public void setTemplateDiv(Integer templateDiv) {
-        this.templateDiv = templateDiv;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setRegistTime(LocalDateTime registTime) {
-        this.registTime = registTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public void setDeleteFlg(Boolean deleteFlg) {
-        this.deleteFlg = deleteFlg;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
 }

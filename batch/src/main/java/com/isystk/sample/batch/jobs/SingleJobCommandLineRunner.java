@@ -96,8 +96,6 @@ public class SingleJobCommandLineRunner implements CommandLineRunner, Applicatio
 	 */
 	protected JobParameters getJobParameters(String[] args) {
 
-		System.out.println("--hoge----:" + args[0]);
-
 		val props = StringUtils.splitArrayElementsIntoProperties(args, "=");
 
 		if (log.isDebugEnabled() && props != null) {

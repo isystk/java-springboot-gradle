@@ -113,6 +113,7 @@ docs/_build/
 
 # nginx
 docker/nginx/logs
+docker/nginx/public/thumb/*
 
 # mysql
 docker/mysql/data
@@ -123,8 +124,11 @@ docker/solr/logs
 docker/solr/data/mycore/data
 docker/solr/data/post/data
 
-# thumb
-docker/nginx/public/thumb/*
+# elasticsearch
+docker/elasticsearch/data
+
+# s3
+docker/s3/data
 
 .DS_Store
 .history

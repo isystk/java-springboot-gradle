@@ -1,7 +1,6 @@
 # 共通の設定を定義する
 spring:
   profiles:
-    include: common
     # デフォルトを明示的に指定する
     # ローカル環境以外は環境変数でプロファイルを切り替える
     default: local

@@ -27,7 +27,9 @@ SpringBoot を利用したマルチモジュールのボイラープレートで
 │   │   │   └── thumb （アップロードした写真）
 │   │   ├── logs （nginxのログ）
 │   │   └── ssl （SSL自己証明書）
-│   ├── phpmyadmin （DB管理画面）
+│   ├── phpmyadmin （DB管理コンソール）
+│   ├── s3（Minio）
+│   │   └── data (オブジェクトストレージ)
 │   ├── solr （検索エンジン）
 │   │   ├── data (solrのデータファイル)
 │   │   └── logs （solrのログ）
@@ -39,7 +41,7 @@ SpringBoot を利用したマルチモジュールのボイラープレートで
 ├── web-admin (管理画面)
 ├── web-front (フロント画面)
 ├── dc.sh （Dockerの起動用スクリプト）
-└── pom.xml （Maven用設定ファイル）
+└── build.gradle （Gradle用設定ファイル）
 ```
 
 ## 🖊️ VS. 
@@ -51,13 +53,15 @@ SpringBoot を利用したマルチモジュールのボイラープレートで
     - Solr 8.4　・・・　フロント表示はSolrからデータ取得表示、また、バッチでDB取得したデータをインデックス生成させています。
     - phpMyAdmin　・・・　起動したMySQLのデータを参照・編集するためのツールです。
     - MailHog 　・・・　ダミーのSMTPサーバーです。送信したメールをブラウザで閲覧することが可能です。実際にはメールは送信されないので開発時の誤送信してしまう心配がありません。
+    - Minio 　・・・　S3に完全互換性のあるオブジェクトストレージです。アップロードした画像の保存先として利用しています。
+    - Redis 　・・・　永続化可能なインメモリデータベースです。DBから取得したデータのキャッシュとして利用しています。
 - アプリケーション
     - SpringBoot 2.2.5
     - Spring Data Solr
     - Spring Batch
     - Doma2
     - AdminLTE3
-    - Vuejs2
+    - ReactJS
 
 ## 🌐 Demo
 
@@ -83,7 +87,7 @@ $ ./gradlew tasks
 ```
 
 #### Dockerの起動
-NginX、MySQL、Solrなどのサーバーを立ち上げる。
+NginX、MySQL、Solr、S3などのサーバーを立ち上げる。
 
 ```bash
 $ ./gradlew composeUp
@@ -148,6 +152,7 @@ test@sample.com / password
 | phpMyAdmin| http://localhost:8888/|
 | Solr| http://localhost:8983/solr/|
 | MailHog| http://localhost:8025/|
+| Minio| http://localhost:9090/|
 
 ## 📦 Install
 

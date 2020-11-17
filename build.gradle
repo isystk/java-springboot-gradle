@@ -33,19 +33,19 @@ subprojects {
   sourceCompatibility = JavaVersion.VERSION_11
   targetCompatibility = JavaVersion.VERSION_11
 
-  compileKotlin {
-    kotlinOptions {
-      freeCompilerArgs = ["-Xjsr305=strict"]
-      jvmTarget = "11"
-    }
-  }
-
-  compileTestKotlin {
-    kotlinOptions {
-      freeCompilerArgs = ["-Xjsr305=strict"]
-      jvmTarget = "11"
-    }
-  }
+//  compileKotlin {
+//    kotlinOptions {
+//      freeCompilerArgs = ["-Xjsr305=strict"]
+//      jvmTarget = "11"
+//    }
+//  }
+//
+//  compileTestKotlin {
+//    kotlinOptions {
+//      freeCompilerArgs = ["-Xjsr305=strict"]
+//      jvmTarget = "11"
+//    }
+//  }
   /* enable junit 5 */
   test {
     useJUnitPlatform()
@@ -97,11 +97,11 @@ subprojects {
   }
 
   dependencies {
-    /* kotlin */
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+//    /* kotlin */
+//    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+//    implementation("org.jetbrains.kotlin:kotlin-reflect")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
     /* spring */
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -250,6 +250,12 @@ tasks.register("radis") {
   dependsOn composeUp
   dockerCompose {
     startedServices = ['radis']
+  }
+}
+tasks.register("s3") {
+  dependsOn composeUp
+  dockerCompose {
+    startedServices = ['s3']
   }
 }
 

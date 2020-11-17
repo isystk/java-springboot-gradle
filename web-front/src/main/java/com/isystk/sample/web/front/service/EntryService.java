@@ -82,7 +82,7 @@ public class EntryService extends BaseTransactionalService {
 		Map<String, Object> objects = new HashMap<>();
 		objects.put("dto", dto);
 		val body = sendMailHelper.getMailBody(templateBody, objects);
-		sendMailHelper.sendMail(fromAddress, new String[] { tUser.getEmail() }, subject, body);
+		sendMailHelper.sendMail(fromAddress, tUser.getEmail(), subject, body);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class EntryService extends BaseTransactionalService {
 		Map<String, Object> objects = new HashMap<>();
 		objects.put("dto", dto);
 		val body = sendMailHelper.getMailBody(templateBody, objects);
-		sendMailHelper.sendMail(fromAddress, new String[] { tUser.getEmail() }, subject, body);
+		sendMailHelper.sendMail(fromAddress, tUser.getEmail(), subject, body);
 
 		// ワンタイムキーを削除
 		tUserOnetimeValidDao.delete(tUserOnetimeValid);

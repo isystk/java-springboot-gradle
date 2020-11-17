@@ -23,21 +23,9 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
 //  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
   /* webjars */
-  implementation "org.webjars:jquery:$jqueryVersion"
-  implementation "org.webjars:vue:$webjarVueVersion"
-  implementation "org.webjars.npm:lodash:$webjarLodashVersion"
-  implementation "org.webjars.npm:axios:$webjarAxiosVersion"
-}
-
-test {
-  if (System.properties['test.profile'] == 'ci_test') {
-    exclude 'com/isystk/sample/front/adapter/infra/repository/**'
-    exclude 'com/isystk/sample/front/adapter/infra/queryservice/**'
-  }
-
-  reports {
-    junitXml.enabled = false
-    html.enabled = false
-  }
+  implementation "org.webjars:jquery:${jqueryVersion}"
+  implementation "org.webjars:vue:${webjarVueVersion}"
+  implementation "org.webjars.npm:lodash:${webjarLodashVersion}"
+  implementation "org.webjars.npm:axios:${webjarAxiosVersion}"
 }
 

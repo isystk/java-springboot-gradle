@@ -23,18 +23,5 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
 //  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
   /* webjars */
-  implementation "org.webjars:AdminLTE:3.0.2"
+  implementation("org.webjars:AdminLTE:${webjarAdminLTEVersion}")
 }
-
-test {
-  if (System.properties['test.profile'] == 'ci_test') {
-    exclude 'com/isystk/sample/admin/adapter/infra/repository/**'
-    exclude 'com/isystk/sample/admin/adapter/infra/queryservice/**'
-  }
-
-  reports {
-    junitXml.enabled = false
-    html.enabled = false
-  }
-}
-

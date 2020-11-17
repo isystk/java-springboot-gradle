@@ -129,7 +129,7 @@ subprojects {
     implementation("redis.clients:jedis:${jedisVersion}")
 
     /* javax.mail */
-    implementation("javax.mail:mail:1.4")
+    implementation("javax.mail:mail:${javaxMailVersion}")
 
     /* Doma2 */
     implementation("org.seasar.doma.boot:doma-spring-boot-starter:$springBootDomaVersion")
@@ -140,43 +140,43 @@ subprojects {
     /* aws sdk */
     implementation("com.amazonaws:aws-xray-recorder-sdk-core")
     implementation("com.amazonaws:aws-xray-recorder-sdk-spring")
-    implementation("com.amazonaws:aws-java-sdk-s3:$awsSdkVersion")
+    implementation("com.amazonaws:aws-java-sdk-s3:${awsSdkVersion}")
 
     /*ApacheCommons*/
-    implementation("org.apache.commons:commons-lang3:$commonsLang")
-    implementation("commons-io:commons-io:2.6")
-    implementation("org.apache.commons:commons-pool2:2.5.0")
-    implementation("org.apache.commons:commons-compress:1.20")
-    implementation("commons-collections:commons-collections:3.2.2")
+    implementation("org.apache.commons:commons-lang3:$commonsLangVersion")
+    implementation("commons-io:commons-io:${commonsIoVersion}")
+    implementation("org.apache.commons:commons-pool2:${commonsPool2Version}")
+    implementation("org.apache.commons:commons-compress:${commonsCompressVersion}")
+    implementation("commons-collections:commons-collections:${commonsCollectionsVersion}")
 
     /* modelmapper */
-    implementation("com.github.jmnarloch:modelmapper-spring-boot-starter:1.0.1")
+    implementation("com.github.jmnarloch:modelmapper-spring-boot-starter:${modelmapperVersion}")
 
     /* lombok */
-    compileOnly("org.projectlombok:lombok:1.18.16")
-    annotationProcessor("org.projectlombok:lombok:1.18.16")
-    testCompileOnly("org.projectlombok:lombok:1.18.16")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.16")
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
 
     /* google */
-    implementation("com.google.guava:guava:28.2-jre")
+    implementation("com.google.guava:guava:${googleGuavaVersion}")
 
     /* thumbnailator */
-    implementation("net.coobird:thumbnailator:0.4.11")
+    implementation("net.coobird:thumbnailator:${thumbnailatorVersion}")
 
     /* csv */
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:$jacksonVersion")
 
     /* poi */
-    implementation("org.apache.poi:poi-ooxml:4.1.2")
+    implementation("org.apache.poi:poi-ooxml:${poiOoxmlVersion}")
 
 //    /* pdf */
-//    implementation("net.sf.jasperreports:jasperreports:6.4.1")
+//    implementation("net.sf.jasperreports:jasperreports:${jasperreportsVersion}")
 
-    implementation("org.apache.tika:tika-core:1.23")
+    implementation("org.apache.tika:tika-core:${apacheTikaVersion}")
 
     /* xml */
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}")
 
     /* json */
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
@@ -205,7 +205,7 @@ subprojects {
     implementation("com.github.ProjectMapK:KMapper:${kmapperVersion}")
 
     /* flyway */
-    implementation("org.flywaydb:flyway-core:$flywayVersion")
+    implementation("org.flywaydb:flyway-core:${flywayVersion}")
   }
 }
 

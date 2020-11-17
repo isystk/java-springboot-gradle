@@ -51,18 +51,6 @@ subprojects {
     useJUnitPlatform()
   }
 
-  /* Docker Image */
-  jib {
-    from {
-      image = "adoptopenjdk/openjdk11:alpine-slim"
-    }
-    container {
-      creationTime = "USE_CURRENT_TIMESTAMP"
-      jvmFlags = ['-Duser.timezone=GMT+09']
-      ports = ports = ['8080', '8081']
-    }
-  }
-
 //  kapt {
 //    javacOptions {
 //      // Increase the max count of errors from annotation processors.

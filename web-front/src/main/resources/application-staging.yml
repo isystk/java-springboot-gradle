@@ -4,7 +4,7 @@ spring:
     - common-staging
 
 server:
-  address: localhost
+  address: stg.isystk.work
 
 ####
 # アプリケーションの設定

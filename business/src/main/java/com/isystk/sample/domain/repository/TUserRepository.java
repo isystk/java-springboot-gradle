@@ -1,9 +1,8 @@
 package com.isystk.sample.domain.repository;
 
-import com.isystk.sample.domain.util.DomaUtils;
-import java.util.stream.Collectors;
+import static com.isystk.sample.domain.util.DomaUtils.createSelectOptions;
+import static java.util.stream.Collectors.toList;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +38,12 @@ public class TUserRepository extends BaseRepository {
 	 * @return
 	 */
 	public Page<TUserRepositoryDto> findAll(TUserCriteria criteria, Pageable pageable) {
-		var options = DomaUtils.createSelectOptions(pageable);
+		var options = createSelectOptions(pageable);
 		// ページングを指定する
 		return pageFactory.create(convertDto(
 				tUserDao.findAll(criteria,
 				options.count(),
-						Collectors.toList()
+				toList()
 			)), pageable, options.getCount());
 	}
 
@@ -67,7 +66,7 @@ public class TUserRepository extends BaseRepository {
 	public TUser create(final TUser inputUser) {
 
 		// 1件登録
-		LocalDateTime time = DateUtils.getNow();
+		val time = DateUtils.getNow();
 
 		inputUser.setRegistTime(time); // 作成日
 		inputUser.setUpdateTime(time); // 更新日
@@ -86,7 +85,7 @@ public class TUserRepository extends BaseRepository {
 	 */
 	public TUser update(final TUser inputUser) {
 		// 1件更新
-		LocalDateTime time = DateUtils.getNow();
+		val time = DateUtils.getNow();
 		inputUser.setUpdateTime(time); // 更新日
 		int updated = tUserDao.update(inputUser);
 
@@ -103,7 +102,7 @@ public class TUserRepository extends BaseRepository {
 	 * @return
 	 */
 	public TUser delete(final Integer id) {
-		TUser user = tUserDao.selectById(id)
+		val user = tUserDao.selectById(id)
 				.orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
 
 		int updated = tUserDao.delete(user);

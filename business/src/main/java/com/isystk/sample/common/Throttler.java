@@ -100,8 +100,8 @@ public class Throttler {
 		}
 
 		protected synchronized TimeSlot next() {
-			long startTime = Math.max(System.currentTimeMillis(), this.startTime + this.duration);
-			TimeSlot slot = new TimeSlot(startTime);
+			val startTime = Math.max(System.currentTimeMillis(), this.startTime + this.duration);
+			val slot = new TimeSlot(startTime);
 			return slot;
 		}
 

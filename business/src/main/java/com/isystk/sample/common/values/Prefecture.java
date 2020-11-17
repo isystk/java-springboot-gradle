@@ -6,6 +6,7 @@ import lombok.Getter;
 /**
  * 都道府県
  */
+@Getter
 @AllArgsConstructor
 public enum Prefecture implements Values {
 
@@ -66,15 +67,7 @@ public enum Prefecture implements Values {
 	private final Integer code;
 	private final String text;
 
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    /**
+	/**
 	 * コードに一致する値を取得します。
 	 * @param code
 	 * @return

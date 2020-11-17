@@ -6,6 +6,7 @@ import lombok.Getter;
 /**
  * メールテンプレート
  */
+@Getter
 @AllArgsConstructor
 public enum MailTemplate implements Values {
 
@@ -21,19 +22,6 @@ public enum MailTemplate implements Values {
 
 	private final Integer code;
 	private final String text;
-
-	public Integer getCode() {
-		return code;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public MailTemplateDiv getDiv() {
-		return div;
-	}
-
 	private final MailTemplateDiv div;
 
 	/**

@@ -14,10 +14,15 @@ public enum Sex implements Values {
 	MAN(2, "男性")
 	;
 
+	private Sex(int code, String text) {
+		this.code = code;
+		this.text = text;
+	}
+
 	private final Integer code;
 	private final String text;
 
-    /**
+	/**
 	 * コードに一致する値を取得します。
 	 * @param code
 	 * @return
@@ -33,5 +38,4 @@ public enum Sex implements Values {
 		}
 		return null;
 	}
-
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 /**
  * メールテンプレート区分
  */
+@Getter
 @AllArgsConstructor
 public enum MailTemplateDiv implements Values {
 
@@ -19,14 +20,6 @@ public enum MailTemplateDiv implements Values {
 
 	private final Integer code;
 	private final String text;
-
-	public Integer getCode() {
-		return code;
-	}
-
-	public String getText() {
-		return text;
-	}
 
 	/**
 	 * コードに一致する値を取得します。

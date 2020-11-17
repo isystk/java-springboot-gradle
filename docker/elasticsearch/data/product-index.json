@@ -1,0 +1,46 @@
+{
+  "settings": {
+    "analysis": {
+      "tokenizer": {
+        "ngram_custom_tokenizer": {
+          "type": "ngram",
+          "min_gram": 2,
+          "max_gram": 2
+        },
+        "edge_ngram_custom_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 13
+        }
+      },
+      "analyzer": {
+        "ngram_custom_analyzer": {
+          "type": "custom",
+          "tokenizer": "ngram_custom_tokenizer"
+        },
+        "edge_ngram_custom_analyzer": {
+          "type": "custom",
+          "tokenizer": "edge_ngram_custom_tokenizer"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "shopId": {
+        "type": "keyword"
+      },
+      "productName": {
+        "type": "text",
+        "analyzer": "ngram_custom_analyzer"
+      },
+      "janCode": {
+        "type": "text",
+        "analyzer": "edge_ngram_custom_analyzer"
+      }
+    }
+  }
+}

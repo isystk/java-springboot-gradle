@@ -2,3 +2,11 @@ spring:
   flyway:
     enabled: true
     locations: classpath:/db/createTable,classpath:/db/insertData
+    placeholderReplacement: false
+
+aws:
+  s3:
+    endpoint-url: "http://localhost:9090"
+    region: "ap-northeast-1"
+    bucket-name: "/www.isystk.work"
+    profile-name: "isystk.localhost"

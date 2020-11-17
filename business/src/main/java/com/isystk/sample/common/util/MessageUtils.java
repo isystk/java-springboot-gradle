@@ -1,19 +1,20 @@
 package com.isystk.sample.common.util;
 
-import org.slf4j.Logger;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class MessageUtils {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(MessageUtils.class);
-    private static MessageSource messageSource;
+	private static MessageSource messageSource;
 
 	@Autowired
 	public void setMessageSource(MessageSource messageSource) {

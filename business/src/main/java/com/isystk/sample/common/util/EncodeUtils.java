@@ -1,18 +1,17 @@
 package com.isystk.sample.common.util;
 
-import org.slf4j.Logger;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * エンコードユーティリティ
  */
+@Slf4j
 public class EncodeUtils {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(EncodeUtils.class);
-
-    /**
+	/**
 	 * UTF-8でエンコードした文字列を返します。
 	 *
 	 * @param filename

@@ -1,9 +1,9 @@
 package com.isystk.sample.common.dto;
 
-import org.seasar.doma.Domain;
-
 import java.io.Serializable;
 import java.util.Objects;
+
+import org.seasar.doma.Domain;
 
 /**
  * ID値を内包するクラス

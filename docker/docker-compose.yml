@@ -5,29 +5,25 @@ services:
   nginx:
     image: isystk/nginx
 #    container_name: isystk-nginx
-    build:
-      context: "./nginx"
-      dockerfile: "Dockerfile"
+    build: ./nginx
     ports:
-     - "80:80"
-     - "443:443"
+     - 80:80
+     - 443:443
     restart: always
     volumes:
-     - "./nginx/conf.d:/etc/nginx/conf.d"
-     - "./nginx/ssl:/etc/nginx/ssl"
-     - "./nginx/logs:/var/log/nginx"
-     - "./nginx/public:/usr/share/nginx/html"
+     - ./nginx/conf.d:/etc/nginx/conf.d
+     - ./nginx/ssl:/etc/nginx/ssl
+     - ./nginx/logs:/var/log/nginx
+     - ./nginx/public:/usr/share/nginx/html
 
   mysql:
     image: isystk/mysql
 #    container_name: isystk-mysql
-    build:
-      context: "./mysql"
-      dockerfile: "Dockerfile"
+    build: ./mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
     ports:
-     - "3306:3306"
+     - 3306:3306
     restart: always
     volumes:
      - ./mysql/conf.d:/etc/mysql/conf.d
@@ -37,11 +33,9 @@ services:
   solr:
     image: isystk/solr
 #    container_name: isystk-solr
-    build:
-      context: "./solr"
-      dockerfile: "Dockerfile"
+    build: ./solr
     ports:
-     - "8983:8983"
+     - 8983:8983
     restart: always
     volumes:
       - ./solr/logs:/var/solr/logs
@@ -51,22 +45,20 @@ services:
       - solr-precreate
       - mycore
 
-
-  phpmyadmin:
-    image: isystk/phpmyadmin
-#    container_name: isystk-phpmyadmin
-    build:
-      context: "./phpmyadmin"
-      dockerfile: "Dockerfile"
-    ports:
-      - 8888:80
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mysql
-      - PMA_USER=root
-      - PMA_PASSWORD=password
-    volumes:
-     - "./phpmyadmin/sessions:/sessions"
+# ↓ 必要な場合はコメントアウトを外してご利用ください
+#  phpmyadmin:
+#    image: isystk/phpmyadmin
+##    container_name: isystk-phpmyadmin
+#    build: ./phpmyadmin
+#    ports:
+#      - 8888:80
+#    environment:
+#      - PMA_ARBITRARY=1
+#      - PMA_HOST=mysql
+#      - PMA_USER=root
+#      - PMA_PASSWORD=password
+#    volumes:
+#     - ./phpmyadmin/sessions:/sessions
  
   mailhog:
     image: mailhog/mailhog:latest
@@ -77,6 +69,36 @@ services:
 
   redis:
     image: redis:latest
-#    container_name: isystk-redis
+    container_name: isystk-redis
     ports:
       - 6379:6379
+
+# ↓ Solrの代わりにElasticSearchを利用する場合はコメントアウトを外してください。
+#  elasticsearch:
+#    build: ./elasticsearch
+##    container_name: isystk-es
+#    environment:
+#      - cluster.name=docker-cluster
+#      - bootstrap.memory_lock=true
+#      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    ports:
+#      - 9200:9200
+#    # esデータの永続化
+#    volumes:
+#      - ./elasticsearch/data:/usr/share/elasticsearch/data
+
+  s3:
+    image: minio/minio:latest
+    container_name: isystk-s3
+    environment:
+      MINIO_ACCESS_KEY: "access_key"
+      MINIO_SECRET_KEY: "secret_key"
+    ports:
+      - 9090:9000 # VSCodeと競合するので9090番ポートを指定
+    command: ["--compat", "server", "/data"]
+    volumes:
+      - ./s3/data:/data

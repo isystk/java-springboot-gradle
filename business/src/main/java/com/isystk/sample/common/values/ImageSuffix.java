@@ -22,15 +22,4 @@ public enum ImageSuffix implements Values {
 	private final int width;
 	private final int height;
 
-	public String getSuffix() {
-		return this.suffix;
-	}
-
-	public int getWidth() {
-		return this.width;
-	}
-
-	public int getHeight() {
-		return this.height;
-	}
 }

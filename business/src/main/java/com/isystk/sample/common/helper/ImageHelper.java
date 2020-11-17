@@ -1,30 +1,12 @@
 package com.isystk.sample.common.helper;
 
-import com.isystk.sample.common.dto.UploadFileDto;
-import com.isystk.sample.common.exception.FileNotFoundException;
-import com.isystk.sample.common.exception.SystemException;
-import com.isystk.sample.common.util.DateUtils;
-import com.isystk.sample.common.util.FileUtils;
-import com.isystk.sample.common.values.ImageSuffix;
-import com.isystk.sample.domain.dao.TImageDao;
-import com.isystk.sample.domain.entity.TImage;
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.filters.Canvas;
-import net.coobird.thumbnailator.geometry.Positions;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
-import org.springframework.web.multipart.MultipartFile;
+import static com.isystk.sample.common.Const.*;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -36,16 +18,40 @@ import java.text.DecimalFormat;
 import java.util.Formatter;
 import java.util.stream.Stream;
 
-import static com.isystk.sample.common.Const.IMAGE_EXTENSION;
+import javax.imageio.ImageIO;
+
+import com.isystk.sample.common.util.AwsS3Utils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.isystk.sample.common.dto.UploadFileDto;
+import com.isystk.sample.common.exception.FileNotFoundException;
+import com.isystk.sample.common.exception.SystemException;
+import com.isystk.sample.common.util.DateUtils;
+import com.isystk.sample.common.util.FileUtils;
+import com.isystk.sample.common.values.ImageSuffix;
+import com.isystk.sample.domain.dao.TImageDao;
+import com.isystk.sample.domain.entity.TImage;
+
+import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.filters.Canvas;
+import net.coobird.thumbnailator.geometry.Positions;
 
 /**
  * 画像ヘルパー
  */
 @Component("img")
+@Slf4j
 public class ImageHelper {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(ImageHelper.class);
-    @Value("${application.imageUploadLocation:#{systemProperties['java.io.tmpdir']}}") // 設定ファイルに定義されたアップロード先を取得する
+	@Value("${application.imageUploadLocation:#{systemProperties['java.io.tmpdir']}}") // 設定ファイルに定義されたアップロード先を取得する
 	String imageUploadLocation;
 
 	@Autowired
@@ -136,7 +142,7 @@ public class ImageHelper {
 			throw new SystemException(e);
 		}
 		Formatter f = new Formatter();
-		f.format("/%02x/%02x/", (h & 0xff), ((h >> 8) & 0xff));
+		f.format("%02x/%02x/", (h & 0xff), ((h >> 8) & 0xff));
 		return f.toString();
 	}
 
@@ -187,6 +193,8 @@ public class ImageHelper {
 			for (ImageSuffix suffix: ImageSuffix.values()) {
 				File dist = new File(dirPath.toUri().getPath(), String.valueOf(id) + suffix.getSuffix() + "." + IMAGE_EXTENSION);
 				convert(source, dist, suffix.getWidth(), suffix.getHeight());
+				// AWSアップロード
+				AwsS3Utils.putObject(dir + dist.toPath().getFileName().toString(), dist.length(), file.getContentType(), new FileInputStream(dist));
 			}
 
 			TImage tImage = new TImage();
@@ -255,7 +263,8 @@ public class ImageHelper {
 	public String getUrl(Integer imageId, String suffix) {
 		String dir = getHash(imageId);
 		String saveFileName = imageId + suffix + "." + IMAGE_EXTENSION;
-		return "/thumb" + dir + saveFileName;
+//		return "/thumb/" + dir + saveFileName;
+		return AwsS3Utils.ENDPOINT_URL + AwsS3Utils.BUCKET_NAME + "/" + dir + saveFileName;
 	}
 
 	/** JSPからアクセス用*/

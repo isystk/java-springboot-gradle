@@ -24,14 +24,6 @@ public enum UserStatus implements Values {
 	private final Integer code;
 	private final String text;
 
-	public Integer getCode() {
-		return code;
-	}
-
-	public String getText() {
-		return text;
-	}
-
 	/**
 	 * コードに一致する値を取得します。
 	 * @param code

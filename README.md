@@ -100,6 +100,24 @@ $ ./gradlew business::flywayMigrate
 $ ./gradlew business::flywayInfo
 ```
 
+#### minio に S3バケットを作成する
+
+```bash
+$ export AWS_ACCESS_KEY_ID=access_key
+$ export AWS_SECRET_ACCESS_KEY=secret_key
+# バケットの一覧を確認する
+$ aws --endpoint-url http://localhost:9090 s3 ls
+# バケットを作成する
+$ aws configure --profile isystk.localhost
+$ aws --endpoint-url http://localhost:9090 --profile isystk.localhost s3 mb s3://www.isystk.work
+# バケットを公開する
+$ POLICY='{ "Version": "2012-10-17", "Statement": [{ "Sid": "MakeItPublic", "Effect": "Allow", "Principal": "*", "Action": "s3:GetObject", "Resource": "arn:aws:s3:::www.isystk.work/*" }] }'
+$ aws --endpoint-url http://localhost:9090 --profile isystk.localhost s3api put-bucket-policy --bucket www.isystk.work --policy $POLICY
+# テストファイルをアップロードする
+$ echo 'hello' > test.txt
+$ aws --endpoint-url http://localhost:9090 --profile isystk.localhost s3 cp ./test.txt s3://www.isystk.work
+```
+
 #### アプリケーションの起動
 
 ```bash

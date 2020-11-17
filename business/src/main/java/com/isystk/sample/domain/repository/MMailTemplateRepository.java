@@ -1,7 +1,7 @@
 package com.isystk.sample.domain.repository;
 
-import com.isystk.sample.domain.util.DomaUtils;
-import java.util.stream.Collectors;
+import static com.isystk.sample.domain.util.DomaUtils.createSelectOptions;
+import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 
@@ -38,12 +38,12 @@ public class MMailTemplateRepository extends BaseRepository {
 	 * @return
 	 */
 	public Page<MMailTemplateRepositoryDto> findAll(MMailTemplateCriteria criteria, Pageable pageable) {
-		var options = DomaUtils.createSelectOptions(pageable);
+		var options = createSelectOptions(pageable);
 		// ページングを指定する
 		return pageFactory.create(convertDto(
 				mMailTemplateDao.findAll(criteria,
 				options.count(),
-						Collectors.toList()
+				toList()
 			)), pageable, options.getCount());
 	}
 

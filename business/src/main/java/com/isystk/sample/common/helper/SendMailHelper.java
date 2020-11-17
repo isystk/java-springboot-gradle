@@ -1,7 +1,9 @@
 package com.isystk.sample.common.helper;
 
-import lombok.val;
-import org.slf4j.Logger;
+import static com.isystk.sample.common.util.ValidateUtils.isNotEmpty;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,18 +14,17 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.StringTemplateResolver;
 
-import java.util.Map;
-
-import static com.isystk.sample.common.util.ValidateUtils.isNotEmpty;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * メール送信ヘルパー
  */
 @Component
+@Slf4j
 public class SendMailHelper {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(SendMailHelper.class);
-    @Autowired
+	@Autowired
 	JavaMailSender javaMailSender;
 
 	/**
@@ -35,7 +36,7 @@ public class SendMailHelper {
 	 * @param body
 	 */
 	public void sendMail(String fromAddress, String[] toAddress, String subject, String body) {
-		SimpleMailMessage message = new SimpleMailMessage();
+		val message = new SimpleMailMessage();
 		message.setFrom(fromAddress);
 		message.setTo(toAddress);
 		message.setSubject(subject);
@@ -57,10 +58,10 @@ public class SendMailHelper {
 	 * @return
 	 */
 	public String getMailBody(String template, Map<String, Object> objects) {
-		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+		val templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver());
 
-		Context context = new Context();
+		val context = new Context();
 		if (isNotEmpty(objects)) {
 			objects.forEach(context::setVariable);
 		}
@@ -69,7 +70,7 @@ public class SendMailHelper {
 	}
 
 	private ITemplateResolver templateResolver() {
-		StringTemplateResolver resolver = new StringTemplateResolver();
+		val resolver = new StringTemplateResolver();
 		resolver.setTemplateMode("TEXT");
 		resolver.setCacheable(false); // 安全をとってキャッシュしない
 		return resolver;

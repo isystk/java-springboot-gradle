@@ -19,9 +19,7 @@ dependencies {
   implementation project(":business")
   implementation project(":web")
 
-  /* spring */
-  implementation("org.springframework.boot:spring-boot-starter-web")
-//  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
   /* webjars */
   implementation("org.webjars:AdminLTE:${webjarAdminLTEVersion}")
+
 }

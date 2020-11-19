@@ -155,7 +155,7 @@ public class PostHtmlController extends AbstractHtmlController {
 	 * @return
 	 */
 	@GetMapping("/download/{filename:.+\\.csv}")
-	public ModelAndView downloadCsv(@PathVariable String filename, PostSearchForm form, Model model) {
+	public CsvView downloadCsv(@PathVariable String filename, PostSearchForm form, Model model) {
 
 		// 全件取得する
 		form.setPerpage(Pageable.NO_LIMIT.getPerpage());
@@ -165,9 +165,7 @@ public class PostHtmlController extends AbstractHtmlController {
 		List<PostCsv> csvList = ObjectMapperUtils.mapAll(pages.getData(), PostCsv.class);
 
 		// CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-		val view = new CsvView(PostCsv.class, csvList, filename);
-
-		return new ModelAndView(view);
+		return new CsvView(PostCsv.class, csvList, filename);
 	}
 
 	/**

@@ -75,6 +75,7 @@ subprojects {
     mavenCentral()
     jcenter()
     maven { url 'https://jitpack.io' }
+    maven { url 'http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/' }
   }
 
   dependencyManagement {
@@ -158,9 +159,10 @@ subprojects {
     /* poi */
     implementation("org.apache.poi:poi-ooxml:${poiOoxmlVersion}")
 
-//    /* pdf */
-//    implementation("net.sf.jasperreports:jasperreports:${jasperreportsVersion}")
+    /* pdf */
+    implementation("net.sf.jasperreports:jasperreports:${jasperreportsVersion}")
 
+    /* tika */
     implementation("org.apache.tika:tika-core:${apacheTikaVersion}")
 
     /* xml */

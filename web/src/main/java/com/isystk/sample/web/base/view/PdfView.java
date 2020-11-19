@@ -2,17 +2,17 @@ package com.isystk.sample.web.base.view;
 
 import com.isystk.sample.common.util.EncodeUtils;
 import lombok.val;
-//import net.sf.jasperreports.engine.JRException;
-//import net.sf.jasperreports.engine.JasperCompileManager;
-//import net.sf.jasperreports.engine.JasperFillManager;
-//import net.sf.jasperreports.engine.JasperReport;
-//import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-//import net.sf.jasperreports.engine.design.JasperDesign;
-//import net.sf.jasperreports.engine.export.JRPdfExporter;
-//import net.sf.jasperreports.engine.util.JRLoader;
-//import net.sf.jasperreports.engine.xml.JRXmlLoader;
-//import net.sf.jasperreports.export.SimpleExporterInput;
-//import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.servlet.view.AbstractView;
 
@@ -58,18 +58,18 @@ public class PdfView extends AbstractView {
 		// IEの場合はContent-Lengthヘッダが指定されていないとダウンロードが失敗するので、
 		// サイズを取得するための一時的なバイト配列ストリームにコンテンツを書き出すようにする
 		val baos = createTemporaryOutputStream();
-//
-//		// 帳票レイアウト
-//		val report = loadReport();
-//
-//		// データの設定
-//		val dataSource = new JRBeanCollectionDataSource(this.data);
-//		val print = JasperFillManager.fillReport(report, model, dataSource);
-//
-//		val exporter = new JRPdfExporter();
-//		exporter.setExporterInput(new SimpleExporterInput(print));
-//		exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
-//		exporter.exportReport();
+
+		// 帳票レイアウト
+		val report = loadReport();
+
+		// データの設定
+		val dataSource = new JRBeanCollectionDataSource(this.data);
+		val print = JasperFillManager.fillReport(report, model, dataSource);
+
+		val exporter = new JRPdfExporter();
+		exporter.setExporterInput(new SimpleExporterInput(print));
+		exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
+		exporter.exportReport();
 
 		// ファイル名に日本語を含めても文字化けしないようにUTF-8にエンコードする
 		val encodedFilename = EncodeUtils.encodeUtf8(filename);
@@ -79,33 +79,33 @@ public class PdfView extends AbstractView {
 		writeToResponse(response, baos);
 	}
 
-//	/**
-//	 * 帳票レイアウトを読み込む
-//	 *
-//	 * @return
-//	 */
-//	protected final JasperReport loadReport() {
-//		val resource = new ClassPathResource(this.report);
-//
-//		try {
-//			val fileName = resource.getFilename();
-//			if (fileName.endsWith(".jasper")) {
-//				try (val is = resource.getInputStream()) {
-//					return (JasperReport) JRLoader.loadObject(is);
-//				}
-//			} else if (fileName.endsWith(".jrxml")) {
-//				try (val is = resource.getInputStream()) {
-//					JasperDesign design = JRXmlLoader.load(is);
-//					return JasperCompileManager.compileReport(design);
-//				}
-//			} else {
-//				throw new IllegalArgumentException(
-//						".jasper または .jrxml の帳票を指定してください。 [" + fileName + "] must end in either ");
-//			}
-//		} catch (IOException e) {
-//			throw new IllegalArgumentException("failed to load report. " + resource, e);
-//		} catch (JRException e) {
-//			throw new IllegalArgumentException("failed to parse report. " + resource, e);
-//		}
-//	}
+	/**
+	 * 帳票レイアウトを読み込む
+	 *
+	 * @return
+	 */
+	protected final JasperReport loadReport() {
+		val resource = new ClassPathResource(this.report);
+
+		try {
+			val fileName = resource.getFilename();
+			if (fileName.endsWith(".jasper")) {
+				try (val is = resource.getInputStream()) {
+					return (JasperReport) JRLoader.loadObject(is);
+				}
+			} else if (fileName.endsWith(".jrxml")) {
+				try (val is = resource.getInputStream()) {
+					JasperDesign design = JRXmlLoader.load(is);
+					return JasperCompileManager.compileReport(design);
+				}
+			} else {
+				throw new IllegalArgumentException(
+						".jasper または .jrxml の帳票を指定してください。 [" + fileName + "] must end in either ");
+			}
+		} catch (IOException e) {
+			throw new IllegalArgumentException("failed to load report. " + resource, e);
+		} catch (JRException e) {
+			throw new IllegalArgumentException("failed to parse report. " + resource, e);
+		}
+	}
 }

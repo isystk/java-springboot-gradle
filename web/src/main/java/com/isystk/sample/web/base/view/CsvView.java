@@ -2,6 +2,7 @@ package com.isystk.sample.web.base.view;
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.google.common.collect.Lists;
 import com.isystk.sample.common.util.EncodeUtils;
 import lombok.val;
 import org.springframework.web.servlet.view.AbstractView;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Collection;
 import java.util.List;
@@ -89,8 +91,9 @@ public class CsvView extends AbstractView {
 		}
 
 		// 書き出し
-		val outputStream = createTemporaryOutputStream();
-		try (Writer writer = new OutputStreamWriter(outputStream, "Windows-31J")) {
+//		val outputStream = createTemporaryOutputStream();
+//		try (Writer writer = new OutputStreamWriter(outputStream, "Windows-31J")) {
+		try (PrintWriter writer = response.getWriter()) {
 			csvMapper.writer(schema).writeValue(writer, data);
 		}
 	}

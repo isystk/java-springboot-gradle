@@ -2,20 +2,6 @@ spring:
   profiles: local
   profiles.include:
     - common-local
-  datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sample
-    username: root
-    password: password
-  data.solr.host: http://localhost:8983/solr
-  mail:
-    host: 127.0.0.1
-    port: 25
-    username: test
-    password: test
-    properties:
-      mail:
-        from: from@test.com
   thymeleaf:
     cache: false
 

@@ -33,34 +33,22 @@ subprojects {
   sourceCompatibility = JavaVersion.VERSION_11
   targetCompatibility = JavaVersion.VERSION_11
 
-  compileKotlin {
-    kotlinOptions {
-      freeCompilerArgs = ["-Xjsr305=strict"]
-      jvmTarget = "11"
-    }
-  }
-
-  compileTestKotlin {
-    kotlinOptions {
-      freeCompilerArgs = ["-Xjsr305=strict"]
-      jvmTarget = "11"
-    }
-  }
+//  compileKotlin {
+//    kotlinOptions {
+//      freeCompilerArgs = ["-Xjsr305=strict"]
+//      jvmTarget = "11"
+//    }
+//  }
+//
+//  compileTestKotlin {
+//    kotlinOptions {
+//      freeCompilerArgs = ["-Xjsr305=strict"]
+//      jvmTarget = "11"
+//    }
+//  }
   /* enable junit 5 */
   test {
     useJUnitPlatform()
-  }
-
-  /* Docker Image */
-  jib {
-    from {
-      image = "adoptopenjdk/openjdk11:alpine-slim"
-    }
-    container {
-      creationTime = "USE_CURRENT_TIMESTAMP"
-      jvmFlags = ['-Duser.timezone=GMT+09']
-      ports = ports = ['8080', '8081']
-    }
   }
 
 //  kapt {
@@ -87,6 +75,7 @@ subprojects {
     mavenCentral()
     jcenter()
     maven { url 'https://jitpack.io' }
+    maven { url 'http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/' }
   }
 
   dependencyManagement {
@@ -97,23 +86,23 @@ subprojects {
   }
 
   dependencies {
-    /* kotlin */
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+//    /* kotlin */
+//    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+//    implementation("org.jetbrains.kotlin:kotlin-reflect")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
     /* spring */
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:${thymeleafLayoutVersion}")
     implementation("org.springframework.boot:spring-boot-starter-aop")
-    runtimeOnly("org.springframework.boot:spring-boot-devtools")
     implementation("org.springframework.data:spring-data-elasticsearch")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.session:spring-session-data-redis")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     /* solr */
     implementation("org.springframework.boot:spring-boot-starter-data-solr")
@@ -129,7 +118,7 @@ subprojects {
     implementation("redis.clients:jedis:${jedisVersion}")
 
     /* javax.mail */
-    implementation("javax.mail:mail:1.4")
+    implementation("javax.mail:mail:${javaxMailVersion}")
 
     /* Doma2 */
     implementation("org.seasar.doma.boot:doma-spring-boot-starter:$springBootDomaVersion")
@@ -140,43 +129,44 @@ subprojects {
     /* aws sdk */
     implementation("com.amazonaws:aws-xray-recorder-sdk-core")
     implementation("com.amazonaws:aws-xray-recorder-sdk-spring")
-    implementation("com.amazonaws:aws-java-sdk-s3:$awsSdkVersion")
+    implementation("com.amazonaws:aws-java-sdk-s3:${awsSdkVersion}")
 
     /*ApacheCommons*/
-    implementation("org.apache.commons:commons-lang3:$commonsLang")
-    implementation("commons-io:commons-io:2.6")
-    implementation("org.apache.commons:commons-pool2:2.5.0")
-    implementation("org.apache.commons:commons-compress:1.20")
-    implementation("commons-collections:commons-collections:3.2.2")
+    implementation("org.apache.commons:commons-lang3:$commonsLangVersion")
+    implementation("commons-io:commons-io:${commonsIoVersion}")
+    implementation("org.apache.commons:commons-pool2:${commonsPool2Version}")
+    implementation("org.apache.commons:commons-compress:${commonsCompressVersion}")
+    implementation("commons-collections:commons-collections:${commonsCollectionsVersion}")
 
     /* modelmapper */
-    implementation("com.github.jmnarloch:modelmapper-spring-boot-starter:1.0.1")
+    implementation("com.github.jmnarloch:modelmapper-spring-boot-starter:${modelmapperVersion}")
 
     /* lombok */
-    compileOnly("org.projectlombok:lombok:1.18.16")
-    annotationProcessor("org.projectlombok:lombok:1.18.16")
-    testCompileOnly("org.projectlombok:lombok:1.18.16")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.16")
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
 
     /* google */
-    implementation("com.google.guava:guava:28.2-jre")
+    implementation("com.google.guava:guava:${googleGuavaVersion}")
 
     /* thumbnailator */
-    implementation("net.coobird:thumbnailator:0.4.11")
+    implementation("net.coobird:thumbnailator:${thumbnailatorVersion}")
 
     /* csv */
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv:$jacksonVersion")
 
     /* poi */
-    implementation("org.apache.poi:poi-ooxml:4.1.2")
+    implementation("org.apache.poi:poi-ooxml:${poiOoxmlVersion}")
 
-//    /* pdf */
-//    implementation("net.sf.jasperreports:jasperreports:6.4.1")
+    /* pdf */
+    implementation("net.sf.jasperreports:jasperreports:${jasperreportsVersion}")
 
-    implementation("org.apache.tika:tika-core:1.23")
+    /* tika */
+    implementation("org.apache.tika:tika-core:${apacheTikaVersion}")
 
     /* xml */
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}")
 
     /* json */
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
@@ -205,7 +195,7 @@ subprojects {
     implementation("com.github.ProjectMapK:KMapper:${kmapperVersion}")
 
     /* flyway */
-    implementation("org.flywaydb:flyway-core:$flywayVersion")
+    implementation("org.flywaydb:flyway-core:${flywayVersion}")
   }
 }
 
@@ -250,6 +240,12 @@ tasks.register("radis") {
   dependsOn composeUp
   dockerCompose {
     startedServices = ['radis']
+  }
+}
+tasks.register("s3") {
+  dependsOn composeUp
+  dockerCompose {
+    startedServices = ['s3']
   }
 }
 

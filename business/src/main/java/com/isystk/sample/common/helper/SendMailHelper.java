@@ -3,8 +3,11 @@ package com.isystk.sample.common.helper;
 import static com.isystk.sample.common.util.ValidateUtils.isNotEmpty;
 
 import java.util.Map;
+import java.util.Properties;
 
+import com.isystk.sample.common.exception.SystemException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,6 +20,14 @@ import org.thymeleaf.templateresolver.StringTemplateResolver;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 /**
  * メール送信ヘルパー
  */
@@ -24,8 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SendMailHelper {
 
-	@Autowired
-	JavaMailSender javaMailSender;
+	@Value("${spring.mail.host}")
+	private String SMTP_HOST_NAME;
 
 	/**
 	 * メールを送信します。
@@ -35,18 +46,28 @@ public class SendMailHelper {
 	 * @param subject
 	 * @param body
 	 */
-	public void sendMail(String fromAddress, String[] toAddress, String subject, String body) {
-		val message = new SimpleMailMessage();
-		message.setFrom(fromAddress);
-		message.setTo(toAddress);
-		message.setSubject(subject);
-		message.setText(body);
-
+	public void sendMail(String fromAddress, String toAddress, String subject, String body) {
 		try {
-			javaMailSender.send(message);
-		} catch (MailException e) {
+			Properties props = new Properties();
+			props.put("mail.localhost.host", SMTP_HOST_NAME);
+			Session session2 = Session.getDefaultInstance(props, null);
+			val message = new MimeMessage(session2);
+
+			message.addFrom(InternetAddress.parse(fromAddress));
+			message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(toAddress));
+//			message.setSubject(subject, "iso-2022-jp");
+//			message.setText(body, "iso-2022-jp");
+			message.setSubject(subject, "utf-8");
+			message.setText(body, "utf-8");
+
+			Transport.send(message);
+
+		} catch (MailException | AddressException e) {
 			log.error("failed to send mail.", e);
-			throw e;
+			throw new SystemException(e);
+		} catch (MessagingException e) {
+			log.error("failed to send mail.", e);
+			throw new SystemException(e);
 		}
 	}
 

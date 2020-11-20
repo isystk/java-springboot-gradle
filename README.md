@@ -23,8 +23,6 @@ SpringBoot を利用したマルチモジュールのボイラープレートで
 │   │   └── sample.a5er （ER図）
 │   ├── nginx （Webサーバー）
 │   │   ├── conf.d (nginxの設定ファイル)
-│   │   ├── public (WEB公開ディレクトリ)
-│   │   │   └── thumb （アップロードした写真）
 │   │   ├── logs （nginxのログ）
 │   │   └── ssl （SSL自己証明書）
 │   ├── phpmyadmin （DB管理コンソール）
@@ -37,6 +35,9 @@ SpringBoot を利用したマルチモジュールのボイラープレートで
 │   └── docker-compose.yml
 ├── batch (バッチ)
 ├── business (共通ロジック)
+├── static (フロントエンドモジュール)
+│   └── public (WEB公開ディレクトリ)
+│       └── thumb （アップロードした写真）
 ├── web (Web共通ロジック)
 ├── web-admin (管理画面)
 ├── web-front (フロント画面)

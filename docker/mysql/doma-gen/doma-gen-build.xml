@@ -14,7 +14,7 @@
 	<property name="criteriaPackageName" value="com.isystk.sample.domain.dto"/>
 	<property name="daoPackageName" value="com.isystk.sample.domain.dao"/>
 	<property name="sqlFilePattern" value="META-INF/**/*.sql"/>
-	<property name="ignoredTableNamePattern" value="BATCH.*|SYS_CONFIG"/>
+	<property name="ignoredTableNamePattern" value="Flyway.*|BATCH.*|SYS_CONFIG"/>
 
 	<path id="classpath">
 		<fileset dir="lib"/>

@@ -2,6 +2,8 @@ package com.isystk.sample.batch.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +45,6 @@ public class SolrPostService extends BaseTransactionalService {
 	/**
 	 * Solrの投稿インデックスを更新します。
 	 *
-	 * @param datas
 	 * @return
 	 */
 	public void refresh() {
@@ -61,40 +62,43 @@ public class SolrPostService extends BaseTransactionalService {
 		mPostTagCriteria.setDeleteFlgFalse(true);
 		val mPostTagList = mPostTagDao.findAll(mPostTagCriteria);
 		Map<Integer, String> tagNameMap = Maps.newHashMap();
-		for (MPostTag mPostTag : mPostTagList) {
+		mPostTagList.stream().forEach(mPostTag -> {
 			tagNameMap.put(mPostTag.getPostTagId(), mPostTag.getName());
-		}
+		});
 
 		List<SolrPost> solrPostList = Lists.newArrayList();
-		for (TPostRepositoryDto tPostDto : postPage.getData()) {
-			SolrPost solrPost = ObjectMapperUtils.map(tPostDto, SolrPost.class);
+		postPage.getData()
+				.stream()
+				.forEach(tPostDto -> {
+					SolrPost solrPost = ObjectMapperUtils.map(tPostDto, SolrPost.class);
 
-			// 投稿画像データを詰める
-			List<Integer> imageIdList = Lists.newArrayList();
-			if (tPostDto.getTPostImageList() != null) {
-				for (TPostImage tPostImage : tPostDto.getTPostImageList()) {
-					imageIdList.add(tPostImage.getImageId());
-				}
-			}
-			solrPost.setImageIdList(imageIdList);
+					// 投稿画像データを詰める
+					solrPost.setImageIdList(Optional.ofNullable(tPostDto.getTPostImageList())
+							.map(list -> list.stream()
+									.map(tPostImage -> tPostImage.getImageId())
+									.collect(Collectors.toList())
+							)
+							.orElse(Lists.newArrayList()));
 
-			// 投稿タグIDデータを詰める
-			List<Integer> tagIdList = Lists.newArrayList();
-			if (tPostDto.getTPostTagList() != null) {
-				for (TPostTag tPostTag : tPostDto.getTPostTagList()) {
-					tagIdList.add(tPostTag.getPostTagId());
-				}
-			}
-			solrPost.setTagIdList(tagIdList);
+					// 投稿タグIDデータを詰める
+					List<Integer> tagIdList = Optional.ofNullable(tPostDto.getTPostTagList())
+							.map(list -> list.stream()
+									.map(tPostTag -> tPostTag.getPostTagId())
+									.collect(Collectors.toList())
+							)
+							.orElse(Lists.newArrayList());
+					solrPost.setTagIdList(tagIdList);
 
-			// 投稿タグ名称データを詰める
-			List<String> tagNameList = Lists.newArrayList();
-			for (Integer tagId : tagIdList) {
-				tagNameList.add(tagNameMap.get(tagId));
-			}
-			solrPost.setTagNameList(tagNameList);
-			solrPostList.add(solrPost);
-		}
+					// 投稿タグ名称データを詰める
+					solrPost.setTagNameList(tagIdList
+							.stream()
+							.map(tagId -> {
+								return tagNameMap.get(tagId);
+							})
+							.collect(Collectors.toList())
+					);
+					solrPostList.add(solrPost);
+				});
 
 		// Solrをすべて削除
 		solrPostRepository.deleteAll();

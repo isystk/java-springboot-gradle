@@ -3,6 +3,8 @@ package com.isystk.sample.web.front.controller.html.member.post.edit;
 import static com.isystk.sample.common.FrontUrl.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -71,7 +73,7 @@ public class MemberPostEditHtmlController extends AbstractHtmlController {
 	/**
 	 * 修正画面表示
 	 *
-	 * @param post
+	 * @param form
 	 * @param model
 	 * @return
 	 */
@@ -89,18 +91,24 @@ public class MemberPostEditHtmlController extends AbstractHtmlController {
 
 		// 取得したDtoをFromに詰め替える
 		ObjectMapperUtils.map(post, form);
-		form.setPostImageId(Lists.newArrayList());
-		if (post.getTPostImageList() != null) {
-			for (TPostImage tPostImage : post.getTPostImageList()) {
-				form.getPostImageId().add(tPostImage.getImageId());
-			}
-		}
-		form.setPostTagId(Lists.newArrayList());
-		if (post.getTPostTagList() != null) {
-			for (TPostTag tPostTag : post.getTPostTagList()) {
-				form.getPostTagId().add(tPostTag.getPostTagId());
-			}
-		}
+		// 投稿画像
+		form.setPostImageId(
+				Optional.ofNullable(post.getTPostImageList())
+						.map(list -> list.stream()
+								.map(s -> s.getImageId())
+								.collect(Collectors.toList())
+						)
+						.orElse(null)
+		);
+		// 投稿タグ
+		form.setPostTagId(
+				Optional.ofNullable(post.getTPostTagList())
+						.map(list -> list.stream()
+								.map(s -> s.getPostTagId())
+								.collect(Collectors.toList())
+						)
+						.orElse(null)
+		);
 
 		return "modules/member/post/edit/index";
 	}
@@ -108,8 +116,10 @@ public class MemberPostEditHtmlController extends AbstractHtmlController {
 	/**
 	 * 修正確認画面表示
 	 *
-	 * @param post
-	 * @param model
+	 * @param form
+	 * @param br
+	 * @param sessionStatus
+	 * @param attributes
 	 * @return
 	 */
 	@PutMapping(params = "confirm")
@@ -127,8 +137,10 @@ public class MemberPostEditHtmlController extends AbstractHtmlController {
 	/**
 	 * 前に戻る
 	 *
-	 * @param post
-	 * @param model
+	 * @param form
+	 * @param br
+	 * @param sessionStatus
+	 * @param attributes
 	 * @return
 	 */
 	@PutMapping(params = "back")
@@ -142,7 +154,6 @@ public class MemberPostEditHtmlController extends AbstractHtmlController {
 	 *
 	 * @param form
 	 * @param br
-	 * @param postId
 	 * @param sessionStatus
 	 * @param attributes
 	 * @return
@@ -160,25 +171,31 @@ public class MemberPostEditHtmlController extends AbstractHtmlController {
 		// 入力値を詰め替える
 		val tPostDto = ObjectMapperUtils.map(form, TPostRepositoryDto.class);
 		// 投稿画像
-		List<TPostImage> tPostImageList = Lists.newArrayList();
-		if (form.getPostImageId() != null) {
-			for (Integer imageId : form.getPostImageId()) {
-				TPostImage tPostImage = new TPostImage();
-				tPostImage.setImageId(imageId);
-				tPostImageList.add(tPostImage);
-			}
-		}
-		tPostDto.setTPostImageList(tPostImageList);
+		tPostDto.setTPostImageList(
+				Optional.ofNullable(form.getPostImageId())
+						.map(list -> list.stream()
+								.map(imageId -> {
+									TPostImage tPostImage = new TPostImage();
+									tPostImage.setImageId(imageId);
+									return tPostImage;
+								})
+								.collect(Collectors.toList())
+						)
+						.orElse(null)
+		);
 		// 投稿タグ
-		List<TPostTag> tPostTagList = Lists.newArrayList();
-		if (form.getPostTagId() != null) {
-			for (Integer tagId : form.getPostTagId()) {
-				TPostTag tPostTag = new TPostTag();
-				tPostTag.setPostTagId(tagId);
-				tPostTagList.add(tPostTag);
-			}
-		}
-		tPostDto.setTPostTagList(tPostTagList);
+		tPostDto.setTPostTagList(
+				Optional.ofNullable(form.getPostTagId())
+						.map(list -> list.stream()
+								.map(tagId -> {
+									TPostTag tPostTag = new TPostTag();
+									tPostTag.setPostTagId(tagId);
+									return tPostTag;
+								})
+								.collect(Collectors.toList())
+						)
+						.orElse(null)
+		);
 		// 更新する
 		postService.update(tPostDto);
 

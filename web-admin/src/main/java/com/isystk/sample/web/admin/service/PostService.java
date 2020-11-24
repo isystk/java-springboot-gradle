@@ -18,7 +18,7 @@ public class PostService extends BaseTransactionalService {
 	/**
 	 * 投稿を追加します。
 	 *
-	 * @param input
+	 * @param tPostDto
 	 * @return
 	 */
 	public TPost create(final TPostRepositoryDto tPostDto) {
@@ -29,7 +29,7 @@ public class PostService extends BaseTransactionalService {
 	/**
 	 * 投稿を更新します。
 	 *
-	 * @param input
+	 * @param tPostDto
 	 * @return
 	 */
 	public TPost update(final TPostRepositoryDto tPostDto) {

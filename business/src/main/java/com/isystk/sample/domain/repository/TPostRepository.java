@@ -99,11 +99,13 @@ public class TPostRepository extends BaseRepository {
 
 		// tPostList を元に、postDtoList へコピー
 		List<TPostRepositoryDto> postDtoList = ObjectMapperUtils.mapAll(tPostList, TPostRepositoryDto.class);
-		for (TPostRepositoryDto postDto : postDtoList) {
-			postDto.setTPostImageList(tPostImageMap.get(postDto.getPostId()));
-			postDto.setTPostTagList(tPostTagMap.get(postDto.getPostId()));
-			postDto.setTUser(tUserMap.get(postDto.getUserId()).get(0));
-		}
+		postDtoList
+				.stream()
+				.forEach(postDto -> {
+					postDto.setTPostImageList(tPostImageMap.get(postDto.getPostId()));
+					postDto.setTPostTagList(tPostTagMap.get(postDto.getPostId()));
+					postDto.setTUser(tUserMap.get(postDto.getUserId()).get(0));
+				});
 
 		return postDtoList;
 	}
@@ -133,7 +135,7 @@ public class TPostRepository extends BaseRepository {
 	/**
 	 * 投稿を追加します。
 	 *
-	 * @param post
+	 * @param tPostDto
 	 * @return
 	 */
 	public TPost create(final TPostRepositoryDto tPostDto) {
@@ -148,18 +150,20 @@ public class TPostRepository extends BaseRepository {
 		tPostDao.insert(tPost);
 
 		// 投稿画像テーブル
-		val tPostImageList = ObjectMapperUtils.mapAll(tPostDto.getTPostImageList(), TPostImage.class);
-		for (TPostImage tPostImage : tPostImageList) {
-			tPostImage.setPostId(tPost.getPostId());
-			tPostImageDao.insert(tPostImage);
-		}
+		val tPostImageList = ObjectMapperUtils.mapAll(Optional.ofNullable(tPostDto.getTPostImageList()).orElse(Lists.newArrayList()), TPostImage.class);
+		tPostImageList.stream()
+				.forEach(tPostImage -> {
+					tPostImage.setPostId(tPost.getPostId());
+					tPostImageDao.insert(tPostImage);
+				});
 
 		// 投稿タグテーブル
-		val tPostTagList = ObjectMapperUtils.mapAll(tPostDto.getTPostTagList(), TPostTag.class);
-		for (TPostTag tPostTag : tPostTagList) {
-			tPostTag.setPostId(tPost.getPostId());
-			tPostTagDao.insert(tPostTag);
-		}
+		val tPostTagList = ObjectMapperUtils.mapAll(Optional.ofNullable(tPostDto.getTPostTagList()).orElse(Lists.newArrayList()), TPostTag.class);
+		tPostTagList.stream()
+				.forEach(tPostTag -> {
+					tPostTag.setPostId(tPost.getPostId());
+					tPostTagDao.insert(tPostTag);
+				});
 
 		return tPost;
 	}
@@ -167,7 +171,7 @@ public class TPostRepository extends BaseRepository {
 	/**
 	 * 投稿を更新します。
 	 *
-	 * @param post
+	 * @param tPostDto
 	 * @return
 	 */
 	public TPost update(final TPostRepositoryDto tPostDto) {
@@ -184,26 +188,36 @@ public class TPostRepository extends BaseRepository {
 		// 投稿画像テーブル (Delete→Insert)
 		TPostImageCriteria tPostImageCriteria = new TPostImageCriteria();
 		tPostImageCriteria.setPostIdEq(tPostDto.getPostId());
-		for (TPostImage tPostImage : tPostImageDao.findAll(tPostImageCriteria)) {
-			tPostImageDao.delete(tPostImage);
-		}
-		val tPostImageList = ObjectMapperUtils.mapAll(tPostDto.getTPostImageList(), TPostImage.class);
-		for (TPostImage tPostImage : tPostImageList) {
-			tPostImage.setPostId(tPost.getPostId());
-			tPostImageDao.insert(tPostImage);
-		}
 
-		// 投稿タグテーブル (Delete→Insert)
+		// 投稿画像（Delete→Insert）
+		tPostImageDao.findAll(tPostImageCriteria)
+				.stream()
+				.forEach(tPostImage -> {
+					tPostImageDao.delete(tPostImage);
+				});
+		ObjectMapperUtils.mapAll(Optional.ofNullable(tPostDto.getTPostImageList()).orElse(Lists.newArrayList()), TPostImage.class)
+				.stream()
+				.forEach(tPostImage -> {
+					tPostImage.setPostId(tPost.getPostId());
+					tPostImageDao.insert(tPostImage);
+				});
+
+
+		// 投稿タグ (Delete→Insert)
 		TPostTagCriteria tPostTagCriteria = new TPostTagCriteria();
 		tPostTagCriteria.setPostIdEq(tPostDto.getPostId());
-		for (TPostTag tPostTag : tPostTagDao.findAll(tPostTagCriteria)) {
-			tPostTagDao.delete(tPostTag);
-		}
-		val tPostTagList = ObjectMapperUtils.mapAll(tPostDto.getTPostTagList(), TPostTag.class);
-		for (TPostTag tPostTag : tPostTagList) {
-			tPostTag.setPostId(tPost.getPostId());
-			tPostTagDao.insert(tPostTag);
-		}
+		tPostTagDao.findAll(tPostTagCriteria)
+				.stream()
+				.forEach(tPostTag -> {
+					tPostTagDao.delete(tPostTag);
+				});
+
+		ObjectMapperUtils.mapAll(Optional.ofNullable(tPostDto.getTPostTagList()).orElse(Lists.newArrayList()), TPostTag.class)
+				.stream()
+				.forEach(tPostTag -> {
+					tPostTag.setPostId(tPost.getPostId());
+					tPostTagDao.insert(tPostTag);
+				});
 
 		return tPost;
 	}

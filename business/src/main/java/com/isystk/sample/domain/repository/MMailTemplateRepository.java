@@ -55,9 +55,10 @@ public class MMailTemplateRepository extends BaseRepository {
 	private List<MMailTemplateRepositoryDto> convertDto(List<MMailTemplate> mMailTemplateList) {
 
 		List<MMailTemplateRepositoryDto> list = ObjectMapperUtils.mapAll(mMailTemplateList, MMailTemplateRepositoryDto.class);
-		for (MMailTemplateRepositoryDto dto : list) {
-			dto.setMailTemplateDiv(MailTemplateDiv.getValue(dto.getTemplateDiv()));
-		}
+		list.stream()
+				.forEach(dto -> {
+					dto.setMailTemplateDiv(MailTemplateDiv.getValue(dto.getTemplateDiv()));
+				});
 
 		return list;
 	}

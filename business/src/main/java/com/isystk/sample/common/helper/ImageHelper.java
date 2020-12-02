@@ -74,8 +74,7 @@ public class ImageHelper {
 	/**
 	 * ファイルを読み込みます。
 	 *
-	 * @param location
-	 * @param filename
+	 * @param imageId
 	 * @return
 	 */
 	public Resource loadFile(Integer imageId) {
@@ -149,7 +148,6 @@ public class ImageHelper {
 	/**
 	 * ファイルを保存します。
 	 *
-	 * @param location
 	 * @param file     保存先ディレクトリ
 	 */
 	public UploadFileDto saveFile(MultipartFile file) {

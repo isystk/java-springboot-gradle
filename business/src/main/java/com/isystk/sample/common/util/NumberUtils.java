@@ -18,7 +18,6 @@ public class NumberUtils {
 	 * @param str
 	 *            文字列
 	 * @return Integer
-	 * @see NumberUtils#toInt(String)
 	 */
 	public static final Integer toInteger(String str) {
 		return toInteger(str, null);
@@ -32,7 +31,6 @@ public class NumberUtils {
 	 * @param defaultValue
 	 *            数値変換に失敗した場合のデフォルト値
 	 * @return Integer
-	 * @see NumberUtils#toInt(String, int)
 	 */
 	public static final Integer toInteger(String str, Integer defaultValue) {
 		if (str == null) {
@@ -93,7 +91,6 @@ public class NumberUtils {
 	 * @param defaultValue
 	 *            数値変換に失敗した場合のデフォルト値
 	 * @return Integer
-	 * @see NumberUtils#toInt(String, int)
 	 */
 	public static final Integer[] toIntegerArray(String[] strArray, Integer[] defaultValue) {
 		if (strArray == null) {
@@ -142,7 +139,6 @@ public class NumberUtils {
 	 * @param defaultValue
 	 *            数値変換に失敗した場合のデフォルト値
 	 * @return Long
-	 * @see NumberUtils#toLong(String, long)
 	 */
 	public static final Long toLong(String str, Long defaultValue) {
 		if (str == null) {
@@ -190,7 +186,6 @@ public class NumberUtils {
 	 * @param defaultValue
 	 *            数値変換に失敗した場合のデフォルト値
 	 * @return Long
-	 * @see NumberUtils#toBigInteger(Integer, long)
 	 */
 	public static final BigInteger toBigInteger(Integer num, BigInteger defaultValue) {
 		if (num == null) {
@@ -223,7 +218,6 @@ public class NumberUtils {
 	 * @param defaultValue
 	 *            数値変換に失敗した場合のデフォルト値
 	 * @return Double
-	 * @see NumberUtils#toDoubleString, int)
 	 */
 	public static final Double toDouble(String str, Double defaultValue) {
 		if (str == null) {
@@ -256,7 +250,6 @@ public class NumberUtils {
 	 * @param defaultValue
 	 *            数値変換に失敗した場合のデフォルト値
 	 * @return Double
-	 * @see NumberUtils#toBigDecimalString, int)
 	 */
 	public static final BigDecimal toBigDecimal(String str, BigDecimal defaultValue) {
 		if (str == null) {

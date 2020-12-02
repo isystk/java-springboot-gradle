@@ -3,6 +3,8 @@ package com.isystk.sample.web.front.controller.html.member.post.regist;
 import static com.isystk.sample.common.FrontUrl.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,7 +66,7 @@ public class MemberPostRegistHtmlController extends AbstractHtmlController {
 	/**
 	 * 登録画面表示
 	 *
-	 * @param post
+	 * @param form
 	 * @param model
 	 * @return
 	 */
@@ -101,8 +103,10 @@ public class MemberPostRegistHtmlController extends AbstractHtmlController {
 	/**
 	 * 前に戻る
 	 *
-	 * @param post
-	 * @param model
+	 * @param form
+	 * @param br
+	 * @param sessionStatus
+	 * @param attributes
 	 * @return
 	 */
 	@PostMapping(params = "back")
@@ -134,25 +138,31 @@ public class MemberPostRegistHtmlController extends AbstractHtmlController {
 		// ログインユーザーID
 		tPostDto.setUserId(userHelper.getLoginUserId());
 		// 投稿画像
-		List<TPostImage> tPostImageList = Lists.newArrayList();
-		if (form.getPostImageId() != null) {
-			for (Integer imageId : form.getPostImageId()) {
-				TPostImage tPostImage = new TPostImage();
-				tPostImage.setImageId(imageId);
-				tPostImageList.add(tPostImage);
-			}
-		}
-		tPostDto.setTPostImageList(tPostImageList);
+		tPostDto.setTPostImageList(
+				Optional.ofNullable(form.getPostImageId())
+						.map(list -> list.stream()
+								.map(imageId -> {
+									TPostImage tPostImage = new TPostImage();
+									tPostImage.setImageId(imageId);
+									return tPostImage;
+								})
+								.collect(Collectors.toList())
+						)
+						.orElse(null)
+		);
 		// 投稿タグ
-		List<TPostTag> tPostTagList = Lists.newArrayList();
-		if (form.getPostTagId() != null) {
-			for (Integer tagId : form.getPostTagId()) {
-				TPostTag tPostTag = new TPostTag();
-				tPostTag.setPostTagId(tagId);
-				tPostTagList.add(tPostTag);
-			}
-		}
-		tPostDto.setTPostTagList(tPostTagList);
+		tPostDto.setTPostTagList(
+				Optional.ofNullable(form.getPostTagId())
+						.map(list -> list.stream()
+								.map(tagId -> {
+									TPostTag tPostTag = new TPostTag();
+									tPostTag.setPostTagId(tagId);
+									return tPostTag;
+								})
+								.collect(Collectors.toList())
+						)
+						.orElse(null)
+		);
 		val postId = postService.create(tPostDto);
 
 		return "redirect:/member/post/regist/complete";

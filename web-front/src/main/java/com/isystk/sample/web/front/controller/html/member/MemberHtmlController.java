@@ -35,7 +35,7 @@ public class MemberHtmlController extends AbstractHtmlController {
 	/**
 	 * 会員表示
 	 *
-	 * @param postId
+	 * @param form
 	 * @param model
 	 * @return
 	 */

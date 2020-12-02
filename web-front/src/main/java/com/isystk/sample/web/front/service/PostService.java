@@ -46,7 +46,8 @@ public class PostService extends BaseTransactionalService {
 	/**
 	 * Solrの投稿インデックスを取得します。
 	 *
-	 * @param datas
+	 * @param criteria
+	 * @param pageable
 	 * @return
 	 */
 	@Transactional(readOnly = true) // 読み取りのみの場合は指定する
@@ -69,7 +70,7 @@ public class PostService extends BaseTransactionalService {
 	/**
 	 * Solrの投稿インデックスを取得します。
 	 *
-	 * @param datas
+	 * @param postId
 	 * @return
 	 */
 	@Transactional(readOnly = true) // 読み取りのみの場合は指定する
@@ -138,7 +139,7 @@ public class PostService extends BaseTransactionalService {
 	/**
 	 * 投稿を追加します。
 	 *
-	 * @param input
+	 * @param tPostDto
 	 * @return
 	 */
 	public int create(final TPostRepositoryDto tPostDto) {
@@ -150,7 +151,7 @@ public class PostService extends BaseTransactionalService {
 	/**
 	 * 投稿を更新します。
 	 *
-	 * @param input
+	 * @param tPostDto
 	 * @return
 	 */
 	public void update(final TPostRepositoryDto tPostDto) {

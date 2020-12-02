@@ -1,6 +1,5 @@
-package com.isystk.sample.web.front.controller.api.v1.post;
+package com.isystk.sample.web.front.controller.api.v1.posts;
 
-import static com.isystk.sample.common.FrontUrl.*;
 import static com.isystk.sample.common.Const.*;
 
 import java.util.Arrays;
@@ -11,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.isystk.sample.common.dto.Page;
 import com.isystk.sample.common.dto.Pageable;
+import static com.isystk.sample.common.FrontUrl.API_V1_POSTS;
 import com.isystk.sample.common.util.ObjectMapperUtils;
-import com.isystk.sample.solr.dto.SolrPost;
 import com.isystk.sample.solr.dto.SolrPostCriteria;
 import com.isystk.sample.web.base.controller.api.AbstractRestController;
 import com.isystk.sample.web.base.controller.api.resource.PageableResource;
@@ -24,15 +23,15 @@ import com.isystk.sample.web.front.service.PostService;
 import lombok.val;
 
 @RestController
-@RequestMapping(path = API_V1_POST, produces = MediaType.APPLICATION_JSON_VALUE)
-public class PostRestController extends AbstractRestController {
+@RequestMapping(path = API_V1_POSTS, produces = MediaType.APPLICATION_JSON_VALUE)
+public class PostsRestController extends AbstractRestController {
 
 	@Autowired
 	PostService postService;
 
 	@Override
 	public String getFunctionName() {
-		return "API_POST";
+		return "API_POSTS";
 	}
 
 	/**
@@ -43,7 +42,7 @@ public class PostRestController extends AbstractRestController {
 	 * @return
 	 */
 	@GetMapping
-	public PageableResource index(PostRestForm query, @RequestParam(required = false, defaultValue = "1") int page) {
+	public PageableResource index(PostsRestForm query, @RequestParam(required = false, defaultValue = "1") int page) {
 
 		// 入力値からDTOを作成する
 		val criteria = ObjectMapperUtils.map(query, SolrPostCriteria.class);

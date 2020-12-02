@@ -30,7 +30,7 @@ public class FrontUrl {
 
 	/** ---- APIｓ ---- **/
 
-	public static final String API_V1_POST = "/api/v1/post";
+	public static final String API_V1_POSTS = "/api/v1/posts";
 
 	public static final String API_V1_FILEUPLOAD = "/api/v1/fileupload";
 

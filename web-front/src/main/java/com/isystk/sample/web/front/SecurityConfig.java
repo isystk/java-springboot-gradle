@@ -3,6 +3,7 @@ package com.isystk.sample.web.front;
 import static com.isystk.sample.common.FrontUrl.*;
 import static com.isystk.sample.common.Const.*;
 
+import com.isystk.sample.web.base.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +16,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.isystk.sample.web.base.security.BaseSecurityConfig;
-import com.isystk.sample.web.base.security.DefaultAccessDeniedHandler;
-import com.isystk.sample.web.base.security.DefaultAuthenticationEntryPoint;
 import com.isystk.sample.web.base.util.RequestUtils;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true) // アノテーションで役割、権限チェックを行うために定義する
@@ -51,9 +51,10 @@ public class SecurityConfig extends BaseSecurityConfig {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// CookieにCSRFトークンを保存する
-		http.csrf()//
-				.csrfTokenRepository(new CookieCsrfTokenRepository());
+//		// CookieにCSRFトークンを保存する
+//		http.csrf()//
+//				.csrfTokenRepository(new CookieCsrfTokenRepository());
+		http.csrf().disable();
 
 		String[] permittedUrls = { "*"};
 
@@ -74,11 +75,12 @@ public class SecurityConfig extends BaseSecurityConfig {
 				// ログイン画面のURL
 				.loginPage(LOGIN_URL)
 				// 認可を処理するURL
-				.loginProcessingUrl(LOGIN_PROCESSING_URL)
+//				.loginProcessingUrl(LOGIN_PROCESSING_URL)
+				.loginProcessingUrl(API_V1_AUTH)
 				// ログイン成功時の遷移先
-				.successForwardUrl(LOGIN_SUCCESS_URL)
+				.successForwardUrl(API_V1_LOGIN_SUCCESS_URL)
 				// ログイン失敗時の遷移先
-				.failureUrl(LOGIN_FAILURE_URL)
+				.failureUrl(API_V1_LOGIN_FAILURE_URL)
 				// ログインIDのパラメータ名
 				.usernameParameter("loginId")
 				// パスワードのパラメータ名
@@ -109,4 +111,5 @@ public class SecurityConfig extends BaseSecurityConfig {
 	public AuthenticationEntryPoint authenticationEntryPoint() {
 		return new DefaultAuthenticationEntryPoint(LOGIN_URL, LOGIN_TIMEOUT_URL);
 	}
+
 }

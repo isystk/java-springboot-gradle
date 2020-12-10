@@ -30,6 +30,14 @@ public class FrontUrl {
 
 	/** ---- APIｓ ---- **/
 
+	public static final String API_V1_AUTH = "/api/v1/authenticate";
+
+	public static final String API_V1_LOGIN_SUCCESS_URL = "/api/v1/authenticate/loginSuccess";
+
+	public static final String API_V1_LOGIN_FAILURE_URL = "/api/v1/authenticate/loginFailure";
+
+	public static final String API_V1_LOGIN_TIMEOUT_URL = "/api/v1/authenticate/loginTimeout";
+
 	public static final String API_V1_POSTS = "/api/v1/posts";
 
 	public static final String API_V1_FILEUPLOAD = "/api/v1/fileupload";

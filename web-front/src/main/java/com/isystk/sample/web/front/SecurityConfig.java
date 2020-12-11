@@ -86,20 +86,20 @@ public class SecurityConfig extends BaseSecurityConfig {
 				// パスワードのパラメータ名
 				.passwordParameter("password").permitAll();
 
-		// ログアウト処理
-		http.logout().logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
-				// Cookieを破棄する
-				.deleteCookies("SESSION", "JSESSIONID")
-				// ログアウト画面のURL
-				.logoutUrl(LOGOUT_URL)
-				// ログアウト後の遷移先
-				.logoutSuccessUrl(LOGOUT_SUCCESS_URL)
-				// ajaxの場合は、HTTPステータスを返す
-				.defaultLogoutSuccessHandlerFor(new HttpStatusReturningLogoutSuccessHandler(),
-						RequestUtils::isAjaxRequest)
-				// セッションを破棄する
-				.invalidateHttpSession(true).permitAll();
-
+//		// ログアウト処理
+//		http.logout().logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
+//				// Cookieを破棄する
+//				.deleteCookies("SESSION", "JSESSIONID")
+//				// ログアウト画面のURL
+//				.logoutUrl(LOGOUT_URL)
+//				// ログアウト後の遷移先
+//				.logoutSuccessUrl(LOGOUT_SUCCESS_URL)
+//				// ajaxの場合は、HTTPステータスを返す
+//				.defaultLogoutSuccessHandlerFor(new HttpStatusReturningLogoutSuccessHandler(),
+//						RequestUtils::isAjaxRequest)
+//				// セッションを破棄する
+//				.invalidateHttpSession(true).permitAll();
+//
 	}
 
 	@Bean
@@ -111,5 +111,4 @@ public class SecurityConfig extends BaseSecurityConfig {
 	public AuthenticationEntryPoint authenticationEntryPoint() {
 		return new DefaultAuthenticationEntryPoint(LOGIN_URL, LOGIN_TIMEOUT_URL);
 	}
-
 }

@@ -11,4 +11,4 @@ server:
 ####
 # アプリケーションの設定
 application:
-  imageUploadLocation: ../static/public/thumb
+  imageUploadLocation: ../docker/nginx/public/thumb

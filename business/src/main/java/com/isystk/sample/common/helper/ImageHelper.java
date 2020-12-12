@@ -178,6 +178,7 @@ public class ImageHelper {
 			Files.copy(file.getInputStream(), filePath);
 
 			File source = new File(dirPath.toUri().getPath(), String.valueOf(id) + "." + IMAGE_EXTENSION);
+			source.deleteOnExit();
 			if (!IMAGE_EXTENSION.equalsIgnoreCase(extension)) {
 				// JPG 以外の場合は変換する
 			    BufferedImage image = ImageIO.read(filePath.toFile());
@@ -190,8 +191,9 @@ public class ImageHelper {
 			// 画像のアスペクト比を変換
 			for (ImageSuffix suffix: ImageSuffix.values()) {
 				File dist = new File(dirPath.toUri().getPath(), String.valueOf(id) + suffix.getSuffix() + "." + IMAGE_EXTENSION);
+				dist.deleteOnExit();
 				convert(source, dist, suffix.getWidth(), suffix.getHeight());
-				// AWSアップロード
+				// S3アップロード
 				AwsS3Utils.putObject(dir + dist.toPath().getFileName().toString(), dist.length(), file.getContentType(), new FileInputStream(dist));
 			}
 
@@ -261,8 +263,8 @@ public class ImageHelper {
 	public String getUrl(Integer imageId, String suffix) {
 		String dir = getHash(imageId);
 		String saveFileName = imageId + suffix + "." + IMAGE_EXTENSION;
-//		return "/thumb/" + dir + saveFileName;
-		return AwsS3Utils.ENDPOINT_URL + AwsS3Utils.BUCKET_NAME + "/" + dir + saveFileName;
+		return "/thumb/" + dir + saveFileName;
+//		return AwsS3Utils.ENDPOINT_URL + AwsS3Utils.BUCKET_NAME + "/" + dir + saveFileName;
 	}
 
 	/** JSPからアクセス用*/

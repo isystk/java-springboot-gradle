@@ -38,6 +38,8 @@ public class FrontUrl {
 
 	public static final String API_V1_LOGIN_FAILURE_URL = "/api/v1/loginFailure";
 
+	public static final String API_V1_LOGOUT_URL = "/api/v1/logout";
+
 	public static final String API_V1_LOGOUT_SUCCESS_URL = "/api/v1/logoutSuccess";
 
 	public static final String API_V1_POSTS = "/api/v1/posts";

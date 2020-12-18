@@ -44,6 +44,18 @@ public class FrontUrl {
 
 	public static final String API_V1_POSTS = "/api/v1/posts";
 
+	public static final String API_V1_MEMBER = "/api/v1/member";
+
+	public static final String API_V1_MEMBER_POSTS = "/api/v1/member/posts";
+
+	public static final String API_V1_MEMBER_POSTS_DETAIL = "/api/v1/member/posts/p{postId}";
+
+	public static final String API_V1_MEMBER_POSTS_EDIT = "/api/v1/member/posts/p{postId}/edit";
+
+	public static final String API_V1_MEMBER_POSTS_DELETE = "/api/v1/member/posts/p{postId}/delete";
+
+	public static final String API_V1_MEMBER_POSTS_NEW = "/api/v1/member/posts/new";
+
 	public static final String API_V1_FILEUPLOAD = "/api/v1/fileupload";
 
 }

@@ -18,6 +18,10 @@ spring:
     enabled: true
     locations: classpath:/db/createTable,classpath:/db/insertData
     placeholderReplacement: false
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 logging:
   level:

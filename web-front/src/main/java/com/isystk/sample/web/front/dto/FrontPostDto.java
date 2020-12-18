@@ -29,9 +29,7 @@ public class FrontPostDto implements Dto {
 
 	String registTimeMMDD;
 
-	List<Integer> imageIdList;
-
-	List<String> imageUrlList;
+	List<FrontPostImageDto> imageList;
 
 	List<String> tagNameList;
 

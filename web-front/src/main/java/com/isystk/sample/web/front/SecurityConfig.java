@@ -58,7 +58,7 @@ public class SecurityConfig extends BaseSecurityConfig {
 
 		String[] permittedUrls = { "*"};
 
-		String[] authenticatedUrls = { MEMBER + "/**" };
+		String[] authenticatedUrls = { API_V1_MEMBER + "/**" };
 
 		// 認証除外設定
 		http.authorizeRequests()

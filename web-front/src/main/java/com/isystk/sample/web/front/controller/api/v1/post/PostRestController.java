@@ -1,4 +1,4 @@
-package com.isystk.sample.web.front.controller.api.v1.posts;
+package com.isystk.sample.web.front.controller.api.v1.post;
 
 import static com.isystk.sample.common.Const.*;
 
@@ -24,7 +24,7 @@ import lombok.val;
 
 @RestController
 @RequestMapping(path = API_V1_POSTS, produces = MediaType.APPLICATION_JSON_VALUE)
-public class PostsRestController extends AbstractRestController {
+public class PostRestController extends AbstractRestController {
 
 	@Autowired
 	PostService postService;
@@ -42,7 +42,7 @@ public class PostsRestController extends AbstractRestController {
 	 * @return
 	 */
 	@GetMapping
-	public PageableResource index(PostsRestForm query, @RequestParam(required = false, defaultValue = "1") int page) {
+	public PageableResource index(PostRestForm query, @RequestParam(required = false, defaultValue = "1") int page) {
 
 		// 入力値からDTOを作成する
 		val criteria = ObjectMapperUtils.map(query, SolrPostCriteria.class);
@@ -65,7 +65,7 @@ public class PostsRestController extends AbstractRestController {
 	@GetMapping(value = "/{postId}")
 	public Resource show(@PathVariable Integer postId) {
 		// 1件取得する
-		var post = postService.findSolrById(postId);
+		var post = postService.findDataById(postId);
 
 		Resource resource = resourceFactory.create();
 		resource.setData(Arrays.asList(post.orElse(new FrontPostDto())));

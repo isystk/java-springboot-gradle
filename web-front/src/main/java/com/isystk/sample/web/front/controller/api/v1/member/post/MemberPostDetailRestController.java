@@ -1,42 +1,31 @@
 package com.isystk.sample.web.front.controller.api.v1.member.post;
 
-import com.isystk.sample.common.exception.NoDataFoundException;
 import com.isystk.sample.common.helper.UserHelper;
-import com.isystk.sample.common.util.DateUtils;
 import com.isystk.sample.common.util.ObjectMapperUtils;
-import com.isystk.sample.common.values.ImageSuffix;
 import com.isystk.sample.domain.entity.TPostImage;
 import com.isystk.sample.domain.entity.TPostTag;
-import com.isystk.sample.domain.repository.TPostRepository;
 import com.isystk.sample.domain.repository.dto.TPostRepositoryDto;
-import com.isystk.sample.solr.dto.SolrPost;
 import com.isystk.sample.web.base.controller.api.AbstractRestController;
 import com.isystk.sample.web.base.controller.api.resource.Resource;
-import com.isystk.sample.web.base.controller.html.AbstractHtmlController;
-import com.isystk.sample.web.front.controller.html.member.post.regist.MemberPostRegistForm;
 import com.isystk.sample.web.front.dto.FrontPostDto;
 import com.isystk.sample.web.front.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.isystk.sample.common.Const.MESSAGE_SUCCESS;
-import static com.isystk.sample.common.Const.NO_DATA_FOUND_ERROR;
 import static com.isystk.sample.common.FrontUrl.API_V1_MEMBER_POSTS_DETAIL;
 import static com.isystk.sample.common.FrontUrl.API_V1_MEMBER_POSTS_EDIT;
 import static com.isystk.sample.common.FrontUrl.API_V1_MEMBER_POSTS_NEW;
@@ -99,19 +88,25 @@ public class MemberPostDetailRestController extends AbstractRestController {
 	 *
 	 * @param form
 	 * @param br
-	 * @param sessionStatus
-	 * @param attributes
+	 * @param bindingResult
 	 * @return
 	 */
 	@PutMapping(API_V1_MEMBER_POSTS_EDIT)
-	public Resource update(@Validated @ModelAttribute MemberPostDetailRestForm form, BindingResult br,
-								 SessionStatus sessionStatus, RedirectAttributes attributes) {
+	public Resource update(@Validated @ModelAttribute("memberPostDetailRestForm") MemberPostDetailRestForm form, BindingResult br,
+						   BindingResult bindingResult) {
 
 		Resource resource = resourceFactory.create();
 
 		// 入力チェックエラーがある場合は、元の画面にもどる
 		if (br.hasErrors()) {
-			resource.setMessage("入力エラー");
+			String message = "";
+			for (FieldError fieldError : bindingResult.getFieldErrors()) {
+
+				message += "<hr />Field:" + fieldError.getField();
+				message += "<br />Code:" + fieldError.getCode();
+				message += "<br />DefaultMessage:" + fieldError.getDefaultMessage();
+			}
+			resource.setMessage(message);
 			return resource;
 		}
 
@@ -119,11 +114,11 @@ public class MemberPostDetailRestController extends AbstractRestController {
 		val tPostDto = ObjectMapperUtils.map(form, TPostRepositoryDto.class);
 		// 投稿画像
 		tPostDto.setTPostImageList(
-				Optional.ofNullable(form.getPostImageId())
+				Optional.ofNullable(form.getImageList())
 						.map(list -> list.stream()
-								.map(imageId -> {
+								.map(image -> {
 									TPostImage tPostImage = new TPostImage();
-									tPostImage.setImageId(imageId);
+									tPostImage.setImageId(image.getImageId());
 									return tPostImage;
 								})
 								.collect(Collectors.toList())
@@ -132,11 +127,11 @@ public class MemberPostDetailRestController extends AbstractRestController {
 		);
 		// 投稿タグ
 		tPostDto.setTPostTagList(
-				Optional.ofNullable(form.getPostTagId())
+				Optional.ofNullable(form.getTagList())
 						.map(list -> list.stream()
-								.map(tagId -> {
+								.map(tag -> {
 									TPostTag tPostTag = new TPostTag();
-									tPostTag.setPostTagId(tagId);
+									tPostTag.setPostTagId(tag.getTagId());
 									return tPostTag;
 								})
 								.collect(Collectors.toList())
@@ -146,9 +141,9 @@ public class MemberPostDetailRestController extends AbstractRestController {
 		// 更新する
 		postService.update(tPostDto);
 
-		// セッションのmemberPostFormをクリアする
-		sessionStatus.setComplete();
-
+		// 1件取得する
+		val post = postService.findMyDataById(form.getPostId());
+		resource.setData(Arrays.asList(post.orElse(new FrontPostDto())));
 		resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
 		return resource;
@@ -159,19 +154,24 @@ public class MemberPostDetailRestController extends AbstractRestController {
 	 *
 	 * @param form
 	 * @param br
-	 * @param sessionStatus
-	 * @param attributes
+	 * @param bindingResult
 	 * @return
 	 */
 	@PostMapping(API_V1_MEMBER_POSTS_NEW)
-	public Resource regist(@Validated @ModelAttribute MemberPostRegistForm form, BindingResult br,
-								 SessionStatus sessionStatus, RedirectAttributes attributes) {
+	public Resource regist(@Validated @ModelAttribute("memberPostDetailRestForm")  MemberPostDetailRestForm form, BindingResult br,
+						   BindingResult bindingResult) {
 
 		Resource resource = resourceFactory.create();
 
 		// 入力チェックエラーがある場合は、元の画面にもどる
 		if (br.hasErrors()) {
-			resource.setMessage("入力エラー");
+			String message = "";
+			for (FieldError fieldError : bindingResult.getFieldErrors()) {
+				message += "<hr />Field:" + fieldError.getField();
+				message += "<br />Code:" + fieldError.getCode();
+				message += "<br />DefaultMessage:" + fieldError.getDefaultMessage();
+			}
+			resource.setMessage(message);
 			return resource;
 		}
 
@@ -181,11 +181,11 @@ public class MemberPostDetailRestController extends AbstractRestController {
 		tPostDto.setUserId(userHelper.getLoginUserId());
 		// 投稿画像
 		tPostDto.setTPostImageList(
-				Optional.ofNullable(form.getPostImageId())
+				Optional.ofNullable(form.getImageList())
 						.map(list -> list.stream()
-								.map(imageId -> {
+								.map(image -> {
 									TPostImage tPostImage = new TPostImage();
-									tPostImage.setImageId(imageId);
+									tPostImage.setImageId(image.getImageId());
 									return tPostImage;
 								})
 								.collect(Collectors.toList())
@@ -194,11 +194,11 @@ public class MemberPostDetailRestController extends AbstractRestController {
 		);
 		// 投稿タグ
 		tPostDto.setTPostTagList(
-				Optional.ofNullable(form.getPostTagId())
+				Optional.ofNullable(form.getTagList())
 						.map(list -> list.stream()
-								.map(tagId -> {
+								.map(tag -> {
 									TPostTag tPostTag = new TPostTag();
-									tPostTag.setPostTagId(tagId);
+									tPostTag.setPostTagId(tag.getTagId());
 									return tPostTag;
 								})
 								.collect(Collectors.toList())
@@ -207,6 +207,9 @@ public class MemberPostDetailRestController extends AbstractRestController {
 		);
 		val postId = postService.create(tPostDto);
 
+		// 1件取得する
+		val post = postService.findMyDataById(form.getPostId());
+		resource.setData(Arrays.asList(post.orElse(new FrontPostDto())));
 		resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
 		return resource;

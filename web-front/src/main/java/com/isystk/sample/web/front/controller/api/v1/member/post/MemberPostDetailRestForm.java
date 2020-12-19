@@ -4,6 +4,7 @@ import com.isystk.sample.web.base.controller.html.BaseForm;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 public class MemberPostDetailRestForm extends BaseForm {
 
-	private static final long serialVersionUID = 7593564324192730932L;
+	private static final long serialVersionUID = 1L;
 
 	@NotNull
 	Integer postId;
@@ -24,9 +25,10 @@ public class MemberPostDetailRestForm extends BaseForm {
 	@NotEmpty
 	String text;
 
-	@NotEmpty
-	List<@Digits(integer = 9, fraction = 0) Integer> postImageId;
+	@Valid
+	List<MemberPostDetailImageRestForm> imageList;
 
-	List<@Digits(integer = 9, fraction = 0) Integer> postTagId;
+	@Valid
+	List<MemberPostDetailTagRestForm> tagList;
 
 }

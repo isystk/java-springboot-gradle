@@ -13,7 +13,7 @@ import org.springframework.validation.Errors;
  * 投稿 入力チェック
  */
 @Component
-public class MemberPostDetailRestValidator extends AbstractValidator<MemberPostDetailRestForm> {
+public class MemberPostEditRestValidator extends AbstractValidator<MemberPostEditRestForm> {
 
 	@Autowired
 	TPostDao tPostDao;
@@ -22,7 +22,7 @@ public class MemberPostDetailRestValidator extends AbstractValidator<MemberPostD
 	UserHelper userHelper;
 
 	@Override
-	protected void doValidate(MemberPostDetailRestForm form, Errors errors) {
+	protected void doValidate(MemberPostEditRestForm form, Errors errors) {
 
 		// 自分の投稿かどうか
 		TPostCriteria criteria = new TPostCriteria();

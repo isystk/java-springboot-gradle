@@ -18,8 +18,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -33,7 +31,7 @@ import static com.isystk.sample.common.FrontUrl.API_V1_MEMBER_POSTS_DELETE;
 
 @RestController
 @Slf4j
-@SessionAttributes(types = { MemberPostDetailRestForm.class })
+@SessionAttributes(types = { MemberPostRegistRestForm.class })
 public class MemberPostDetailRestController extends AbstractRestController {
 
 	@Autowired
@@ -43,16 +41,21 @@ public class MemberPostDetailRestController extends AbstractRestController {
 	UserHelper userHelper;
 
 	@Autowired
-	MemberPostDetailRestValidator memberPostDetailRestValidator;
+	MemberPostEditRestValidator memberPostEditRestValidator;
 
-	@ModelAttribute("memberPostDetailRestForm")
-	public MemberPostDetailRestForm memberPostDetailRestForm() {
-		return new MemberPostDetailRestForm();
+	@ModelAttribute("memberPostRegistRestForm")
+	public MemberPostRegistRestForm memberPostRegistRestForm() {
+		return new MemberPostRegistRestForm();
 	}
 
-	@InitBinder("memberPostDetailRestForm")
+	@ModelAttribute("memberPostEditRestForm")
+	public MemberPostEditRestForm memberPostEditRestForm() {
+		return new MemberPostEditRestForm();
+	}
+
+	@InitBinder("memberPostEditRestForm")
 	public void validatorBinder(WebDataBinder binder) {
-		binder.addValidators(memberPostDetailRestValidator);
+		binder.addValidators(memberPostEditRestValidator);
 	}
 
 	@Override
@@ -63,18 +66,18 @@ public class MemberPostDetailRestController extends AbstractRestController {
 	/**
 	 * 指定した投稿IDに紐づく自分の投稿データを取得します。
 	 *
-	 * @param form
+	 * @param postId
 	 * @param model
 	 * @return
 	 */
 	@GetMapping(API_V1_MEMBER_POSTS_DETAIL)
-	public Resource editIndex(@ModelAttribute MemberPostDetailRestForm form, Model model) {
+	public Resource showDetail(@PathVariable Integer postId, Model model) {
 
 //		// SessionAttributeを再生成する
 //		model.addAttribute("memberPostDetailRestForm", new MemberPostEditForm());
 
 		// 1件取得する
-		val post = postService.findMyDataById(form.getPostId());
+		val post = postService.findMyDataById(postId);
 
 		Resource resource = resourceFactory.create();
 		resource.setData(Arrays.asList(post.orElse(new FrontPostDto())));
@@ -92,7 +95,7 @@ public class MemberPostDetailRestController extends AbstractRestController {
 	 * @return
 	 */
 	@PutMapping(API_V1_MEMBER_POSTS_EDIT)
-	public Resource update(@Validated @ModelAttribute("memberPostDetailRestForm") MemberPostDetailRestForm form, BindingResult br,
+	public Resource update(@Validated @ModelAttribute("memberPostEditRestForm") MemberPostEditRestForm form, BindingResult br,
 						   BindingResult bindingResult) {
 
 		Resource resource = resourceFactory.create();
@@ -158,7 +161,7 @@ public class MemberPostDetailRestController extends AbstractRestController {
 	 * @return
 	 */
 	@PostMapping(API_V1_MEMBER_POSTS_NEW)
-	public Resource regist(@Validated @ModelAttribute("memberPostDetailRestForm")  MemberPostDetailRestForm form, BindingResult br,
+	public Resource regist(@Validated @ModelAttribute("memberPostRegistRestForm") MemberPostRegistRestForm form, BindingResult br,
 						   BindingResult bindingResult) {
 
 		Resource resource = resourceFactory.create();
@@ -208,7 +211,7 @@ public class MemberPostDetailRestController extends AbstractRestController {
 		val postId = postService.create(tPostDto);
 
 		// 1件取得する
-		val post = postService.findMyDataById(form.getPostId());
+		val post = postService.findMyDataById(postId);
 		resource.setData(Arrays.asList(post.orElse(new FrontPostDto())));
 		resource.setMessage(getMessage(MESSAGE_SUCCESS));
 

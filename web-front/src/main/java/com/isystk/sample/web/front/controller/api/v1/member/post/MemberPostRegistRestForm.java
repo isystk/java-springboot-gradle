@@ -12,12 +12,9 @@ import java.util.List;
 
 @Setter
 @Getter
-public class MemberPostDetailRestForm extends BaseForm {
+public class MemberPostRegistRestForm extends BaseForm {
 
 	private static final long serialVersionUID = 1L;
-
-	@NotNull
-	Integer postId;
 
 	@NotEmpty
 	String title;

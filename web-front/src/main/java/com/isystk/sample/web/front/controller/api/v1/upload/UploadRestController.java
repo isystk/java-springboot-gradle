@@ -29,7 +29,7 @@ import lombok.val;
  * ファイルアップロードのコントローラー
  */
 @RestController
-@RequestMapping(path = API_V1_FILEUPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = API_V1_MEMBER_FILEUPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UploadRestController extends AbstractRestController {
 
 	@Autowired

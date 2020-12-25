@@ -56,6 +56,14 @@ public class FrontUrl {
 
 	public static final String API_V1_MEMBER_POSTS_NEW = "/api/v1/member/posts/new";
 
-	public static final String API_V1_FILEUPLOAD = "/api/v1/fileupload";
+	public static final String API_V1_MEMBER_FILEUPLOAD = "/api/v1/member/fileupload";
+
+	public static final String API_V1_ENTRY_REGIST = "/api/v1/entry/regist";
+
+	public static final String API_V1_ENTRY_REMIND = "/api/v1/entry/remind";
+
+	public static final String API_V1_ENTRY_REMIND_CONFIG = "/api/v1/entry/remind/config";
+
+	public static final String API_V1_COMMON_CONST = "/api/v1/common/const";
 
 }

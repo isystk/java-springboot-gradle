@@ -2,8 +2,6 @@ spring:
   profiles: local
   profiles.include:
     - common-local
-  thymeleaf:
-    cache: false
 
 server:
   address: localhost

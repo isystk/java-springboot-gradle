@@ -32,9 +32,6 @@ public class EntryRemindRestController extends AbstractRestController {
 	EntryRemindService entryRemindService;
 
 	@Autowired
-	PasswordEncoder passwordEncoder;
-
-	@Autowired
 	EntryRemindRestFormValidator entryRemindRestFormValidator;
 
     @ModelAttribute("entryRemindRestForm")
@@ -50,22 +47,6 @@ public class EntryRemindRestController extends AbstractRestController {
 	@Override
 	public String getFunctionName() {
 		return "API_ENTRY_REMIND";
-	}
-
-	/**
-	 * パスワード変更メール送信画面表示
-	 *
-	 * @param form
-	 * @param model
-	 * @return
-	 */
-	@GetMapping
-	public String index(@ModelAttribute EntryRemindRestForm form, Model model) {
-
-        // SessionAttributeを再生成する
-        model.addAttribute("entryRemindRestForm", new EntryRemindRestForm());
-
-		return "modules/entry/remind/index";
 	}
 
 	/**

@@ -60,7 +60,9 @@ public class EntryRemindConfigRestController extends AbstractRestController {
 	 * @return
 	 */
 	@GetMapping("{onetimeKey}")
-	public String config(@PathVariable String onetimeKey, @ModelAttribute EntryRemindConfigRestForm form, Model model) {
+	public Resource config(@PathVariable String onetimeKey, @ModelAttribute EntryRemindConfigRestForm form, Model model) {
+
+		Resource resource = resourceFactory.create();
 
 		// ワンタイムキーからユーザーIDを取得する
 		var tUserOnetimePass = entryRemindService.getTUserOnetimePass(onetimeKey);
@@ -70,7 +72,9 @@ public class EntryRemindConfigRestController extends AbstractRestController {
 
 		form.setOnetimeKey(onetimeKey);
 
-		return "modules/entry/remind/config";
+		resource.setMessage(getMessage(MESSAGE_SUCCESS));
+
+		return resource;
 	}
 
 	/**

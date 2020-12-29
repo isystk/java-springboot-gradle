@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Getter
 public class MemberPostDetailImageRestForm implements Serializable {
 
-	@Digits(integer = 9, fraction = 0)
-	Integer imageId;
+  @Digits(integer = 9, fraction = 0)
+  Integer imageId;
 
 }

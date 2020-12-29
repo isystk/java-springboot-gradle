@@ -19,20 +19,20 @@ import lombok.Setter;
 @Getter
 public class PostSearchForm extends BaseSearchForm implements Pageable {
 
-	private static final long serialVersionUID = 7593564324192730932L;
+  private static final long serialVersionUID = 7593564324192730932L;
 
-	@Digits(integer = 9, fraction = 0)
-	Integer postId;
+  @Digits(integer = 9, fraction = 0)
+  Integer postId;
 
-	@Digits(integer = 9, fraction = 0)
-	Integer userId;
+  @Digits(integer = 9, fraction = 0)
+  Integer userId;
 
-	String title;
+  String title;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	LocalDate registDateFrom;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  LocalDate registDateFrom;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	LocalDate registDateTo;
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  LocalDate registDateTo;
 
 }

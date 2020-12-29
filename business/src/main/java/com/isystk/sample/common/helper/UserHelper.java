@@ -23,62 +23,63 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserHelper {
 
-	@Autowired
-	TUserDao tUserDao;
+  @Autowired
+  TUserDao tUserDao;
 
-	/**
-	 * ユーザーを全件取得します。
-	 *
-	 * @return
-	 */
-	public List<TUser> getUserList() {
-		TUserCriteria criteria = new TUserCriteria();
-		criteria.setDeleteFlgFalse(true);
-		return tUserDao.findAll(criteria);
-	}
+  /**
+   * ユーザーを全件取得します。
+   *
+   * @return
+   */
+  public List<TUser> getUserList() {
+    TUserCriteria criteria = new TUserCriteria();
+    criteria.setDeleteFlgFalse(true);
+    return tUserDao.findAll(criteria);
+  }
 
-	/**
-	 * ユーザーを取得します。
-	 *
-	 * @return
-	 */
-	public TUser getLoginUser(Integer userId) {
-		TUserCriteria criteria = new TUserCriteria();
-		criteria.setUserIdEq(userId);
-		return tUserDao.findOne(criteria).orElseThrow(
-				() -> new NoDataFoundException("userId=" + userId + "のデータが見つかりません。"));
-	}
+  /**
+   * ユーザーを取得します。
+   *
+   * @return
+   */
+  public TUser getLoginUser(Integer userId) {
+    TUserCriteria criteria = new TUserCriteria();
+    criteria.setUserIdEq(userId);
+    return tUserDao.findOne(criteria).orElseThrow(
+        () -> new NoDataFoundException("userId=" + userId + "のデータが見つかりません。"));
+  }
 
-	/**
-	 * ログインユーザーを取得します。
-	 *
-	 * @return
-	 */
-	public Integer getLoginUserId() {
-		return getLoginUser().getUserId();
-	}
+  /**
+   * ログインユーザーを取得します。
+   *
+   * @return
+   */
+  public Integer getLoginUserId() {
+    return getLoginUser().getUserId();
+  }
 
-	/**
-	 * ログインユーザーを取得します。
-	 *
-	 * @return
-	 */
-	public TUser getLoginUser() {
-		TUserCriteria criteria = new TUserCriteria();
-		criteria.setEmailEq(AuditInfoHolder.getAuditUser());
-		return tUserDao.findOne(criteria).orElseThrow(
-				() -> new NoDataFoundException("email=" + AuditInfoHolder.getAuditUser() + "のデータが見つかりません。"));
-	}
+  /**
+   * ログインユーザーを取得します。
+   *
+   * @return
+   */
+  public TUser getLoginUser() {
+    TUserCriteria criteria = new TUserCriteria();
+    criteria.setEmailEq(AuditInfoHolder.getAuditUser());
+    return tUserDao.findOne(criteria).orElseThrow(
+        () -> new NoDataFoundException(
+            "email=" + AuditInfoHolder.getAuditUser() + "のデータが見つかりません。"));
+  }
 
-	/**
-	 * 最終ログイン日時を更新します。
-	 *
-	 * @return
-	 */
-	public void updateLastLogin() {
-		TUser tUser = getLoginUser();
-		tUser.setLastLoginTime(DateUtils.getNow());
-		tUserDao.update(tUser);
-	}
+  /**
+   * 最終ログイン日時を更新します。
+   *
+   * @return
+   */
+  public void updateLastLogin() {
+    TUser tUser = getLoginUser();
+    tUser.setLastLoginTime(DateUtils.getNow());
+    tUserDao.update(tUser);
+  }
 
 }

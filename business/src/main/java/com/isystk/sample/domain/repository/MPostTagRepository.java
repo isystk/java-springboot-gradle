@@ -23,34 +23,35 @@ import com.isystk.sample.domain.repository.dto.MPostTagRepositoryDto;
 @Repository
 public class MPostTagRepository extends BaseRepository {
 
-	@Autowired
-	MPostTagDao mPostTagDao;
+  @Autowired
+  MPostTagDao mPostTagDao;
 
-	/**
-	 * 投稿タグを複数取得します。
-	 *
-	 * @param criteria
-	 * @param pageable
-	 * @return
-	 */
-	public Page<MPostTagRepositoryDto> findAll(MPostTagCriteria criteria, Pageable pageable) {
-		var options = createSelectOptions(pageable);
-		// ページングを指定する
-		return pageFactory.create(convertDto(
-				mPostTagDao.findAll(criteria,
-				options.count(),
-				toList()
-			)), pageable, options.getCount());
-	}
+  /**
+   * 投稿タグを複数取得します。
+   *
+   * @param criteria
+   * @param pageable
+   * @return
+   */
+  public Page<MPostTagRepositoryDto> findAll(MPostTagCriteria criteria, Pageable pageable) {
+    var options = createSelectOptions(pageable);
+    // ページングを指定する
+    return pageFactory.create(convertDto(
+        mPostTagDao.findAll(criteria,
+            options.count(),
+            toList()
+        )), pageable, options.getCount());
+  }
 
-	/**
-	 * RepositoryDto に変換します。
-	 * @param mPostTagList
-	 * @return
-	 */
-	private List<MPostTagRepositoryDto> convertDto(List<MPostTag> mPostTagList) {
+  /**
+   * RepositoryDto に変換します。
+   *
+   * @param mPostTagList
+   * @return
+   */
+  private List<MPostTagRepositoryDto> convertDto(List<MPostTag> mPostTagList) {
 
-		return ObjectMapperUtils.mapAll(mPostTagList, MPostTagRepositoryDto.class);
-	}
+    return ObjectMapperUtils.mapAll(mPostTagList, MPostTagRepositoryDto.class);
+  }
 
 }

@@ -34,90 +34,89 @@ import static com.isystk.sample.common.FrontUrl.API_V1_POSTS;
 @RequestMapping(path = API_V1_ENTRY_REGIST, produces = MediaType.APPLICATION_JSON_VALUE)
 public class EntryRestController extends AbstractRestController {
 
-	@Autowired
-	EntryService entryService;
+  @Autowired
+  EntryService entryService;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
-	@Autowired
-	EntryRestFormValidator entryFormValidator;
+  @Autowired
+  EntryRestFormValidator entryFormValidator;
 
-    @ModelAttribute("entryRestForm")
-    public EntryRestForm entryRestForm() {
-        return new EntryRestForm();
+  @ModelAttribute("entryRestForm")
+  public EntryRestForm entryRestForm() {
+    return new EntryRestForm();
+  }
+
+  @InitBinder("entryRestForm")
+  public void validatorBinder(WebDataBinder binder) {
+    binder.addValidators(entryFormValidator);
+  }
+
+  @Override
+  public String getFunctionName() {
+    return "API_ENTRY";
+  }
+
+  /**
+   * 仮会員登録処理
+   *
+   * @param form
+   * @param br
+   * @param bindingResult
+   * @return
+   */
+  @PostMapping
+  public Resource ontime(@Validated @ModelAttribute EntryRestForm form, BindingResult br,
+      BindingResult bindingResult) {
+
+    Resource resource = resourceFactory.create();
+
+    // 入力チェックエラーがある場合は、元の画面にもどる
+    if (br.hasErrors()) {
+      String message = "";
+      for (FieldError fieldError : bindingResult.getFieldErrors()) {
+
+        message += "<hr />Field:" + fieldError.getField();
+        message += "<br />Code:" + fieldError.getCode();
+        message += "<br />DefaultMessage:" + fieldError.getDefaultMessage();
+      }
+      resource.setMessage(message);
+      return resource;
     }
 
-    @InitBinder("entryRestForm")
-    public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(entryFormValidator);
-    }
+    // 入力値からDTOを作成する
+    val inputUser = ObjectMapperUtils.map(form, TUser.class);
+    val password = form.getPassword();
 
-	@Override
-	public String getFunctionName() {
-		return "API_ENTRY";
-	}
+    // パスワードをハッシュ化する
+    inputUser.setPassword(passwordEncoder.encode(password));
 
-	/**
-	 *
-	 * 仮会員登録処理
-	 *
-	 * @param form
-	 * @param br
-	 * @param bindingResult
-	 * @return
-	 */
-	@PostMapping
-	public Resource ontime(@Validated @ModelAttribute EntryRestForm form, BindingResult br,
-						   BindingResult bindingResult) {
+    // 仮会員登録
+    entryService.registTemporary(inputUser);
 
-		Resource resource = resourceFactory.create();
+    resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
-		// 入力チェックエラーがある場合は、元の画面にもどる
-		if (br.hasErrors()) {
-			String message = "";
-			for (FieldError fieldError : bindingResult.getFieldErrors()) {
+    return resource;
+  }
 
-				message += "<hr />Field:" + fieldError.getField();
-				message += "<br />Code:" + fieldError.getCode();
-				message += "<br />DefaultMessage:" + fieldError.getDefaultMessage();
-			}
-			resource.setMessage(message);
-			return resource;
-		}
+  /**
+   * 本会員登録処理
+   *
+   * @param onetimeKey
+   * @return
+   */
+  @PutMapping("{onetimeKey}")
+  public Resource complete(@PathVariable String onetimeKey, Model model) {
 
-		// 入力値からDTOを作成する
-		val inputUser = ObjectMapperUtils.map(form, TUser.class);
-		val password = form.getPassword();
+    Resource resource = resourceFactory.create();
 
-		// パスワードをハッシュ化する
-		inputUser.setPassword(passwordEncoder.encode(password));
+    // 本会員登録
+    entryService.registComplete(onetimeKey);
 
-		// 仮会員登録
-		entryService.registTemporary(inputUser);
+    resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
-		resource.setMessage(getMessage(MESSAGE_SUCCESS));
-
-		return resource;
-	}
-
-	/**
-	 * 本会員登録処理
-	 *
-	 * @param onetimeKey
-	 * @return
-	 */
-	@PutMapping("{onetimeKey}")
-	public Resource complete(@PathVariable String onetimeKey, Model model) {
-
-		Resource resource = resourceFactory.create();
-
-		// 本会員登録
-		entryService.registComplete(onetimeKey);
-
-		resource.setMessage(getMessage(MESSAGE_SUCCESS));
-
-		return resource;
-	}
+    return resource;
+  }
 
 }

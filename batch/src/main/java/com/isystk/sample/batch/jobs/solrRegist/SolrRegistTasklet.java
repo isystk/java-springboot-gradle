@@ -19,18 +19,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SolrRegistTasklet extends BaseTasklet<SolrRegistPostDto> {
 
-	@Autowired
-	SolrPostService solrPostService;
+  @Autowired
+  SolrPostService solrPostService;
 
-	@Override
-	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws IOException {
-		return super.execute(contribution, chunkContext);
-	}
+  @Override
+  public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext)
+      throws IOException {
+    return super.execute(contribution, chunkContext);
+  }
 
-	@Override
-	protected void doProcess(BatchContext context) {
-		// Solrの投稿インデックスを更新します。
-		solrPostService.refresh();
-	}
+  @Override
+  protected void doProcess(BatchContext context) {
+    // Solrの投稿インデックスを更新します。
+    solrPostService.refresh();
+  }
 
 }

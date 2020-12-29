@@ -14,18 +14,18 @@ import java.util.List;
 @Getter
 public class MemberPostRegistRestForm extends BaseForm {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@NotEmpty
-	String title;
+  @NotEmpty
+  String title;
 
-	@NotEmpty
-	String text;
+  @NotEmpty
+  String text;
 
-	@Valid
-	List<MemberPostDetailImageRestForm> imageList;
+  @Valid
+  List<MemberPostDetailImageRestForm> imageList;
 
-	@Valid
-	List<MemberPostDetailTagRestForm> tagList;
+  @Valid
+  List<MemberPostDetailTagRestForm> tagList;
 
 }

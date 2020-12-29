@@ -32,7 +32,7 @@ doma:
   # 小文字のスネークケースに変換する（firstName → first_name）
   naming: SNAKE_LOWER_CASE
   # バルクインサート・アップデートのサイズ
-  batch-size: 1000  
+  batch-size: 1000
 
 logging:
   pattern:

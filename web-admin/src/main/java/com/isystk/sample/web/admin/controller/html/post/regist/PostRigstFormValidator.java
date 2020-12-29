@@ -14,8 +14,8 @@ import com.isystk.sample.common.validator.AbstractValidator;
 @Component
 public class PostRigstFormValidator extends AbstractValidator<PostRegistForm> {
 
-	@Override
-	protected void doValidate(PostRegistForm form, Errors errors) {
+  @Override
+  protected void doValidate(PostRegistForm form, Errors errors) {
 
-	}
+  }
 }

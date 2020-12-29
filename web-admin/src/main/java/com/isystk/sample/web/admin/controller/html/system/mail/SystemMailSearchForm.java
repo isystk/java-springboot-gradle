@@ -12,9 +12,9 @@ import lombok.Setter;
 @Getter
 public class SystemMailSearchForm extends BaseSearchForm implements Pageable {
 
-	private static final long serialVersionUID = 7593564324192730932L;
+  private static final long serialVersionUID = 7593564324192730932L;
 
-	@Digits(integer = 9, fraction = 0)
-	Integer templateDiv;
+  @Digits(integer = 9, fraction = 0)
+  Integer templateDiv;
 
 }

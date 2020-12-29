@@ -8,18 +8,18 @@ import lombok.Getter;
 @Getter
 public enum ImageSuffix {
 
-	SQUARE("_square", 900, 900),
-	SD("_sd", 900, 675),
-	;
+  SQUARE("_square", 900, 900),
+  SD("_sd", 900, 675),
+  ;
 
-	private ImageSuffix(String suffix, int width, int height) {
-		this.suffix = suffix;
-		this.width = width;
-		this.height = height;
-	}
+  private ImageSuffix(String suffix, int width, int height) {
+    this.suffix = suffix;
+    this.width = width;
+    this.height = height;
+  }
 
-	private final String suffix;
-	private final int width;
-	private final int height;
+  private final String suffix;
+  private final int width;
+  private final int height;
 
 }

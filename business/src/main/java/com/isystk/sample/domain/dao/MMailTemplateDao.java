@@ -17,68 +17,70 @@ import org.seasar.doma.SelectType;
 import com.isystk.sample.domain.dto.MMailTemplateCriteria;
 
 /**
+ *
  */
 @ConfigAutowireable
 @Dao
 public interface MMailTemplateDao {
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Insert
-    int insert(MMailTemplate entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Insert
+  int insert(MMailTemplate entity);
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Update
-    int update(MMailTemplate entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Update
+  int update(MMailTemplate entity);
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Delete
-    int delete(MMailTemplate entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Delete
+  int delete(MMailTemplate entity);
 
-    /**
-     * @param criteria
-     * @param options
-     * @return
-     */
-    @Select(strategy = SelectType.COLLECT)
-    <R> R findAll(final MMailTemplateCriteria criteria, final SelectOptions options, final Collector<MMailTemplate, ?, R> collector);
+  /**
+   * @param criteria
+   * @param options
+   * @return
+   */
+  @Select(strategy = SelectType.COLLECT)
+  <R> R findAll(final MMailTemplateCriteria criteria, final SelectOptions options,
+      final Collector<MMailTemplate, ?, R> collector);
 
-    /**
-     * @param criteria
-     * @return
-     */
-    @Select
-    List<MMailTemplate> findAll(MMailTemplateCriteria criteria);
+  /**
+   * @param criteria
+   * @return
+   */
+  @Select
+  List<MMailTemplate> findAll(MMailTemplateCriteria criteria);
 
-    /**
-     * @param mailTemplateId
-     * @return the MMailTemplate entity
-     */
-    @Select
-    Optional<MMailTemplate> selectById(Integer mailTemplateId);
+  /**
+   * @param mailTemplateId
+   * @return the MMailTemplate entity
+   */
+  @Select
+  Optional<MMailTemplate> selectById(Integer mailTemplateId);
 
-    /**
-     * @param mailTemplateId
-     * @param version
-     * @return the MMailTemplate entity
-     */
-    @Select(ensureResult = true)
-    Optional<MMailTemplate> selectByIdAndVersion(Integer mailTemplateId, Long version);
+  /**
+   * @param mailTemplateId
+   * @param version
+   * @return the MMailTemplate entity
+   */
+  @Select(ensureResult = true)
+  Optional<MMailTemplate> selectByIdAndVersion(Integer mailTemplateId, Long version);
 
 
-    /**
-     * @param criteria
-     * @return
-     */
-    @Select
-    Optional<MMailTemplate> findOne(MMailTemplateCriteria criteria);
+  /**
+   * @param criteria
+   * @return
+   */
+  @Select
+  Optional<MMailTemplate> findOne(MMailTemplateCriteria criteria);
 
 }

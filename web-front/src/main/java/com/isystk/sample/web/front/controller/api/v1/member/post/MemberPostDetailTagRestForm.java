@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Getter
 public class MemberPostDetailTagRestForm implements Serializable {
 
-	@Digits(integer = 9, fraction = 0)
-	Integer tagId;
+  @Digits(integer = 9, fraction = 0)
+  Integer tagId;
 
 }

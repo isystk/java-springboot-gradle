@@ -15,22 +15,22 @@ import static com.isystk.sample.common.util.ValidateUtils.isNotEquals;
 @Component
 public class EntryRestFormValidator extends AbstractValidator<EntryRestForm> {
 
-	@Autowired
-	TUserDao tUserDao;
+  @Autowired
+  TUserDao tUserDao;
 
-	@Override
-	protected void doValidate(EntryRestForm form, Errors errors) {
-		// 確認用パスワードと突き合わせる
-		if (isNotEquals(form.getPassword(), form.getPasswordConf())) {
-			errors.rejectValue("password", "errros.unmatchPassword");
-			errors.rejectValue("passwordConf", "errros.unmatchPassword");
-		}
+  @Override
+  protected void doValidate(EntryRestForm form, Errors errors) {
+    // 確認用パスワードと突き合わせる
+    if (isNotEquals(form.getPassword(), form.getPasswordConf())) {
+      errors.rejectValue("password", "errros.unmatchPassword");
+      errors.rejectValue("passwordConf", "errros.unmatchPassword");
+    }
 
-		// メールアドレスの存在チェック
-		TUserCriteria criteria = new TUserCriteria();
-		criteria.setEmailEq(form.getEmail());
-		if(tUserDao.findOne(criteria).orElse(null) != null) {
-			errors.rejectValue("email", "errros.emailExist");
-		}
-	}
+    // メールアドレスの存在チェック
+    TUserCriteria criteria = new TUserCriteria();
+    criteria.setEmailEq(form.getEmail());
+    if (tUserDao.findOne(criteria).orElse(null) != null) {
+      errors.rejectValue("email", "errros.emailExist");
+    }
+  }
 }

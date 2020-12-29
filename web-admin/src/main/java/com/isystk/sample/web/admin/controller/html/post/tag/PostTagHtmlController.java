@@ -18,49 +18,50 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequestMapping(POST_TAG)
-@SessionAttributes(types = { PostTagSearchForm.class })
+@SessionAttributes(types = {PostTagSearchForm.class})
 public class PostTagHtmlController extends AbstractHtmlController {
 
-	@Autowired
-	MPostTagRepository mPostTagRepository;
+  @Autowired
+  MPostTagRepository mPostTagRepository;
 
-	@Override
-	public String getFunctionName() {
-		return "A_POST_TAG";
-	}
+  @Override
+  public String getFunctionName() {
+    return "A_POST_TAG";
+  }
 
-	/**
-	 * 一覧画面表示
-	 *
-	 * @param form
-	 * @param model
-	 * @return
-	 */
-	@GetMapping
-	public String index(PostTagSearchForm form, Model model) {
+  /**
+   * 一覧画面表示
+   *
+   * @param form
+   * @param model
+   * @return
+   */
+  @GetMapping
+  public String index(PostTagSearchForm form, Model model) {
 
-		// 10件区切りで取得する
-		val pages = mPostTagRepository.findAll(formToCriteria(form), form);
+    // 10件区切りで取得する
+    val pages = mPostTagRepository.findAll(formToCriteria(form), form);
 
-		// 画面に検索結果を渡す
-		model.addAttribute("pages", pages);
+    // 画面に検索結果を渡す
+    model.addAttribute("pages", pages);
 
-		return "modules/post/tag/list";
-	}
+    return "modules/post/tag/list";
+  }
 
-	/**
-	 * 検索条件を詰める
-	 * @return
-	 */
-	private MPostTagCriteria formToCriteria(PostTagSearchForm form) {
+  /**
+   * 検索条件を詰める
+   *
+   * @return
+   */
+  private MPostTagCriteria formToCriteria(PostTagSearchForm form) {
 
-		// 入力値を詰め替える
-		MPostTagCriteria criteria = new MPostTagCriteria();
-		criteria.setNameLike(form.getPostTagName());
-		criteria.setDeleteFlgFalse(true);
-		criteria.setOrderBy("order by post_tag_id asc");
+    // 入力値を詰め替える
+    MPostTagCriteria criteria = new MPostTagCriteria();
+    criteria.setNameLike(form.getPostTagName());
+    criteria.setDeleteFlgFalse(true);
+    criteria.setOrderBy("order by post_tag_id asc");
 
-		return criteria;
-	}
+    return criteria;
+  }
 
 }

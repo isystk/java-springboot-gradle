@@ -25,115 +25,117 @@ import java.util.List;
 @Slf4j
 public class AwsS3Utils {
 
-    public static String ENDPOINT_URL;
-    public static String REGION;
-    public static String BUCKET_NAME;
-    private static String PROFILE_NAME;
+  public static String ENDPOINT_URL;
+  public static String REGION;
+  public static String BUCKET_NAME;
+  private static String PROFILE_NAME;
 
-    @Value("${aws.s3.endpoint-url}")
-    public void setEndpointUrl(String endpointUrl) {
-        ENDPOINT_URL = endpointUrl;
-    }
+  @Value("${aws.s3.endpoint-url}")
+  public void setEndpointUrl(String endpointUrl) {
+    ENDPOINT_URL = endpointUrl;
+  }
 
-    @Value("${aws.s3.region}")
-    public void setRegion(String region) {
-        REGION = region;
-    }
+  @Value("${aws.s3.region}")
+  public void setRegion(String region) {
+    REGION = region;
+  }
 
-    @Value("${aws.s3.bucket-name}")
-    public void setBucketName(String bucketName) {
-        BUCKET_NAME = bucketName;
-    }
+  @Value("${aws.s3.bucket-name}")
+  public void setBucketName(String bucketName) {
+    BUCKET_NAME = bucketName;
+  }
 
-    @Value("${aws.s3.profile-name}")
-    public void setProfileName(String profileName) {
-        PROFILE_NAME = profileName;
-    }
+  @Value("${aws.s3.profile-name}")
+  public void setProfileName(String profileName) {
+    PROFILE_NAME = profileName;
+  }
 
-    //--------------------------------------------------
-    // アップロード
-    //--------------------------------------------------
-    public static void putObject(String objectKey, long objectSize, String contentType, InputStream is) {
+  //--------------------------------------------------
+  // アップロード
+  //--------------------------------------------------
+  public static void putObject(String objectKey, long objectSize, String contentType,
+      InputStream is) {
 
-        // クライアント生成
-        AmazonS3 client = getClient(BUCKET_NAME);
-
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(objectSize);
-        metadata.setContentType(contentType);
-
-        // アップロード
-        client.putObject(BUCKET_NAME, objectKey, is, metadata);
-    }
-
-    //--------------------------------------------------
-    // ダウンロード
-    //--------------------------------------------------
-    public static S3ObjectInputStream getObject(String objectKey) {
-
-        // クライアント生成
-        AmazonS3 client = getClient(BUCKET_NAME);
-
-        // ダウンロード
-        S3Object s3Object = client.getObject(BUCKET_NAME, objectKey);
-
-        return s3Object.getObjectContent();
-    }
-
-    //--------------------------------------------------
-    // 一括削除
-    //--------------------------------------------------
-    public static List<String> deleteObjects(List<String> objectKeys) {
-
-        // クライアント生成
-        AmazonS3 client = getClient(BUCKET_NAME);
-
-        List<DeleteObjectsRequest.KeyVersion> keys = new ArrayList<DeleteObjectsRequest.KeyVersion>();
-        objectKeys.forEach(obj -> keys.add(new DeleteObjectsRequest.KeyVersion(obj)));
-
-        // ファイル削除
-        DeleteObjectsRequest request = new DeleteObjectsRequest(BUCKET_NAME).withKeys(keys);
-        DeleteObjectsResult  result  = client.deleteObjects(request);
-
-        // 削除したオブジェクトのキーを取得
-        List<String>         deleted = new ArrayList<String>();
-        result.getDeletedObjects().forEach(obj -> deleted.add(obj.getKey()));
-
-        return deleted;
-    }
-
-    //--------------------------------------------------
     // クライアント生成
-    //--------------------------------------------------
-    private static AmazonS3 getClient(String BUCKET_NAME) {
+    AmazonS3 client = getClient(BUCKET_NAME);
 
-        // 認証情報
-        AWSCredentialsProvider provider = new ProfileCredentialsProvider(PROFILE_NAME);
+    ObjectMetadata metadata = new ObjectMetadata();
+    metadata.setContentLength(objectSize);
+    metadata.setContentType(contentType);
+
+    // アップロード
+    client.putObject(BUCKET_NAME, objectKey, is, metadata);
+  }
+
+  //--------------------------------------------------
+  // ダウンロード
+  //--------------------------------------------------
+  public static S3ObjectInputStream getObject(String objectKey) {
+
+    // クライアント生成
+    AmazonS3 client = getClient(BUCKET_NAME);
+
+    // ダウンロード
+    S3Object s3Object = client.getObject(BUCKET_NAME, objectKey);
+
+    return s3Object.getObjectContent();
+  }
+
+  //--------------------------------------------------
+  // 一括削除
+  //--------------------------------------------------
+  public static List<String> deleteObjects(List<String> objectKeys) {
+
+    // クライアント生成
+    AmazonS3 client = getClient(BUCKET_NAME);
+
+    List<DeleteObjectsRequest.KeyVersion> keys = new ArrayList<DeleteObjectsRequest.KeyVersion>();
+    objectKeys.forEach(obj -> keys.add(new DeleteObjectsRequest.KeyVersion(obj)));
+
+    // ファイル削除
+    DeleteObjectsRequest request = new DeleteObjectsRequest(BUCKET_NAME).withKeys(keys);
+    DeleteObjectsResult result = client.deleteObjects(request);
+
+    // 削除したオブジェクトのキーを取得
+    List<String> deleted = new ArrayList<String>();
+    result.getDeletedObjects().forEach(obj -> deleted.add(obj.getKey()));
+
+    return deleted;
+  }
+
+  //--------------------------------------------------
+  // クライアント生成
+  //--------------------------------------------------
+  private static AmazonS3 getClient(String BUCKET_NAME) {
+
+    // 認証情報
+    AWSCredentialsProvider provider = new ProfileCredentialsProvider(PROFILE_NAME);
 //        AWSCredentials credentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
-        AWSCredentials credentials = provider.getCredentials();
+    AWSCredentials credentials = provider.getCredentials();
 
-        // クライアント設定
-        ClientConfiguration clientConfig = new ClientConfiguration();
-        clientConfig.setProtocol(Protocol.HTTPS);  // プロトコル
-        clientConfig.setConnectionTimeout(10000);   // 接続タイムアウト(ms)
+    // クライアント設定
+    ClientConfiguration clientConfig = new ClientConfiguration();
+    clientConfig.setProtocol(Protocol.HTTPS);  // プロトコル
+    clientConfig.setConnectionTimeout(10000);   // 接続タイムアウト(ms)
 
-        // エンドポイント設定
-        AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(ENDPOINT_URL, REGION);
+    // エンドポイント設定
+    AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(
+        ENDPOINT_URL, REGION);
 
-        // クライアント生成
-        AmazonS3 client = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withClientConfiguration(clientConfig)
-                .withEndpointConfiguration(endpointConfiguration).build();
+    // クライアント生成
+    AmazonS3 client = AmazonS3ClientBuilder.standard()
+        .withCredentials(new AWSStaticCredentialsProvider(credentials))
+        .withClientConfiguration(clientConfig)
+        .withEndpointConfiguration(endpointConfiguration).build();
 
-        if(!client.doesBucketExistV2(BUCKET_NAME)) {
+    if (!client.doesBucketExistV2(BUCKET_NAME)) {
 //            // バケットの作成
 //            client.createBucket(BUCKET_NAME);
-            // バケットがなければException
-            throw new SystemException("S3バケット[" + BUCKET_NAME + "]がありません");
-        }
-
-        return client;
+      // バケットがなければException
+      throw new SystemException("S3バケット[" + BUCKET_NAME + "]がありません");
     }
+
+    return client;
+  }
 
 }

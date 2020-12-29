@@ -27,50 +27,54 @@ import com.isystk.sample.domain.repository.dto.TPostRepositoryDto;
 @Repository
 public class MMailTemplateRepository extends BaseRepository {
 
-	@Autowired
-	MMailTemplateDao mMailTemplateDao;
+  @Autowired
+  MMailTemplateDao mMailTemplateDao;
 
-	/**
-	 * メールテンプレートを複数取得します。
-	 *
-	 * @param criteria
-	 * @param pageable
-	 * @return
-	 */
-	public Page<MMailTemplateRepositoryDto> findAll(MMailTemplateCriteria criteria, Pageable pageable) {
-		var options = createSelectOptions(pageable);
-		// ページングを指定する
-		return pageFactory.create(convertDto(
-				mMailTemplateDao.findAll(criteria,
-				options.count(),
-				toList()
-			)), pageable, options.getCount());
-	}
+  /**
+   * メールテンプレートを複数取得します。
+   *
+   * @param criteria
+   * @param pageable
+   * @return
+   */
+  public Page<MMailTemplateRepositoryDto> findAll(MMailTemplateCriteria criteria,
+      Pageable pageable) {
+    var options = createSelectOptions(pageable);
+    // ページングを指定する
+    return pageFactory.create(convertDto(
+        mMailTemplateDao.findAll(criteria,
+            options.count(),
+            toList()
+        )), pageable, options.getCount());
+  }
 
-	/**
-	 * RepositoryDto に変換します。
-	 * @param mMailTemplateList
-	 * @return
-	 */
-	private List<MMailTemplateRepositoryDto> convertDto(List<MMailTemplate> mMailTemplateList) {
+  /**
+   * RepositoryDto に変換します。
+   *
+   * @param mMailTemplateList
+   * @return
+   */
+  private List<MMailTemplateRepositoryDto> convertDto(List<MMailTemplate> mMailTemplateList) {
 
-		List<MMailTemplateRepositoryDto> list = ObjectMapperUtils.mapAll(mMailTemplateList, MMailTemplateRepositoryDto.class);
-		list.stream()
-				.forEach(dto -> {
-					dto.setMailTemplateDiv(MailTemplateDiv.getValue(dto.getTemplateDiv()));
-				});
+    List<MMailTemplateRepositoryDto> list = ObjectMapperUtils
+        .mapAll(mMailTemplateList, MMailTemplateRepositoryDto.class);
+    list.stream()
+        .forEach(dto -> {
+          dto.setMailTemplateDiv(MailTemplateDiv.getValue(dto.getTemplateDiv()));
+        });
 
-		return list;
-	}
+    return list;
+  }
 
-	/**
-	 * メールテンプレートを取得します。
-	 *
-	 * @return
-	 */
-	public MMailTemplateRepositoryDto findById(final Integer id) {
-		var data= mMailTemplateDao.selectById(id).orElseThrow(() -> new NoDataFoundException("mail_tempate_id=" + id + " のデータが見つかりません。"));
-		return convertDto(Lists.newArrayList(data)).get(0);
-	}
+  /**
+   * メールテンプレートを取得します。
+   *
+   * @return
+   */
+  public MMailTemplateRepositoryDto findById(final Integer id) {
+    var data = mMailTemplateDao.selectById(id)
+        .orElseThrow(() -> new NoDataFoundException("mail_tempate_id=" + id + " のデータが見つかりません。"));
+    return convertDto(Lists.newArrayList(data)).get(0);
+  }
 
 }

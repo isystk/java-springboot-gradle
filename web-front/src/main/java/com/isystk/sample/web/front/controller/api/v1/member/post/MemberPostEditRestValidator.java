@@ -15,21 +15,23 @@ import org.springframework.validation.Errors;
 @Component
 public class MemberPostEditRestValidator extends AbstractValidator<MemberPostEditRestForm> {
 
-	@Autowired
-	TPostDao tPostDao;
+  @Autowired
+  TPostDao tPostDao;
 
-	@Autowired
-	UserHelper userHelper;
+  @Autowired
+  UserHelper userHelper;
 
-	@Override
-	protected void doValidate(MemberPostEditRestForm form, Errors errors) {
+  @Override
+  protected void doValidate(MemberPostEditRestForm form, Errors errors) {
 
-		// 自分の投稿かどうか
-		TPostCriteria criteria = new TPostCriteria();
-		criteria.setPostIdEq(form.getPostId());
-		criteria.setUserIdEq(userHelper.getLoginUser().getUserId());
-		tPostDao.findOne(criteria)
-				.orElseThrow(() -> new NoDataFoundException("post_id=" + form.getPostId() + " user_id=" + userHelper.getLoginUser().getUserId() + " のデータが見つかりません。"));
+    // 自分の投稿かどうか
+    TPostCriteria criteria = new TPostCriteria();
+    criteria.setPostIdEq(form.getPostId());
+    criteria.setUserIdEq(userHelper.getLoginUser().getUserId());
+    tPostDao.findOne(criteria)
+        .orElseThrow(() -> new NoDataFoundException(
+            "post_id=" + form.getPostId() + " user_id=" + userHelper.getLoginUser().getUserId()
+                + " のデータが見つかりません。"));
 
-	}
+  }
 }

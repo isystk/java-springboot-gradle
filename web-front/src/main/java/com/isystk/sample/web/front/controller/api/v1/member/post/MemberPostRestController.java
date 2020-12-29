@@ -25,39 +25,39 @@ import static com.isystk.sample.common.FrontUrl.API_V1_MEMBER_POSTS;
 @RequestMapping(API_V1_MEMBER_POSTS)
 public class MemberPostRestController extends AbstractRestController {
 
-	@Autowired
-	PostService postService;
+  @Autowired
+  PostService postService;
 
-	@Autowired
-	UserHelper userHelper;
+  @Autowired
+  UserHelper userHelper;
 
-	@Override
-	public String getFunctionName() {
-		return "API_MEMBER_POSTS";
-	}
+  @Override
+  public String getFunctionName() {
+    return "API_MEMBER_POSTS";
+  }
 
-	/**
-	 * 会員表示
-	 *
-	 * @param query
-	 * @param model
-	 * @return
-	 */
-	@GetMapping()
-	public PageableResource index(MemberPostRestForm query, Model model) {
-		// 入力値を詰め替える
-		TPostCriteria criteria = new TPostCriteria();
-		criteria.setUserIdEq(userHelper.getLoginUserId());
-		criteria.setDeleteFlgFalse(true);
-		criteria.setOrderBy("order by update_time desc");
+  /**
+   * 会員表示
+   *
+   * @param query
+   * @param model
+   * @return
+   */
+  @GetMapping()
+  public PageableResource index(MemberPostRestForm query, Model model) {
+    // 入力値を詰め替える
+    TPostCriteria criteria = new TPostCriteria();
+    criteria.setUserIdEq(userHelper.getLoginUserId());
+    criteria.setDeleteFlgFalse(true);
+    criteria.setOrderBy("order by update_time desc");
 
-		// 10件区切りで取得する
-		val posts = postService.findAll(criteria, query);
+    // 10件区切りで取得する
+    val posts = postService.findAll(criteria, query);
 
-		PageableResource resource = ObjectMapperUtils.map(posts, PageableResourceImpl.class);
-		resource.setMessage(getMessage(MESSAGE_SUCCESS));
+    PageableResource resource = ObjectMapperUtils.map(posts, PageableResourceImpl.class);
+    resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
-		return resource;
-	}
+    return resource;
+  }
 
 }

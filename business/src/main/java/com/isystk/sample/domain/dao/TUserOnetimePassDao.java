@@ -17,60 +17,62 @@ import org.seasar.doma.SelectType;
 import com.isystk.sample.domain.dto.TUserOnetimePassCriteria;
 
 /**
+ *
  */
 @ConfigAutowireable
 @Dao
 public interface TUserOnetimePassDao {
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Insert
-    int insert(TUserOnetimePass entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Insert
+  int insert(TUserOnetimePass entity);
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Update
-    int update(TUserOnetimePass entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Update
+  int update(TUserOnetimePass entity);
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Delete
-    int delete(TUserOnetimePass entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Delete
+  int delete(TUserOnetimePass entity);
 
-    /**
-     * @param criteria
-     * @param options
-     * @return
-     */
-    @Select(strategy = SelectType.COLLECT)
-    <R> R findAll(final TUserOnetimePassCriteria criteria, final SelectOptions options, final Collector<TUserOnetimePass, ?, R> collector);
+  /**
+   * @param criteria
+   * @param options
+   * @return
+   */
+  @Select(strategy = SelectType.COLLECT)
+  <R> R findAll(final TUserOnetimePassCriteria criteria, final SelectOptions options,
+      final Collector<TUserOnetimePass, ?, R> collector);
 
-    /**
-     * @param criteria
-     * @return
-     */
-    @Select
-    List<TUserOnetimePass> findAll(TUserOnetimePassCriteria criteria);
+  /**
+   * @param criteria
+   * @return
+   */
+  @Select
+  List<TUserOnetimePass> findAll(TUserOnetimePassCriteria criteria);
 
-    /**
-     * @param userId
-     * @return the TUserOnetimePass entity
-     */
-    @Select
-    Optional<TUserOnetimePass> selectById(Integer userId);
+  /**
+   * @param userId
+   * @return the TUserOnetimePass entity
+   */
+  @Select
+  Optional<TUserOnetimePass> selectById(Integer userId);
 
 
-    /**
-     * @param criteria
-     * @return
-     */
-    @Select
-    Optional<TUserOnetimePass> findOne(TUserOnetimePassCriteria criteria);
+  /**
+   * @param criteria
+   * @return
+   */
+  @Select
+  Optional<TUserOnetimePass> findOne(TUserOnetimePassCriteria criteria);
 
 }

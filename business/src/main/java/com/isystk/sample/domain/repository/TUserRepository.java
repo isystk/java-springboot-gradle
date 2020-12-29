@@ -27,90 +27,91 @@ import lombok.val;
 @Repository
 public class TUserRepository extends BaseRepository {
 
-	@Autowired
-	TUserDao tUserDao;
+  @Autowired
+  TUserDao tUserDao;
 
-	/**
-	 * 投稿を複数取得します。
-	 *
-	 * @param criteria
-	 * @param pageable
-	 * @return
-	 */
-	public Page<TUserRepositoryDto> findAll(TUserCriteria criteria, Pageable pageable) {
-		var options = createSelectOptions(pageable);
-		// ページングを指定する
-		return pageFactory.create(convertDto(
-				tUserDao.findAll(criteria,
-				options.count(),
-				toList()
-			)), pageable, options.getCount());
-	}
+  /**
+   * 投稿を複数取得します。
+   *
+   * @param criteria
+   * @param pageable
+   * @return
+   */
+  public Page<TUserRepositoryDto> findAll(TUserCriteria criteria, Pageable pageable) {
+    var options = createSelectOptions(pageable);
+    // ページングを指定する
+    return pageFactory.create(convertDto(
+        tUserDao.findAll(criteria,
+            options.count(),
+            toList()
+        )), pageable, options.getCount());
+  }
 
-	/**
-	 * RepositoryDto に変換します。
-	 * @param tUserList
-	 * @return
-	 */
-	private List<TUserRepositoryDto> convertDto(List<TUser> tUserList) {
+  /**
+   * RepositoryDto に変換します。
+   *
+   * @param tUserList
+   * @return
+   */
+  private List<TUserRepositoryDto> convertDto(List<TUser> tUserList) {
 
-		return ObjectMapperUtils.mapAll(tUserList, TUserRepositoryDto.class);
-	}
+    return ObjectMapperUtils.mapAll(tUserList, TUserRepositoryDto.class);
+  }
 
-	/**
-	 * ユーザーを追加します。
-	 *
-	 * @param inputUser
-	 * @return
-	 */
-	public TUser create(final TUser inputUser) {
+  /**
+   * ユーザーを追加します。
+   *
+   * @param inputUser
+   * @return
+   */
+  public TUser create(final TUser inputUser) {
 
-		// 1件登録
-		val time = DateUtils.getNow();
+    // 1件登録
+    val time = DateUtils.getNow();
 
-		inputUser.setRegistTime(time); // 作成日
-		inputUser.setUpdateTime(time); // 更新日
-		inputUser.setDeleteFlg(false); // 削除フラグ
-		inputUser.setVersion(0L); // 楽観ロック改定番号
-		tUserDao.insert(inputUser);
+    inputUser.setRegistTime(time); // 作成日
+    inputUser.setUpdateTime(time); // 更新日
+    inputUser.setDeleteFlg(false); // 削除フラグ
+    inputUser.setVersion(0L); // 楽観ロック改定番号
+    tUserDao.insert(inputUser);
 
-		return inputUser;
-	}
+    return inputUser;
+  }
 
-	/**
-	 * ユーザーを更新します。
-	 *
-	 * @param inputUser
-	 * @return
-	 */
-	public TUser update(final TUser inputUser) {
-		// 1件更新
-		val time = DateUtils.getNow();
-		inputUser.setUpdateTime(time); // 更新日
-		int updated = tUserDao.update(inputUser);
+  /**
+   * ユーザーを更新します。
+   *
+   * @param inputUser
+   * @return
+   */
+  public TUser update(final TUser inputUser) {
+    // 1件更新
+    val time = DateUtils.getNow();
+    inputUser.setUpdateTime(time); // 更新日
+    int updated = tUserDao.update(inputUser);
 
-		if (updated < 1) {
-			throw new NoDataFoundException("user_id=" + inputUser.getUserId() + " のデータが見つかりません。");
-		}
+    if (updated < 1) {
+      throw new NoDataFoundException("user_id=" + inputUser.getUserId() + " のデータが見つかりません。");
+    }
 
-		return inputUser;
-	}
+    return inputUser;
+  }
 
-	/**
-	 * ユーザーを論理削除します。
-	 *
-	 * @return
-	 */
-	public TUser delete(final Integer id) {
-		val user = tUserDao.selectById(id)
-				.orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
+  /**
+   * ユーザーを論理削除します。
+   *
+   * @return
+   */
+  public TUser delete(final Integer id) {
+    val user = tUserDao.selectById(id)
+        .orElseThrow(() -> new NoDataFoundException("user_id=" + id + " のデータが見つかりません。"));
 
-		int updated = tUserDao.delete(user);
+    int updated = tUserDao.delete(user);
 
-		if (updated < 1) {
-			throw new NoDataFoundException("user_id=" + id + " は更新できませんでした。");
-		}
+    if (updated < 1) {
+      throw new NoDataFoundException("user_id=" + id + " は更新できませんでした。");
+    }
 
-		return user;
-	}
+    return user;
+  }
 }

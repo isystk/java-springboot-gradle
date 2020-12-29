@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public abstract class BaseForm implements Serializable {
 
-	// 改定番号
-	Integer version;
+  // 改定番号
+  Integer version;
 
 }

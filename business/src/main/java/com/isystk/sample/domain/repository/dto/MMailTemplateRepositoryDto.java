@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class MMailTemplateRepositoryDto extends MMailTemplate {
 
-	MailTemplateDiv mailTemplateDiv;
+  MailTemplateDiv mailTemplateDiv;
 
 }

@@ -11,10 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 
- *
  * 自動生成のため原則修正禁止!!
- *
  */
 @Entity
 @Table(name = "t_user_onetime_pass")
@@ -22,20 +19,28 @@ import lombok.Setter;
 @Setter
 public class TUserOnetimePass extends DomaDtoImpl {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 1L;
+  /**
+   * serialVersionUID
+   */
+  private static final long serialVersionUID = 1L;
 
 
-    /** 会員ID */
-    @Id
-    @Column(name = "USER_ID")
-    Integer userId;
+  /**
+   * 会員ID
+   */
+  @Id
+  @Column(name = "USER_ID")
+  Integer userId;
 
-    /** ワンタイムキー */
-    @Column(name = "ONETIME_KEY")
-    String onetimeKey;
+  /**
+   * ワンタイムキー
+   */
+  @Column(name = "ONETIME_KEY")
+  String onetimeKey;
 
-    /** ワンタイム有効期限 */
-    @Column(name = "ONETIME_VALID_TIME")
-    LocalDateTime onetimeValidTime;
+  /**
+   * ワンタイム有効期限
+   */
+  @Column(name = "ONETIME_VALID_TIME")
+  LocalDateTime onetimeValidTime;
 }

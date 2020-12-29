@@ -17,60 +17,62 @@ import org.seasar.doma.SelectType;
 import com.isystk.sample.domain.dto.TImageCriteria;
 
 /**
+ *
  */
 @ConfigAutowireable
 @Dao
 public interface TImageDao {
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Insert
-    int insert(TImage entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Insert
+  int insert(TImage entity);
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Update
-    int update(TImage entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Update
+  int update(TImage entity);
 
-    /**
-     * @param entity
-     * @return affected rows
-     */
-    @Delete
-    int delete(TImage entity);
+  /**
+   * @param entity
+   * @return affected rows
+   */
+  @Delete
+  int delete(TImage entity);
 
-    /**
-     * @param criteria
-     * @param options
-     * @return
-     */
-    @Select(strategy = SelectType.COLLECT)
-    <R> R findAll(final TImageCriteria criteria, final SelectOptions options, final Collector<TImage, ?, R> collector);
+  /**
+   * @param criteria
+   * @param options
+   * @return
+   */
+  @Select(strategy = SelectType.COLLECT)
+  <R> R findAll(final TImageCriteria criteria, final SelectOptions options,
+      final Collector<TImage, ?, R> collector);
 
-    /**
-     * @param criteria
-     * @return
-     */
-    @Select
-    List<TImage> findAll(TImageCriteria criteria);
+  /**
+   * @param criteria
+   * @return
+   */
+  @Select
+  List<TImage> findAll(TImageCriteria criteria);
 
-    /**
-     * @param imageId
-     * @return the TImage entity
-     */
-    @Select
-    Optional<TImage> selectById(Integer imageId);
+  /**
+   * @param imageId
+   * @return the TImage entity
+   */
+  @Select
+  Optional<TImage> selectById(Integer imageId);
 
 
-    /**
-     * @param criteria
-     * @return
-     */
-    @Select
-    Optional<TImage> findOne(TImageCriteria criteria);
+  /**
+   * @param criteria
+   * @return
+   */
+  @Select
+  Optional<TImage> findOne(TImageCriteria criteria);
 
 }

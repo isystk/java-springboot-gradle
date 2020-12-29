@@ -15,23 +15,23 @@ import lombok.Setter;
 @Setter
 public class FrontPostDto implements Dto {
 
-	Integer postId;
+  Integer postId;
 
-	Integer userId;
+  Integer userId;
 
-	String title;
+  String title;
 
-	String text;
+  String text;
 
-    LocalDateTime registTime;
+  LocalDateTime registTime;
 
-	String registTimeYYYYMMDD;
+  String registTimeYYYYMMDD;
 
-	String registTimeMMDD;
+  String registTimeMMDD;
 
-	List<FrontPostImageDto> imageList;
+  List<FrontPostImageDto> imageList;
 
-	List<String> tagNameList;
+  List<String> tagNameList;
 
 
 }

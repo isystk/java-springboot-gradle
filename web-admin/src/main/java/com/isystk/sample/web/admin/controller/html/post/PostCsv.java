@@ -10,20 +10,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 @JsonIgnoreProperties(ignoreUnknown = true) // 定義されていないプロパティを無視してマッピングする
-@JsonPropertyOrder({ "投稿ID", "ユーザーID", "タイトル" }) // CSVのヘッダ順
+@JsonPropertyOrder({"投稿ID", "ユーザーID", "タイトル"}) // CSVのヘッダ順
 @Getter
 @Setter
 public class PostCsv implements Serializable {
 
-	private static final long serialVersionUID = -1883999589975469540L;
+  private static final long serialVersionUID = -1883999589975469540L;
 
-	@JsonProperty("投稿ID")
-	String postId;
+  @JsonProperty("投稿ID")
+  String postId;
 
-	@JsonProperty("ユーザーID")
-	String userId;
+  @JsonProperty("ユーザーID")
+  String userId;
 
-	@JsonProperty("タイトル")
-	String title;
+  @JsonProperty("タイトル")
+  String title;
 
 }

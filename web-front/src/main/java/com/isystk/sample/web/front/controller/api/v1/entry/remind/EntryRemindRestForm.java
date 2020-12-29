@@ -12,12 +12,14 @@ import java.io.Serializable;
 @Getter
 class EntryRemindRestForm implements Serializable {
 
-	private static final long serialVersionUID = 7593564324192730932L;
+  private static final long serialVersionUID = 7593564324192730932L;
 
-	/** メールアドレス */
-	@NotBlank
-	@Email
-	@Size(max = 100)
-	String email;
+  /**
+   * メールアドレス
+   */
+  @NotBlank
+  @Email
+  @Size(max = 100)
+  String email;
 
 }

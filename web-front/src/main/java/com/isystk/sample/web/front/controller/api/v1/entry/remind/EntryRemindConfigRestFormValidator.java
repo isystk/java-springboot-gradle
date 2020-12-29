@@ -10,14 +10,15 @@ import static com.isystk.sample.common.util.ValidateUtils.isNotEquals;
  * 会員パスワード変更 入力チェック
  */
 @Component
-public class EntryRemindConfigRestFormValidator extends AbstractValidator<EntryRemindConfigRestForm> {
+public class EntryRemindConfigRestFormValidator extends
+    AbstractValidator<EntryRemindConfigRestForm> {
 
-	@Override
-	protected void doValidate(EntryRemindConfigRestForm form, Errors errors) {
-		// 確認用パスワードと突き合わせる
-		if (isNotEquals(form.getPassword(), form.getPasswordConf())) {
-			errors.rejectValue("password", "errros.unmatchPassword");
-			errors.rejectValue("passwordConf", "errros.unmatchPassword");
-		}
-	}
+  @Override
+  protected void doValidate(EntryRemindConfigRestForm form, Errors errors) {
+    // 確認用パスワードと突き合わせる
+    if (isNotEquals(form.getPassword(), form.getPasswordConf())) {
+      errors.rejectValue("password", "errros.unmatchPassword");
+      errors.rejectValue("passwordConf", "errros.unmatchPassword");
+    }
+  }
 }

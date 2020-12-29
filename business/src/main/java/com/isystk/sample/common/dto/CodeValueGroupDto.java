@@ -13,12 +13,12 @@ import java.util.List;
 @Setter
 public class CodeValueGroupDto implements Dto {
 
-	public CodeValueGroupDto(String groupName, List<CodeValueDto> codeValueDtoList) {
-		this.name = groupName;
-		this.data = codeValueDtoList;
-	}
+  public CodeValueGroupDto(String groupName, List<CodeValueDto> codeValueDtoList) {
+    this.name = groupName;
+    this.data = codeValueDtoList;
+  }
 
-	String name;
+  String name;
 
-	List<CodeValueDto> data;
+  List<CodeValueDto> data;
 }

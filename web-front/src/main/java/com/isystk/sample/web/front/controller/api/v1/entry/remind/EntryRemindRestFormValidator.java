@@ -13,16 +13,16 @@ import org.springframework.validation.Errors;
 @Component
 public class EntryRemindRestFormValidator extends AbstractValidator<EntryRemindRestForm> {
 
-	@Autowired
-	TUserDao tUserDao;
+  @Autowired
+  TUserDao tUserDao;
 
-	@Override
-	protected void doValidate(EntryRemindRestForm form, Errors errors) {
-		// メールアドレスの存在チェック
-		TUserCriteria criteria = new TUserCriteria();
-		criteria.setEmailEq(form.getEmail());
-		if(tUserDao.findOne(criteria).orElse(null) == null) {
-			errors.rejectValue("email", "errros.emailNotExist");
-		}
-	}
+  @Override
+  protected void doValidate(EntryRemindRestForm form, Errors errors) {
+    // メールアドレスの存在チェック
+    TUserCriteria criteria = new TUserCriteria();
+    criteria.setEmailEq(form.getEmail());
+    if (tUserDao.findOne(criteria).orElse(null) == null) {
+      errors.rejectValue("email", "errros.emailNotExist");
+    }
+  }
 }

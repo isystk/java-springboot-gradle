@@ -9,49 +9,49 @@ import com.isystk.sample.common.util.MessageUtils;
 
 public class BaseController {
 
-	public static final String VALIDATION_ERROR = "ValidationError";
+  public static final String VALIDATION_ERROR = "ValidationError";
 
-	@Autowired
-	protected ApplicationContext applicationContext;
+  @Autowired
+  protected ApplicationContext applicationContext;
 
-	/**
-	 * 入力エラーの共通メッセージを返します。
-	 *
-	 * @return
-	 */
-	protected String getValidationErrorMessage() {
-		return getMessage(VALIDATION_ERROR);
-	}
+  /**
+   * 入力エラーの共通メッセージを返します。
+   *
+   * @return
+   */
+  protected String getValidationErrorMessage() {
+    return getMessage(VALIDATION_ERROR);
+  }
 
-	/**
-	 * コンテキストを返します。
-	 *
-	 * @return
-	 */
-	protected ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
+  /**
+   * コンテキストを返します。
+   *
+   * @return
+   */
+  protected ApplicationContext getApplicationContext() {
+    return applicationContext;
+  }
 
-	/**
-	 * メッセージを取得します。
-	 *
-	 * @param key
-	 * @param args
-	 * @return
-	 */
-	protected String getMessage(String key, Object... args) {
-		return MessageUtils.getMessage(key, args);
-	}
+  /**
+   * メッセージを取得します。
+   *
+   * @param key
+   * @param args
+   * @return
+   */
+  protected String getMessage(String key, Object... args) {
+    return MessageUtils.getMessage(key, args);
+  }
 
-	/**
-	 * ロケールを指定してメッセージを取得します。
-	 *
-	 * @param key
-	 * @param args
-	 * @param locale
-	 * @return
-	 */
-	protected String getMessage(String key, Object[] args, Locale locale) {
-		return MessageUtils.getMessage(key, args, locale);
-	}
+  /**
+   * ロケールを指定してメッセージを取得します。
+   *
+   * @param key
+   * @param args
+   * @param locale
+   * @return
+   */
+  protected String getMessage(String key, Object[] args, Locale locale) {
+    return MessageUtils.getMessage(key, args, locale);
+  }
 }

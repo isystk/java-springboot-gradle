@@ -13,11 +13,11 @@ import com.isystk.sample.common.validator.AbstractValidator;
 @Component
 public class PostEditFormValidator extends AbstractValidator<PostEditForm> {
 
-	@Autowired
-	UserHelper userHelper;
+  @Autowired
+  UserHelper userHelper;
 
-	@Override
-	protected void doValidate(PostEditForm form, Errors errors) {
+  @Override
+  protected void doValidate(PostEditForm form, Errors errors) {
 
-	}
+  }
 }

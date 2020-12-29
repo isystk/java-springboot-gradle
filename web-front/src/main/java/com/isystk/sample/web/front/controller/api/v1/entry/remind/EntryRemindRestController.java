@@ -28,61 +28,62 @@ import static com.isystk.sample.common.FrontUrl.API_V1_ENTRY_REMIND_CONFIG;
 @RequestMapping(path = API_V1_ENTRY_REMIND, produces = MediaType.APPLICATION_JSON_VALUE)
 public class EntryRemindRestController extends AbstractRestController {
 
-	@Autowired
-	EntryRemindService entryRemindService;
+  @Autowired
+  EntryRemindService entryRemindService;
 
-	@Autowired
-	EntryRemindRestFormValidator entryRemindRestFormValidator;
+  @Autowired
+  EntryRemindRestFormValidator entryRemindRestFormValidator;
 
-    @ModelAttribute("entryRemindRestForm")
-    public EntryRemindRestForm entryRemindRestForm() {
-        return new EntryRemindRestForm();
+  @ModelAttribute("entryRemindRestForm")
+  public EntryRemindRestForm entryRemindRestForm() {
+    return new EntryRemindRestForm();
+  }
+
+  @InitBinder("entryRemindRestForm")
+  public void validatorBinder(WebDataBinder binder) {
+    binder.addValidators(entryRemindRestFormValidator);
+  }
+
+  @Override
+  public String getFunctionName() {
+    return "API_ENTRY_REMIND";
+  }
+
+  /**
+   * パスワード変更メール送信処理
+   *
+   * @param form
+   * @param br
+   * @param bindingResult
+   * @return
+   */
+  @PostMapping
+  public Resource registOnetimePass(@Validated @ModelAttribute EntryRemindRestForm form,
+      BindingResult br,
+      BindingResult bindingResult) {
+
+    Resource resource = resourceFactory.create();
+
+    // 入力チェックエラーがある場合は、元の画面にもどる
+    if (br.hasErrors()) {
+      String message = "";
+      for (FieldError fieldError : bindingResult.getFieldErrors()) {
+
+        message += "<hr />Field:" + fieldError.getField();
+        message += "<br />Code:" + fieldError.getCode();
+        message += "<br />DefaultMessage:" + fieldError.getDefaultMessage();
+      }
+      resource.setMessage(message);
+      return resource;
     }
 
-    @InitBinder("entryRemindRestForm")
-    public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(entryRemindRestFormValidator);
-    }
+    // パスワード変更ワンタイムパス登録
+    entryRemindService.registOnetimePass(form.getEmail());
 
-	@Override
-	public String getFunctionName() {
-		return "API_ENTRY_REMIND";
-	}
+    resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
-	/**
-	 * パスワード変更メール送信処理
-	 *
-	 * @param form
-	 * @param br
-	 * @param bindingResult
-	 * @return
-	 */
-	@PostMapping
-	public Resource registOnetimePass(@Validated @ModelAttribute EntryRemindRestForm form, BindingResult br,
-									BindingResult bindingResult) {
-
-		Resource resource = resourceFactory.create();
-
-		// 入力チェックエラーがある場合は、元の画面にもどる
-		if (br.hasErrors()) {
-			String message = "";
-			for (FieldError fieldError : bindingResult.getFieldErrors()) {
-
-				message += "<hr />Field:" + fieldError.getField();
-				message += "<br />Code:" + fieldError.getCode();
-				message += "<br />DefaultMessage:" + fieldError.getDefaultMessage();
-			}
-			resource.setMessage(message);
-			return resource;
-		}
-
-		// パスワード変更ワンタイムパス登録
-		entryRemindService.registOnetimePass(form.getEmail());
-
-		resource.setMessage(getMessage(MESSAGE_SUCCESS));
-
-		return resource;
-	}
+    return resource;
+  }
 
 
 }

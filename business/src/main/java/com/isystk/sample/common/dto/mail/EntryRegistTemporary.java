@@ -9,7 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EntryRegistTemporary {
-	String familyName;
-	String domain;
-	String onetimeKey;
+
+  String familyName;
+  String domain;
+  String onetimeKey;
 }

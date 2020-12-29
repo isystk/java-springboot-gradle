@@ -12,16 +12,24 @@ import org.seasar.doma.Id;
 @Getter
 public class AuthUserDto implements Dto {
 
-    /** 会員ID */
-    Integer userId;
+  /**
+   * 会員ID
+   */
+  Integer userId;
 
-    /** 姓 */
-    String familyName;
+  /**
+   * 姓
+   */
+  String familyName;
 
-    /** 名 */
-    String name;
+  /**
+   * 名
+   */
+  String name;
 
-    /** セッションID */
-    String sessionId;
+  /**
+   * セッションID
+   */
+  String sessionId;
 
 }

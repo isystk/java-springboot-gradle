@@ -10,8 +10,8 @@ import lombok.Setter;
 @Getter
 public class PostTagSearchForm extends BaseSearchForm implements Pageable {
 
-	private static final long serialVersionUID = 7593564324192730932L;
+  private static final long serialVersionUID = 7593564324192730932L;
 
-	String postTagName;
+  String postTagName;
 
 }

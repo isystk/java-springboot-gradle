@@ -14,8 +14,8 @@ import java.util.List;
 @Setter
 public class FrontPostImageDto implements Dto {
 
-	Integer imageId;
+  Integer imageId;
 
-	String imageUrl;
+  String imageUrl;
 
 }

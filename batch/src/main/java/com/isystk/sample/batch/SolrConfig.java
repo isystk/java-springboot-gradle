@@ -6,4 +6,5 @@ import com.isystk.sample.solr.BaseSolrConfig;
 
 @Configuration
 public class SolrConfig extends BaseSolrConfig {
+
 }

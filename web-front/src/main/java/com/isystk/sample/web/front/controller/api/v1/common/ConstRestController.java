@@ -21,34 +21,34 @@ import static com.isystk.sample.common.FrontUrl.API_V1_COMMON_CONST;
 @RequestMapping(path = API_V1_COMMON_CONST, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ConstRestController extends AbstractRestController {
 
-	@Override
-	public String getFunctionName() {
-		return "API_COMMON_CONST";
-	}
+  @Override
+  public String getFunctionName() {
+    return "API_COMMON_CONST";
+  }
 
-	/**
-	 * 定数取得します。
-	 *
-	 * @return
-	 */
-	@GetMapping
-	public Resource index() {
+  /**
+   * 定数取得します。
+   *
+   * @return
+   */
+  @GetMapping
+  public Resource index() {
 
-		Resource resource = resourceFactory.create();
+    Resource resource = resourceFactory.create();
 
-		List<CodeValueGroupDto> list = Lists.newArrayList();
-		list.add(new CodeValueGroupDto("sex", Arrays.stream(Sex.values())
-				.map((values) -> new CodeValueDto(values)
-				).collect(Collectors.toList())));
+    List<CodeValueGroupDto> list = Lists.newArrayList();
+    list.add(new CodeValueGroupDto("sex", Arrays.stream(Sex.values())
+        .map((values) -> new CodeValueDto(values)
+        ).collect(Collectors.toList())));
 
-		list.add(new CodeValueGroupDto("prefecture", Arrays.stream(Prefecture.values())
-				.map((values) -> new CodeValueDto(values)
-				).collect(Collectors.toList())));
+    list.add(new CodeValueGroupDto("prefecture", Arrays.stream(Prefecture.values())
+        .map((values) -> new CodeValueDto(values)
+        ).collect(Collectors.toList())));
 
-		resource.setData(list);
-		resource.setMessage(getMessage(MESSAGE_SUCCESS));
+    resource.setData(list);
+    resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
-		return resource;
-	}
+    return resource;
+  }
 
 }

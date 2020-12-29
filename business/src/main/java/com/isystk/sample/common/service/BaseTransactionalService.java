@@ -8,7 +8,7 @@ import com.isystk.sample.common.dto.PageFactory;
 @Transactional(rollbackFor = Throwable.class)
 public abstract class BaseTransactionalService extends BaseService {
 
-	@Autowired
-	protected PageFactory pageFactory;
+  @Autowired
+  protected PageFactory pageFactory;
 
 }

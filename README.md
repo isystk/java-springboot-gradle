@@ -170,6 +170,9 @@ $ git clone https://github.com/isystk/java-springboot-gradle.git
 $ brew cask install intellij-idea-ce
 ```
 
+- コードフォーマッターを設定する
+「Preferences - Editor - Code Style - Java」にて、Schemeのところの設定アイコンから、"intellij-java-google-style.xml" をインポートする。
+
 - Lombok pluginをインストールする。
 「Preferences - Plugins - Marketplace」から、"Lombok"をインストール後、InteliJを再起動する
 

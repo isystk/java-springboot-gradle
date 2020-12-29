@@ -19,46 +19,47 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StaffHelper {
 
-	@Autowired
-	TStaffDao tStaffDao;
+  @Autowired
+  TStaffDao tStaffDao;
 
-	/**
-	 * ログイン済みかどうか
-	 */
-	public boolean isLogined() {
-		return AuditInfoHolder.getAuditUser() != null;
-	}
+  /**
+   * ログイン済みかどうか
+   */
+  public boolean isLogined() {
+    return AuditInfoHolder.getAuditUser() != null;
+  }
 
-	/**
-	 * ログインユーザーを取得します。
-	 *
-	 * @return
-	 */
-	public Integer getLoginStaffId() {
-		return getLoginStaff().getStaffId();
-	}
+  /**
+   * ログインユーザーを取得します。
+   *
+   * @return
+   */
+  public Integer getLoginStaffId() {
+    return getLoginStaff().getStaffId();
+  }
 
-	/**
-	 * ログインユーザーを取得します。
-	 *
-	 * @return
-	 */
-	public TStaff getLoginStaff() {
-		TStaffCriteria criteria = new TStaffCriteria();
-		criteria.setEmailEq(AuditInfoHolder.getAuditUser());
-		return tStaffDao.findOne(criteria).orElseThrow(
-				() -> new NoDataFoundException("email=" + AuditInfoHolder.getAuditUser() + "のデータが見つかりません。"));
-	}
+  /**
+   * ログインユーザーを取得します。
+   *
+   * @return
+   */
+  public TStaff getLoginStaff() {
+    TStaffCriteria criteria = new TStaffCriteria();
+    criteria.setEmailEq(AuditInfoHolder.getAuditUser());
+    return tStaffDao.findOne(criteria).orElseThrow(
+        () -> new NoDataFoundException(
+            "email=" + AuditInfoHolder.getAuditUser() + "のデータが見つかりません。"));
+  }
 
-	/**
-	 * 最終ログイン日時を更新します。
-	 *
-	 * @return
-	 */
-	public void updateLastLogin() {
-		TStaff tStaff = getLoginStaff();
-		tStaff.setLastLoginTime(DateUtils.getNow());
-		tStaffDao.update(tStaff);
-	}
+  /**
+   * 最終ログイン日時を更新します。
+   *
+   * @return
+   */
+  public void updateLastLogin() {
+    TStaff tStaff = getLoginStaff();
+    tStaff.setLastLoginTime(DateUtils.getNow());
+    tStaffDao.update(tStaff);
+  }
 
 }

@@ -12,28 +12,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EnvHelper {
 
-	@Value("${spring.profiles}") // 設定ファイルに定義されたprofilesを取得する
-	String profile;
+  @Value("${spring.profiles}") // 設定ファイルに定義されたprofilesを取得する
+  String profile;
 
-	/**
-	 * ローカル環境かどうか
-	 */
-	public boolean isLocal() {
-		return "local".equals(profile);
-	}
+  /**
+   * ローカル環境かどうか
+   */
+  public boolean isLocal() {
+    return "local".equals(profile);
+  }
 
-	/**
-	 * ステージング環境かどうか
-	 */
-	public boolean isStaging() {
-		return "staging".equals(profile);
-	}
+  /**
+   * ステージング環境かどうか
+   */
+  public boolean isStaging() {
+    return "staging".equals(profile);
+  }
 
-	/**
-	 * 本番環境かどうか
-	 */
-	public boolean isProduction() {
-		return "production".equals(profile);
-	}
+  /**
+   * 本番環境かどうか
+   */
+  public boolean isProduction() {
+    return "production".equals(profile);
+  }
 
 }

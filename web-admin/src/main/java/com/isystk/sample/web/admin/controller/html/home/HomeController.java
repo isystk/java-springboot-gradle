@@ -16,14 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(HOME)
 public class HomeController extends AbstractHtmlController {
 
-	@Override
-	public String getFunctionName() {
-		return "A_HOME";
-	}
+  @Override
+  public String getFunctionName() {
+    return "A_HOME";
+  }
 
-	@GetMapping
-	public String index(Model model) {
-		return "modules/home/index";
-	}
+  @GetMapping
+  public String index(Model model) {
+    return "modules/home/index";
+  }
 
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EntryRegistValid {
-	String familyName;
-	String domain;
+
+  String familyName;
+  String domain;
 }

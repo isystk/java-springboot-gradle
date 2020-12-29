@@ -14,10 +14,10 @@ import lombok.Setter;
 @Setter
 public class TPostRepositoryDto extends TPost {
 
-	TUser tUser;
+  TUser tUser;
 
-	List<TPostImage> tPostImageList;
+  List<TPostImage> tPostImageList;
 
-	List<TPostTag> tPostTagList;
+  List<TPostTag> tPostTagList;
 
 }

@@ -29,93 +29,96 @@ import static com.isystk.sample.common.FrontUrl.API_V1_ENTRY_REMIND_CONFIG;
 @RequestMapping(path = API_V1_ENTRY_REMIND_CONFIG, produces = MediaType.APPLICATION_JSON_VALUE)
 public class EntryRemindConfigRestController extends AbstractRestController {
 
-	@Autowired
-	EntryRemindService entryRemindService;
+  @Autowired
+  EntryRemindService entryRemindService;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
-	@Autowired
-    EntryRemindConfigRestFormValidator entryRemindConfigRestFormValidator;
+  @Autowired
+  EntryRemindConfigRestFormValidator entryRemindConfigRestFormValidator;
 
-    @ModelAttribute("entryRemindConfigRestForm")
-    public EntryRemindConfigRestForm entryRemindConfigRestForm() {
-        return new EntryRemindConfigRestForm();
+  @ModelAttribute("entryRemindConfigRestForm")
+  public EntryRemindConfigRestForm entryRemindConfigRestForm() {
+    return new EntryRemindConfigRestForm();
+  }
+
+  @InitBinder("entryRemindConfigRestForm")
+  public void validatorBinder(WebDataBinder binder) {
+    binder.addValidators(entryRemindConfigRestFormValidator);
+  }
+
+  @Override
+  public String getFunctionName() {
+    return "API_ENTRY_REMIND_CONFIG";
+  }
+
+  /**
+   * パスワード変更画面表示
+   *
+   * @param onetimeKey
+   * @return
+   */
+  @GetMapping("{onetimeKey}")
+  public Resource config(@PathVariable String onetimeKey,
+      @ModelAttribute EntryRemindConfigRestForm form, Model model) {
+
+    Resource resource = resourceFactory.create();
+
+    // ワンタイムキーからユーザーIDを取得する
+    var tUserOnetimePass = entryRemindService.getTUserOnetimePass(onetimeKey);
+    if (tUserOnetimePass == null) {
+      throw new NoDataFoundException("指定されたワンタイムキーが見つかりません。[onetimeKey=" + onetimeKey + "]");
     }
 
-    @InitBinder("entryRemindConfigRestForm")
-    public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(entryRemindConfigRestFormValidator);
+    form.setOnetimeKey(onetimeKey);
+
+    resource.setMessage(getMessage(MESSAGE_SUCCESS));
+
+    return resource;
+  }
+
+  /**
+   * パスワード変更処理
+   *
+   * @return
+   */
+  @PostMapping
+  public Resource changePassword(@Validated @ModelAttribute EntryRemindConfigRestForm form,
+      BindingResult br,
+      BindingResult bindingResult) {
+
+    Resource resource = resourceFactory.create();
+
+    // 入力チェックエラーがある場合は、元の画面にもどる
+    if (br.hasErrors()) {
+      String message = "";
+      for (FieldError fieldError : bindingResult.getFieldErrors()) {
+
+        message += "<hr />Field:" + fieldError.getField();
+        message += "<br />Code:" + fieldError.getCode();
+        message += "<br />DefaultMessage:" + fieldError.getDefaultMessage();
+      }
+      resource.setMessage(message);
+      return resource;
     }
 
-	@Override
-	public String getFunctionName() {
-		return "API_ENTRY_REMIND_CONFIG";
-	}
+    // ワンタイムキーからユーザーIDを取得する
+    var tUserOnetimePass = entryRemindService.getTUserOnetimePass(form.getOnetimeKey());
+    if (tUserOnetimePass == null) {
+      throw new NoDataFoundException(
+          "指定されたワンタイムキーが見つかりません。[onetimeKey=" + form.getOnetimeKey() + "]");
+    }
 
-	/**
-	 * パスワード変更画面表示
-	 *
-	 * @param onetimeKey
-	 * @return
-	 */
-	@GetMapping("{onetimeKey}")
-	public Resource config(@PathVariable String onetimeKey, @ModelAttribute EntryRemindConfigRestForm form, Model model) {
+    // パスワードをハッシュ化する
+    String password = passwordEncoder.encode(form.getPassword());
 
-		Resource resource = resourceFactory.create();
+    // パスワード変更ワンタイムパス登録
+    entryRemindService.changePassword(form.getOnetimeKey(), password);
 
-		// ワンタイムキーからユーザーIDを取得する
-		var tUserOnetimePass = entryRemindService.getTUserOnetimePass(onetimeKey);
-		if (tUserOnetimePass == null) {
-			throw new NoDataFoundException("指定されたワンタイムキーが見つかりません。[onetimeKey=" + onetimeKey + "]");
-		}
+    resource.setMessage(getMessage(MESSAGE_SUCCESS));
 
-		form.setOnetimeKey(onetimeKey);
-
-		resource.setMessage(getMessage(MESSAGE_SUCCESS));
-
-		return resource;
-	}
-
-	/**
-	 * パスワード変更処理
-	 *
-	 * @return
-	 */
-	@PostMapping
-	public Resource changePassword(@Validated @ModelAttribute EntryRemindConfigRestForm form, BindingResult br,
-								 BindingResult bindingResult) {
-
-		Resource resource = resourceFactory.create();
-
-		// 入力チェックエラーがある場合は、元の画面にもどる
-		if (br.hasErrors()) {
-			String message = "";
-			for (FieldError fieldError : bindingResult.getFieldErrors()) {
-
-				message += "<hr />Field:" + fieldError.getField();
-				message += "<br />Code:" + fieldError.getCode();
-				message += "<br />DefaultMessage:" + fieldError.getDefaultMessage();
-			}
-			resource.setMessage(message);
-			return resource;
-		}
-
-		// ワンタイムキーからユーザーIDを取得する
-		var tUserOnetimePass = entryRemindService.getTUserOnetimePass(form.getOnetimeKey());
-		if (tUserOnetimePass == null) {
-			throw new NoDataFoundException("指定されたワンタイムキーが見つかりません。[onetimeKey=" + form.getOnetimeKey() + "]");
-		}
-
-		// パスワードをハッシュ化する
-		String password = passwordEncoder.encode(form.getPassword());
-
-		// パスワード変更ワンタイムパス登録
-		entryRemindService.changePassword(form.getOnetimeKey(), password);
-
-		resource.setMessage(getMessage(MESSAGE_SUCCESS));
-
-		return resource;
-	}
+    return resource;
+  }
 
 }

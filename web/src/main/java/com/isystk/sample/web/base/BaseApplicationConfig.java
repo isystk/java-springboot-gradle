@@ -30,11 +30,11 @@ import lombok.val;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 public abstract class BaseApplicationConfig
-		implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>, WebMvcConfigurer {
+    implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>, WebMvcConfigurer {
 
-	@Override
-	public void customize(ConfigurableServletWebServerFactory container) {
-	}
+  @Override
+  public void customize(ConfigurableServletWebServerFactory container) {
+  }
 
 //    @Override
 //    public void addViewControllers(ViewControllerRegistry registry) {
@@ -85,15 +85,15 @@ public abstract class BaseApplicationConfig
 //        return bean;
 //    }
 
-    @Bean
-    public FilterRegistrationBean<LoginUserTrackingFilter> loginUserTrackingFilterBean() {
-        val filter = new LoginUserTrackingFilter();
-        filter.setExcludeUrlPatterns(Arrays.asList(WEBJARS_URL, STATIC_RESOURCES_URL));
+  @Bean
+  public FilterRegistrationBean<LoginUserTrackingFilter> loginUserTrackingFilterBean() {
+    val filter = new LoginUserTrackingFilter();
+    filter.setExcludeUrlPatterns(Arrays.asList(WEBJARS_URL, STATIC_RESOURCES_URL));
 
-        val bean = new FilterRegistrationBean<LoginUserTrackingFilter>(filter);
-        bean.setOrder(Ordered.LOWEST_PRECEDENCE);
-        return bean;
-    }
+    val bean = new FilterRegistrationBean<LoginUserTrackingFilter>(filter);
+    bean.setOrder(Ordered.LOWEST_PRECEDENCE);
+    return bean;
+  }
 
 //    @Bean
 //    public FilterRegistrationBean<ClearMDCFilter> clearMDCFilterBean() {
@@ -153,45 +153,45 @@ public abstract class BaseApplicationConfig
 //        return ehcache;
 //    }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // webjarsをResourceHandlerに登録する
-        registry.addResourceHandler(WEBJARS_URL)
-                // JARの中身をリソースロケーションにする
-                .addResourceLocations("classpath:/META-INF/resources/webjars/")
-                // webjars-locatorを使うためにリソースチェイン内のキャッシュを無効化する
-                .resourceChain(false);
-    }
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    // webjarsをResourceHandlerに登録する
+    registry.addResourceHandler(WEBJARS_URL)
+        // JARの中身をリソースロケーションにする
+        .addResourceLocations("classpath:/META-INF/resources/webjars/")
+        // webjars-locatorを使うためにリソースチェイン内のキャッシュを無効化する
+        .resourceChain(false);
+  }
 
-    @Bean
-    public RequestTrackingInterceptor requestTrackingInterceptor() {
-        // MDCにIDを設定してリクエストをトラッキングする
-        return new RequestTrackingInterceptor();
-    }
+  @Bean
+  public RequestTrackingInterceptor requestTrackingInterceptor() {
+    // MDCにIDを設定してリクエストをトラッキングする
+    return new RequestTrackingInterceptor();
+  }
 
-    @Bean
-    public LoggingFunctionNameInterceptor loggingFunctionNameInterceptor() {
-        // MDCに機能名を設定してログに出力する
-        return new LoggingFunctionNameInterceptor();
-    }
+  @Bean
+  public LoggingFunctionNameInterceptor loggingFunctionNameInterceptor() {
+    // MDCに機能名を設定してログに出力する
+    return new LoggingFunctionNameInterceptor();
+  }
 
-    @Bean
-    public SetAuditInfoInterceptor setAuditInfoInterceptor() {
-        // システム制御項目を保存してDB保存時に利用する
-        return new SetAuditInfoInterceptor();
-    }
+  @Bean
+  public SetAuditInfoInterceptor setAuditInfoInterceptor() {
+    // システム制御項目を保存してDB保存時に利用する
+    return new SetAuditInfoInterceptor();
+  }
 
-    @Bean
-    public SetDoubleSubmitCheckTokenInterceptor setDoubleSubmitCheckTokenInterceptor() {
-        // 二重送信をチェックする
-        return new SetDoubleSubmitCheckTokenInterceptor();
-    }
+  @Bean
+  public SetDoubleSubmitCheckTokenInterceptor setDoubleSubmitCheckTokenInterceptor() {
+    // 二重送信をチェックする
+    return new SetDoubleSubmitCheckTokenInterceptor();
+  }
 
-    @Bean
-    public SetModelAndViewInterceptor setModelAndViewInterceptor() {
-        // 共通的な定数定義などを画面変数に設定する
-        return new SetModelAndViewInterceptor();
-    }
+  @Bean
+  public SetModelAndViewInterceptor setModelAndViewInterceptor() {
+    // 共通的な定数定義などを画面変数に設定する
+    return new SetModelAndViewInterceptor();
+  }
 
 //    @Bean
 //    public PermissionKeyResolver permissionKeyResolver() {
@@ -205,16 +205,16 @@ public abstract class BaseApplicationConfig
 //        return new AuthorizationInterceptor();
 //    }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
+  @Override
+  public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(localeChangeInterceptor());
-        registry.addInterceptor(requestTrackingInterceptor());
-        registry.addInterceptor(loggingFunctionNameInterceptor());
-        registry.addInterceptor(setAuditInfoInterceptor());
-        registry.addInterceptor(setDoubleSubmitCheckTokenInterceptor());
-        registry.addInterceptor(setModelAndViewInterceptor());
+    registry.addInterceptor(requestTrackingInterceptor());
+    registry.addInterceptor(loggingFunctionNameInterceptor());
+    registry.addInterceptor(setAuditInfoInterceptor());
+    registry.addInterceptor(setDoubleSubmitCheckTokenInterceptor());
+    registry.addInterceptor(setModelAndViewInterceptor());
 //        registry.addInterceptor(authorizationInterceptor());
-    }
+  }
 //
 //    @Bean
 //    public SnakeToLowerCamelCaseModelAttributeMethodProcessor attributeMethodProcessor() {
@@ -227,32 +227,35 @@ public abstract class BaseApplicationConfig
 //        argumentResolvers.add(attributeMethodProcessor());
 //    }
 
-    @Bean
-    public PageFactory pageFactory() {
-        return new DefaultPageFactoryImpl();
-    }
+  @Bean
+  public PageFactory pageFactory() {
+    return new DefaultPageFactoryImpl();
+  }
 
-    @Bean
-    public ResourceFactory resourceFactory() {
-        return new DefaultResourceFactoryImpl();
-    }
-	/**
-	 * [] を含むURLをGETしようとするとTomcatが400を返す 問題に対応
-	 *
-	 * @return
-	 */
-	@Bean
-	public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer() {
-		return new EmbeddedTomcatCustomizer();
-	}
+  @Bean
+  public ResourceFactory resourceFactory() {
+    return new DefaultResourceFactoryImpl();
+  }
 
-	private static class EmbeddedTomcatCustomizer implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
-		@Override
-		public void customize(TomcatServletWebServerFactory factory) {
-			factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
-				connector.setAttribute("relaxedPathChars", "<>[\\]^`{|}");
-				connector.setAttribute("relaxedQueryChars", "<>[\\]^`{|}");
-			});
-		}
-	}
+  /**
+   * [] を含むURLをGETしようとするとTomcatが400を返す 問題に対応
+   *
+   * @return
+   */
+  @Bean
+  public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer() {
+    return new EmbeddedTomcatCustomizer();
+  }
+
+  private static class EmbeddedTomcatCustomizer implements
+      WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
+
+    @Override
+    public void customize(TomcatServletWebServerFactory factory) {
+      factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
+        connector.setAttribute("relaxedPathChars", "<>[\\]^`{|}");
+        connector.setAttribute("relaxedQueryChars", "<>[\\]^`{|}");
+      });
+    }
+  }
 }

@@ -20,23 +20,23 @@ import lombok.Setter;
 @Getter
 public class PostEditForm extends BaseForm {
 
-	private static final long serialVersionUID = 7593564324192730932L;
+  private static final long serialVersionUID = 7593564324192730932L;
 
-	@NotNull
-	Integer userId;
+  @NotNull
+  Integer userId;
 
-	@NotNull
-	Integer postId;
+  @NotNull
+  Integer postId;
 
-	@NotBlank
-	String title;
+  @NotBlank
+  String title;
 
-	@NotBlank
-	String text;
+  @NotBlank
+  String text;
 
-	@NotEmpty
-	List<@Digits(integer = 9, fraction = 0) Integer> postImageId;
+  @NotEmpty
+  List<@Digits(integer = 9, fraction = 0) Integer> postImageId;
 
-	List<@Digits(integer = 9, fraction = 0) Integer> postTagId;
+  List<@Digits(integer = 9, fraction = 0) Integer> postTagId;
 
 }

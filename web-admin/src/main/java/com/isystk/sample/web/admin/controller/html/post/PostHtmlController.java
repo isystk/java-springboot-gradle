@@ -41,168 +41,170 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequestMapping(POST)
-@SessionAttributes(types = { PostSearchForm.class })
+@SessionAttributes(types = {PostSearchForm.class})
 public class PostHtmlController extends AbstractHtmlController {
 
-	@Autowired
-	PostService postService;
+  @Autowired
+  PostService postService;
 
-	@Autowired
-	TPostRepository postRepository;
+  @Autowired
+  TPostRepository postRepository;
 
-	@Autowired
-	PostFormValidator postSearchFormValidator;
+  @Autowired
+  PostFormValidator postSearchFormValidator;
 
-	@Autowired
-	UserHelper userHelper;
+  @Autowired
+  UserHelper userHelper;
 
-	@Override
-	public String getFunctionName() {
-		return "A_POST";
-	}
+  @Override
+  public String getFunctionName() {
+    return "A_POST";
+  }
 
-    @ModelAttribute("postSearchForm")
-    public PostSearchForm postSearchForm() {
-        return new PostSearchForm();
+  @ModelAttribute("postSearchForm")
+  public PostSearchForm postSearchForm() {
+    return new PostSearchForm();
+  }
+
+  @InitBinder("postSearchForm")
+  public void validatorBinder(WebDataBinder binder) {
+    binder.addValidators(postSearchFormValidator);
+  }
+
+  /**
+   * 一覧画面表示
+   *
+   * @param form
+   * @param model
+   * @return
+   */
+  @GetMapping
+  public String index(@ModelAttribute @Valid PostSearchForm form, BindingResult br,
+      SessionStatus sessionStatus, RedirectAttributes attributes, Model model) {
+
+    if (br.hasErrors()) {
+      setFlashAttributeErrors(attributes, br);
+      return "modules/post/list";
     }
 
-	@InitBinder("postSearchForm")
-	public void validatorBinder(WebDataBinder binder) {
-		binder.addValidators(postSearchFormValidator);
-	}
+    // 10件区切りで取得する
+    val pages = postRepository.findAll(formToCriteria(form), form);
 
-	/**
-	 * 一覧画面表示
-	 *
-	 * @param form
-	 * @param model
-	 * @return
-	 */
-	@GetMapping
-	public String index(@ModelAttribute @Valid PostSearchForm form, BindingResult br,
-			SessionStatus sessionStatus, RedirectAttributes attributes, Model model) {
+    // 画面に検索結果を渡す
+    model.addAttribute("pages", pages);
 
-		if (br.hasErrors()) {
-			setFlashAttributeErrors(attributes, br);
-			return "modules/post/list";
-		}
+    return "modules/post/list";
+  }
 
-		// 10件区切りで取得する
-		val pages = postRepository.findAll(formToCriteria(form), form);
+  /**
+   * 検索条件を詰める
+   *
+   * @return
+   */
+  private TPostCriteria formToCriteria(PostSearchForm form) {
 
-		// 画面に検索結果を渡す
-		model.addAttribute("pages", pages);
+    // 入力値を詰め替える
+    TPostCriteria criteria = new TPostCriteria();
+    criteria.setPostIdEq(form.getPostId());
+    criteria.setUserIdEq(form.getUserId());
+    criteria.setTitleLike(form.getTitle());
+    if (form.getRegistDateFrom() != null) {
+      criteria.setRegistTimeGe(form.getRegistDateFrom().atStartOfDay());
+    }
+    if (form.getRegistDateTo() != null) {
+      criteria.setRegistTimeLe(form.getRegistDateTo().atTime(LocalTime.MAX));
+    }
+    criteria.setDeleteFlgFalse(true);
+    criteria.setOrderBy("order by update_time desc");
 
-		return "modules/post/list";
-	}
+    return criteria;
+  }
 
-	/**
-	 * 検索条件を詰める
-	 * @return
-	 */
-	private TPostCriteria formToCriteria(PostSearchForm form) {
+  /**
+   * 詳細画面表示
+   *
+   * @param postId
+   * @param model
+   * @return
+   */
+  @GetMapping("{postId}")
+  public String show(@PathVariable Integer postId, Model model) {
+    TPost tPost = postRepository.findById(postId);
+    model.addAttribute("post", tPost);
 
-		// 入力値を詰め替える
-		TPostCriteria criteria = new TPostCriteria();
-		criteria.setPostIdEq(form.getPostId());
-		criteria.setUserIdEq(form.getUserId());
-		criteria.setTitleLike(form.getTitle());
-		if (form.getRegistDateFrom() != null) {
-			criteria.setRegistTimeGe(form.getRegistDateFrom().atStartOfDay());
-		}
-		if (form.getRegistDateTo() != null) {
-			criteria.setRegistTimeLe(form.getRegistDateTo().atTime(LocalTime.MAX));
-		}
-		criteria.setDeleteFlgFalse(true);
-		criteria.setOrderBy("order by update_time desc");
+    model.addAttribute("user", userHelper.getLoginUser(tPost.getUserId()));
 
-		return criteria;
-	}
+    return "modules/post/detail";
+  }
 
-	/**
-	 * 詳細画面表示
-	 *
-	 * @param postId
-	 * @param model
-	 * @return
-	 */
-	@GetMapping("{postId}")
-	public String show(@PathVariable Integer postId, Model model) {
-		TPost tPost = postRepository.findById(postId);
-		model.addAttribute("post", tPost);
+  /**
+   * 削除処理
+   *
+   * @param id
+   * @return
+   */
+  @DeleteMapping("{id}")
+  public String delete(@PathVariable Integer id) {
+    postService.delete(id);
+    return "redirect:/post";
+  }
 
-		model.addAttribute("user", userHelper.getLoginUser(tPost.getUserId()));
+  /**
+   * CSVダウンロード
+   *
+   * @param filename
+   * @return
+   */
+  @GetMapping("/download/{filename:.+\\.csv}")
+  public CsvView downloadCsv(@PathVariable String filename, PostSearchForm form, Model model) {
 
-		return "modules/post/detail";
-	}
+    // 全件取得する
+    form.setPerpage(Pageable.NO_LIMIT.getPerpage());
+    val pages = postRepository.findAll(formToCriteria(form), form);
 
-	/**
-	 * 削除処理
-	 *
-	 * @param id
-	 * @return
-	 */
-	@DeleteMapping("{id}")
-	public String delete(@PathVariable Integer id) {
-		postService.delete(id);
-		return "redirect:/post";
-	}
+    // 詰め替える
+    List<PostCsv> csvList = ObjectMapperUtils.mapAll(pages.getData(), PostCsv.class);
 
-	/**
-	 * CSVダウンロード
-	 *
-	 * @param filename
-	 * @return
-	 */
-	@GetMapping("/download/{filename:.+\\.csv}")
-	public CsvView downloadCsv(@PathVariable String filename, PostSearchForm form, Model model) {
+    // CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
+    return new CsvView(PostCsv.class, csvList, filename);
+  }
 
-		// 全件取得する
-		form.setPerpage(Pageable.NO_LIMIT.getPerpage());
-		val pages = postRepository.findAll(formToCriteria(form), form);
+  /**
+   * Excelダウンロード
+   *
+   * @param filename
+   * @return
+   */
+  @GetMapping(path = "/download/{filename:.+\\.xlsx}")
+  public ModelAndView downloadExcel(@PathVariable String filename, PostSearchForm form,
+      Model model) {
 
-		// 詰め替える
-		List<PostCsv> csvList = ObjectMapperUtils.mapAll(pages.getData(), PostCsv.class);
+    // 全件取得する
+    form.setPerpage(Pageable.NO_LIMIT.getPerpage());
+    val pages = postRepository.findAll(formToCriteria(form), form);
 
-		// CSVスキーマクラス、データ、ダウンロード時のファイル名を指定する
-		return new CsvView(PostCsv.class, csvList, filename);
-	}
+    // Excelプック生成コールバック、データ、ダウンロード時のファイル名を指定する
+    val view = new ExcelView(new PostExcel(), pages.getData(), filename);
 
-	/**
-	 * Excelダウンロード
-	 *
-	 * @param filename
-	 * @return
-	 */
-	@GetMapping(path = "/download/{filename:.+\\.xlsx}")
-	public ModelAndView downloadExcel(@PathVariable String filename, PostSearchForm form, Model model) {
+    return new ModelAndView(view);
+  }
 
-		// 全件取得する
-		form.setPerpage(Pageable.NO_LIMIT.getPerpage());
-		val pages = postRepository.findAll(formToCriteria(form), form);
+  /**
+   * PDFダウンロード
+   *
+   * @param filename
+   * @return
+   */
+  @GetMapping(path = "/download/{filename:.+\\.pdf}")
+  public ModelAndView downloadPdf(@PathVariable String filename, PostSearchForm form, Model model) {
 
-		// Excelプック生成コールバック、データ、ダウンロード時のファイル名を指定する
-		val view = new ExcelView(new PostExcel(), pages.getData(), filename);
+    // 全件取得する
+    form.setPerpage(Pageable.NO_LIMIT.getPerpage());
+    val pages = postRepository.findAll(formToCriteria(form), form);
 
-		return new ModelAndView(view);
-	}
+    // 帳票レイアウト、データ、ダウンロード時のファイル名を指定する
+    val view = new PdfView("reports/post.jrxml", pages.getData(), filename);
 
-	/**
-	 * PDFダウンロード
-	 *
-	 * @param filename
-	 * @return
-	 */
-	@GetMapping(path = "/download/{filename:.+\\.pdf}")
-	public ModelAndView downloadPdf(@PathVariable String filename, PostSearchForm form, Model model) {
-
-		// 全件取得する
-		form.setPerpage(Pageable.NO_LIMIT.getPerpage());
-		val pages = postRepository.findAll(formToCriteria(form), form);
-
-		// 帳票レイアウト、データ、ダウンロード時のファイル名を指定する
-		val view = new PdfView("reports/post.jrxml", pages.getData(), filename);
-
-		return new ModelAndView(view);
-	}
+    return new ModelAndView(view);
+  }
 }

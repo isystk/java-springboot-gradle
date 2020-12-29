@@ -13,21 +13,21 @@ import java.util.List;
 @Getter
 public class MemberPostEditRestForm extends BaseForm {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@NotNull
-	Integer postId;
+  @NotNull
+  Integer postId;
 
-	@NotEmpty
-	String title;
+  @NotEmpty
+  String title;
 
-	@NotEmpty
-	String text;
+  @NotEmpty
+  String text;
 
-	@Valid
-	List<MemberPostDetailImageRestForm> imageList;
+  @Valid
+  List<MemberPostDetailImageRestForm> imageList;
 
-	@Valid
-	List<MemberPostDetailTagRestForm> tagList;
+  @Valid
+  List<MemberPostDetailTagRestForm> tagList;
 
 }

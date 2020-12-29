@@ -10,28 +10,28 @@ import com.isystk.sample.web.base.filter.UserIdAware;
 
 public class LoginStaff extends User implements UserIdAware {
 
-	// 管理者情報。
-	private final TStaff staff;
+  // 管理者情報。
+  private final TStaff staff;
 
-	public LoginStaff(TStaff staff, List<GrantedAuthority> authorities) {
+  public LoginStaff(TStaff staff, List<GrantedAuthority> authorities) {
 
-		super(staff.getEmail(), staff.getPassword(), true, true, true, true, authorities);
+    super(staff.getEmail(), staff.getPassword(), true, true, true, true, authorities);
 
-		this.staff = staff;
-	}
+    this.staff = staff;
+  }
 
-	public TStaff Staff() {
-		return staff;
-	}
+  public TStaff Staff() {
+    return staff;
+  }
 
-	@Override
-	public String getUserId() {
-		return String.valueOf(this.staff.getStaffId());
-	}
+  @Override
+  public String getUserId() {
+    return String.valueOf(this.staff.getStaffId());
+  }
 
-	@Override
-	public String getUserName() {
-		return String.valueOf(this.staff.getFamilyName()) + " " + String.valueOf(this.staff.getName());
-	}
+  @Override
+  public String getUserName() {
+    return String.valueOf(this.staff.getFamilyName()) + " " + String.valueOf(this.staff.getName());
+  }
 
 }

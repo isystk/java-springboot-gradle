@@ -75,7 +75,6 @@ public class SecurityConfig extends BaseSecurityConfig {
 				// ログイン画面のURL
 				.loginPage(LOGIN_URL)
 				// 認可を処理するURL
-//				.loginProcessingUrl(LOGIN_PROCESSING_URL)
 				.loginProcessingUrl(API_V1_AUTH)
 				// ログイン成功時の遷移先
 				.successForwardUrl(API_V1_LOGIN_SUCCESS_URL)

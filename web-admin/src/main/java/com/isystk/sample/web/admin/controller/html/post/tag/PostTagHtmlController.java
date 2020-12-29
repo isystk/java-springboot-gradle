@@ -1,6 +1,6 @@
 package com.isystk.sample.web.admin.controller.html.post.tag;
 
-import static com.isystk.sample.common.FrontUrl.*;
+import static com.isystk.sample.common.AdminUrl.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

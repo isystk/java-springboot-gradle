@@ -16,6 +16,10 @@ public interface AdminUrl {
 
   public static final String POST_EDIT = "/post/edit";
 
+  public static final String POST_TAG = "/post/tag";
+
+  public static final String SYSTEM_MAIL = "/system/mail";
+
   /**
    * ---- APIｓ ----
    **/

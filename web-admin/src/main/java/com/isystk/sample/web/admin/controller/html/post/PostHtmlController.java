@@ -1,6 +1,6 @@
 package com.isystk.sample.web.admin.controller.html.post;
 
-import static com.isystk.sample.common.FrontUrl.*;
+import static com.isystk.sample.common.AdminUrl.*;
 
 import java.time.LocalTime;
 import java.util.List;

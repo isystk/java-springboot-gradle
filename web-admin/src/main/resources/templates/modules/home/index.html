@@ -6,6 +6,9 @@
   <title>Home｜Sample</title>
 </head>
 <body>
+<div layout:fragment="sidebar">
+  <div th:replace="layouts/sidebar :: sidebar ('home', 'home')"></div>
+</div>
 <div layout:fragment="content-header">
   <div class="row mb-2">
     <div class="col-sm-6">

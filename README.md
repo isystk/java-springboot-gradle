@@ -105,6 +105,13 @@ $ ./gradlew business::flywayMigrate
 $ ./gradlew business::flywayInfo
 ```
 
+```bash
+# 既存のSQLを修正するなどして整合性エラーになる場合は以下を実施
+$ ./gradlew business::flywayRepair
+$ ./gradlew business::flywayValidate
+```
+
+
 #### minio に S3バケットを作成する
 
 ```bash

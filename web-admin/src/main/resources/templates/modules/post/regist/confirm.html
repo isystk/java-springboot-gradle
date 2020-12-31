@@ -40,7 +40,7 @@
         <input type="hidden" name="text" th:value="*{text}"/>
         <input type="hidden" name="version" th:value="*{version}"/>
         <input
-            th:replace="fragments/labelField :: input ('投稿者', ${user['__familyName__']}, 'col-md-6')"/>
+            th:replace="fragments/labelField :: input ('投稿者', ${userName}, 'col-md-6')"/>
         <input th:replace="fragments/labelField :: input ('タイトル', *{title}, 'col-md-6')"/>
         <div class="form-group row">
           <label class="col-md-2 control-label">写真</label>

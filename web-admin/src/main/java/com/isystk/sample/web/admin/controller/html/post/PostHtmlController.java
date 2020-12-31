@@ -2,6 +2,7 @@ package com.isystk.sample.web.admin.controller.html.post;
 
 import static com.isystk.sample.common.AdminUrl.*;
 
+import com.isystk.sample.domain.entity.TUser;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -132,7 +133,8 @@ public class PostHtmlController extends AbstractHtmlController {
     TPost tPost = postRepository.findById(postId);
     model.addAttribute("post", tPost);
 
-    model.addAttribute("user", userHelper.getLoginUser(tPost.getUserId()));
+    TUser tUser = userHelper.getUser(tPost.getUserId());
+    model.addAttribute("userName", String.join(tUser.getFamilyName(), " ", tUser.getName()));
 
     return "modules/post/detail";
   }

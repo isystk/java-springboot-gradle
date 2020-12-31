@@ -2,10 +2,12 @@ package com.isystk.sample.web.admin.controller.html.post.regist;
 
 import static com.isystk.sample.common.AdminUrl.POST_REGIST;
 
+import com.isystk.sample.common.dto.CodeValueDto;
 import com.isystk.sample.common.helper.UserHelper;
 import com.isystk.sample.common.util.ObjectMapperUtils;
 import com.isystk.sample.domain.entity.TPostImage;
 import com.isystk.sample.domain.entity.TPostTag;
+import com.isystk.sample.domain.entity.TUser;
 import com.isystk.sample.domain.repository.dto.TPostRepositoryDto;
 import com.isystk.sample.web.admin.service.PostService;
 import com.isystk.sample.web.base.controller.html.AbstractHtmlController;
@@ -83,8 +85,15 @@ public class PostRegistHtmlController extends AbstractHtmlController {
    */
   private String showRegistIndex(Model model) {
     // ユーザー一覧
-    val userList = userHelper.getUserList();
-    model.addAttribute("userList", userList);
+    model.addAttribute("userList", userHelper.getUserList()
+        .stream()
+        .map((tUser) -> {
+          CodeValueDto dto = new CodeValueDto();
+          dto.setCode(tUser.getUserId());
+          dto.setText(String.join(tUser.getFamilyName(), " ", tUser.getName()));
+          return dto;
+        }).collect(Collectors.toList())
+    );
 
     return "modules/post/regist/index";
   }
@@ -107,7 +116,8 @@ public class PostRegistHtmlController extends AbstractHtmlController {
       return showRegistIndex(model);
     }
 
-    model.addAttribute("user", userHelper.getLoginUser(form.getUserId()));
+    TUser tUser = userHelper.getUser(form.getUserId());
+    model.addAttribute("userName", String.join(tUser.getFamilyName(), " ", tUser.getName()));
 
     return "modules/post/regist/confirm";
   }

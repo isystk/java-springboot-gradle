@@ -2,7 +2,7 @@ package com.isystk.sample.web.admin.controller.html.post.edit;
 
 import static com.isystk.sample.common.AdminUrl.*;
 
-import java.util.List;
+import com.isystk.sample.domain.entity.TUser;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,14 +23,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.collect.Lists;
 import com.isystk.sample.common.helper.UserHelper;
 import com.isystk.sample.common.util.ObjectMapperUtils;
 import com.isystk.sample.domain.entity.TPostImage;
 import com.isystk.sample.domain.entity.TPostTag;
 import com.isystk.sample.domain.repository.TPostRepository;
 import com.isystk.sample.domain.repository.dto.TPostRepositoryDto;
-import com.isystk.sample.web.admin.controller.html.post.regist.PostRegistForm;
 import com.isystk.sample.web.admin.service.PostService;
 import com.isystk.sample.web.base.controller.html.AbstractHtmlController;
 
@@ -121,11 +119,9 @@ public class PostEditHtmlController extends AbstractHtmlController {
    * @return
    */
   private String showEditIndex(PostEditForm form, Model model) {
-    // ユーザー一覧
-    val userList = userHelper.getUserList();
-    model.addAttribute("userList", userList);
 
-    model.addAttribute("user", userHelper.getLoginUser(form.getUserId()));
+    TUser tUser = userHelper.getUser(form.getUserId());
+    model.addAttribute("userName", String.join(tUser.getFamilyName(), " ", tUser.getName()));
 
     return "modules/post/edit/index";
   }
@@ -149,7 +145,8 @@ public class PostEditHtmlController extends AbstractHtmlController {
       return showEditIndex(form, model);
     }
 
-    model.addAttribute("user", userHelper.getLoginUser(form.getUserId()));
+    TUser tUser = userHelper.getUser(form.getUserId());
+    model.addAttribute("userName", String.join(tUser.getFamilyName(), " ", tUser.getName()));
 
     return "modules/post/edit/confirm";
   }

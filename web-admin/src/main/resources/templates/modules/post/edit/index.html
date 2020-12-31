@@ -32,7 +32,7 @@
         <input type="hidden" name="postId" th:value="*{postId}"/>
         <input type="hidden" name="userId" th:value="*{userId}"/>
         <input
-            th:replace="fragments/labelField :: input ('投稿者', ${user['__familyName__']}, 'col-md-6')"/>
+            th:replace="fragments/labelField :: input ('投稿者', ${userName}, 'col-md-6')"/>
         <input
             th:replace="fragments/inputField :: input ('text', 'タイトル', 'title', 'col-md-6', 100)"/>
         <input

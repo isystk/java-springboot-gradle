@@ -127,9 +127,9 @@ public class PostService extends BaseTransactionalService {
 
     // 1件取得する
     val post = postRepository.findById(postId);
-    if (!post.getUserId().equals(userHelper.getLoginUser().getUserId())) {
+    if (!post.getUserId().equals(userHelper.getUser().getUserId())) {
       throw new NoDataFoundException(
-          "データが見つかりません。post_id=" + postId + " user_id=" + userHelper.getLoginUser().getUserId());
+          "データが見つかりません。post_id=" + postId + " user_id=" + userHelper.getUser().getUserId());
     }
 
     return Optional.of(convertTPostToFrontPostDto(post));

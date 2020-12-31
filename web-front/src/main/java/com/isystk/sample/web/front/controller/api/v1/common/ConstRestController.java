@@ -38,11 +38,21 @@ public class ConstRestController extends AbstractRestController {
 
     List<CodeValueGroupDto> list = Lists.newArrayList();
     list.add(new CodeValueGroupDto("sex", Arrays.stream(Sex.values())
-        .map((values) -> new CodeValueDto(values)
+        .map((values) -> {
+              CodeValueDto dto = new CodeValueDto();
+              dto.setText(values.getText());
+              dto.setCode(values.getCode());
+              return dto;
+            }
         ).collect(Collectors.toList())));
 
     list.add(new CodeValueGroupDto("prefecture", Arrays.stream(Prefecture.values())
-        .map((values) -> new CodeValueDto(values)
+        .map((values) -> {
+              CodeValueDto dto = new CodeValueDto();
+              dto.setText(values.getText());
+              dto.setCode(values.getCode());
+              return dto;
+            }
         ).collect(Collectors.toList())));
 
     resource.setData(list);

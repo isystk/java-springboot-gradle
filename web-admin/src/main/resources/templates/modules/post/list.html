@@ -110,7 +110,7 @@
             <tr>
               <th>投稿ID</th>
               <th>投稿者</th>
-              <th style="width:400px;">タイトル</th>
+              <th style="width:300px;">タイトル</th>
               <th>投稿日時</th>
               <th></th>
             </tr>
@@ -118,7 +118,7 @@
             <tbody>
             <tr th:each="e : ${pages.data}">
               <td th:text="*{e.postId}"></td>
-              <td th:text="*{e.tUser.familyName}"></td>
+              <td th:text="*{e.tUser.familyName + ' ' + e.tUser.name}"></td>
               <td th:text="*{e.title}"></td>
               <td th:text="${#temporals.format(e.registTime, 'yyyy/MM/dd')}"></td>
               <td class="float-right">

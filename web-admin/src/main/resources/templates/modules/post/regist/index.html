@@ -30,7 +30,7 @@
       <p>投稿内容を入力して下さい</p>
       <form th:object="${postRegistForm}" th:action="@{/post/regist}" th:method="post">
         <input
-            th:replace="fragments/selectField :: select ('投稿者', 'userId', ${userList}, 'userId', 'familyName')"/>
+            th:replace="fragments/selectField :: select ('投稿者', 'userId', ${userList}, 'code', 'text')"/>
         <input
             th:replace="fragments/inputField :: input ('text', 'タイトル', 'title', 'col-md-6', 100)"/>
         <input

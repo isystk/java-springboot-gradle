@@ -85,10 +85,11 @@
 					// 画像をアニメーション（フェードイン）で表示します。
 					var src = data.imageUrlSquare + '?time=' + new Date().getTime();
 					var image = $([
-						'<div class="col-3 m-2"><a href="#" class="js-close">',
-							'<img src="'+src+'" width="120px" />',
-							'<input type="hidden" name="postImageId" value="'+data.imageId+'" />',
-						'</a></div>'
+            '<div class="m-2" style="width:120px;position: relative;">',
+              '<a href="#" class="js-close"></a>',
+              '<img src="'+src+'" width="120px" />',
+              '<input type="hidden" name="postImageId" value="'+data.imageId+'" />',
+            '</div>',
 						].join(''));
 					slides.append(image);
 

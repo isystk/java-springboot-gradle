@@ -1,11 +1,18 @@
 package com.isystk.sample.web.admin.controller.html.post.regist;
 
-import static com.isystk.sample.common.AdminUrl.*;
+import static com.isystk.sample.common.AdminUrl.POST_REGIST;
 
-import java.util.List;
+import com.isystk.sample.common.helper.UserHelper;
+import com.isystk.sample.common.util.ObjectMapperUtils;
+import com.isystk.sample.domain.entity.TPostImage;
+import com.isystk.sample.domain.entity.TPostTag;
+import com.isystk.sample.domain.repository.dto.TPostRepositoryDto;
+import com.isystk.sample.web.admin.service.PostService;
+import com.isystk.sample.web.base.controller.html.AbstractHtmlController;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,23 +28,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.collect.Lists;
-import com.isystk.sample.common.helper.UserHelper;
-import com.isystk.sample.common.util.ObjectMapperUtils;
-import com.isystk.sample.domain.entity.TPostImage;
-import com.isystk.sample.domain.entity.TPostTag;
-import com.isystk.sample.domain.repository.dto.TPostRepositoryDto;
-import com.isystk.sample.web.admin.service.PostService;
-import com.isystk.sample.web.base.controller.html.AbstractHtmlController;
-
-import lombok.val;
-import lombok.extern.slf4j.Slf4j;
-
 @Controller
 @Slf4j
 @RequestMapping(POST_REGIST)
 @SessionAttributes(types = {PostRegistForm.class})
 public class PostRegistHtmlController extends AbstractHtmlController {
+
 
   @Autowired
   PostService postService;

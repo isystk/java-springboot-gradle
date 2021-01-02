@@ -8,6 +8,7 @@ import com.isystk.sample.common.util.ObjectMapperUtils;
 import com.isystk.sample.domain.entity.TPostImage;
 import com.isystk.sample.domain.entity.TPostTag;
 import com.isystk.sample.domain.entity.TUser;
+import com.isystk.sample.domain.repository.MPostTagRepository;
 import com.isystk.sample.domain.repository.dto.TPostRepositoryDto;
 import com.isystk.sample.web.admin.service.PostService;
 import com.isystk.sample.web.base.controller.html.AbstractHtmlController;
@@ -45,6 +46,9 @@ public class PostRegistHtmlController extends AbstractHtmlController {
 
   @Autowired
   UserHelper userHelper;
+
+  @Autowired
+  MPostTagRepository mPostTagRepository;
 
   @ModelAttribute("postRegistForm")
   public PostRegistForm postRegistForm() {
@@ -95,6 +99,10 @@ public class PostRegistHtmlController extends AbstractHtmlController {
         }).collect(Collectors.toList())
     );
 
+    // タグの一覧
+    model.addAttribute("postTagList", mPostTagRepository.findAllSelectList());
+
+
     return "modules/post/regist/index";
   }
 
@@ -118,6 +126,9 @@ public class PostRegistHtmlController extends AbstractHtmlController {
 
     TUser tUser = userHelper.getUser(form.getUserId());
     model.addAttribute("userName", String.join(tUser.getFamilyName(), " ", tUser.getName()));
+
+    // タグの一覧
+    model.addAttribute("postTagList", mPostTagRepository.findAllSelectList());
 
     return "modules/post/regist/confirm";
   }

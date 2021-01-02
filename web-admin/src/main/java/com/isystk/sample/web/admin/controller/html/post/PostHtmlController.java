@@ -3,6 +3,8 @@ package com.isystk.sample.web.admin.controller.html.post;
 import static com.isystk.sample.common.AdminUrl.*;
 
 import com.isystk.sample.domain.entity.TUser;
+import com.isystk.sample.domain.repository.MPostTagRepository;
+import com.isystk.sample.domain.repository.dto.TPostRepositoryDto;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -56,6 +58,9 @@ public class PostHtmlController extends AbstractHtmlController {
 
   @Autowired
   UserHelper userHelper;
+
+  @Autowired
+  MPostTagRepository mPostTagRepository;
 
   @Override
   public String getFunctionName() {
@@ -130,11 +135,14 @@ public class PostHtmlController extends AbstractHtmlController {
    */
   @GetMapping("{postId}")
   public String show(@PathVariable Integer postId, Model model) {
-    TPost tPost = postRepository.findById(postId);
-    model.addAttribute("post", tPost);
+    TPostRepositoryDto post = postRepository.findById(postId);
+    model.addAttribute("post", post);
 
-    TUser tUser = userHelper.getUser(tPost.getUserId());
+    TUser tUser = userHelper.getUser(post.getUserId());
     model.addAttribute("userName", String.join(tUser.getFamilyName(), " ", tUser.getName()));
+
+    // タグの一覧
+    model.addAttribute("postTagList", mPostTagRepository.findAllSelectList());
 
     return "modules/post/detail";
   }

@@ -3,6 +3,7 @@ package com.isystk.sample.web.admin.controller.html.post.edit;
 import static com.isystk.sample.common.AdminUrl.*;
 
 import com.isystk.sample.domain.entity.TUser;
+import com.isystk.sample.domain.repository.MPostTagRepository;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -52,6 +53,9 @@ public class PostEditHtmlController extends AbstractHtmlController {
 
   @Autowired
   PostEditFormValidator postEditFormValidator;
+
+  @Autowired
+  MPostTagRepository mPostTagRepository;
 
   @Autowired
   HttpSession session;
@@ -123,6 +127,9 @@ public class PostEditHtmlController extends AbstractHtmlController {
     TUser tUser = userHelper.getUser(form.getUserId());
     model.addAttribute("userName", String.join(tUser.getFamilyName(), " ", tUser.getName()));
 
+    // タグの一覧
+    model.addAttribute("postTagList", mPostTagRepository.findAllSelectList());
+
     return "modules/post/edit/index";
   }
 
@@ -147,6 +154,9 @@ public class PostEditHtmlController extends AbstractHtmlController {
 
     TUser tUser = userHelper.getUser(form.getUserId());
     model.addAttribute("userName", String.join(tUser.getFamilyName(), " ", tUser.getName()));
+
+    // タグの一覧
+    model.addAttribute("postTagList", mPostTagRepository.findAllSelectList());
 
     return "modules/post/edit/confirm";
   }

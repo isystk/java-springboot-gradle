@@ -169,6 +169,8 @@ test@sample.com / password
 #### ソースのダウンロード
 ```bash
 $ git clone https://github.com/isystk/java-springboot-gradle.git
+$ git submodule init
+$ git submodule update
 ```
 
 #### InteliJ IDEA のインストール

@@ -2,10 +2,14 @@ package com.isystk.sample.web.front.service;
 
 import static com.isystk.sample.domain.util.DomaUtils.createSelectOptions;
 
+import com.isystk.sample.common.dto.CodeValueDto;
 import com.isystk.sample.domain.entity.MPostTag;
+import com.isystk.sample.domain.entity.TPostTag;
 import com.isystk.sample.domain.repository.MPostTagRepository;
+import com.isystk.sample.web.front.dto.FrontPostTagDto;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.isystk.sample.common.exception.NoDataFoundException;
@@ -50,6 +54,9 @@ public class PostService extends BaseTransactionalService {
 
   @Autowired
   UserHelper userHelper;
+
+  @Autowired
+  MPostTagRepository mPostTagRepository;
 
   /**
    * Solrの投稿インデックスを取得します。
@@ -157,6 +164,19 @@ public class PostService extends BaseTransactionalService {
       }
     }
     dto.setImageList(imageList);
+
+    // 投稿タグを設定
+    Map<Integer, CodeValueDto> mPostTagMap = mPostTagRepository.findAllSelectMap();
+    List<FrontPostTagDto> tagList = Lists.newArrayList();
+    if (tPostRepositoryDto.getTPostTagList() != null) {
+      for (TPostTag tPostTag : tPostRepositoryDto.getTPostTagList()) {
+        FrontPostTagDto tagDto = new FrontPostTagDto();
+        tagDto.setTagId(tPostTag.getPostTagId());
+        tagDto.setTagName(mPostTagMap.get(tPostTag.getPostTagId()).getText());
+        tagList.add(tagDto);
+      }
+    }
+    dto.setTagList(tagList);
 
     dto.setRegistTimeYYYYMMDD(DateUtils
         .format(tPostRepositoryDto.getRegistTime(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));

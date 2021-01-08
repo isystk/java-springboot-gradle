@@ -9,7 +9,9 @@ import com.isystk.sample.common.exception.NoDataFoundException;
 import com.isystk.sample.common.util.DateUtils;
 import java.util.List;
 
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -66,6 +68,22 @@ public class MPostTagRepository extends BaseRepository {
    *  @return
    */
   public List<CodeValueDto> findAllSelectList() {
+    return findAllSelectStream().collect(Collectors.toList());
+  }
+
+  /**
+   * 選択用にすべての投稿タグを取得します。
+   *
+   *  @return
+   */
+  public Map<Integer, CodeValueDto> findAllSelectMap() {
+    return findAllSelectStream().collect(Collectors.toMap(
+        s -> s.getCode(),
+        s -> s
+    ));
+  }
+
+  private Stream<CodeValueDto> findAllSelectStream() {
     return mPostTagDao.findAll(new MPostTagCriteria())
         .stream()
         .map((mPostTag -> {
@@ -73,8 +91,7 @@ public class MPostTagRepository extends BaseRepository {
           dto.setCode(mPostTag.getPostTagId());
           dto.setText(mPostTag.getName());
           return dto;
-        }))
-        .collect(Collectors.toList());
+        }));
   }
 
   /**

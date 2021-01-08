@@ -15,6 +15,7 @@ import java.util.Optional;
 import com.isystk.sample.common.exception.NoDataFoundException;
 import com.isystk.sample.common.helper.UserHelper;
 import com.isystk.sample.web.front.dto.FrontPostImageDto;
+import java.util.stream.Collectors;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,16 +107,29 @@ public class PostService extends BaseTransactionalService {
     var dto = ObjectMapperUtils.map(solrPost, FrontPostDto.class);
 
     // 画像のパスを設定
-    List<FrontPostImageDto> imageList = Lists.newArrayList();
-    if (solrPost.getImageIdList() != null) {
-      for (Integer imageId : solrPost.getImageIdList()) {
-        FrontPostImageDto imageDto = new FrontPostImageDto();
-        imageDto.setImageId(imageId);
-        imageDto.setImageUrl(imageHelper.getUrl(imageId, ImageSuffix.SQUARE.getSuffix()));
-        imageList.add(imageDto);
-      }
-    }
-    dto.setImageList(imageList);
+    dto.setImageList(Optional.ofNullable(solrPost.getImageIdList())
+        .orElse(Lists.newArrayList())
+        .stream()
+        .map((imageId) -> {
+          FrontPostImageDto imageDto = new FrontPostImageDto();
+          imageDto.setImageId(imageId);
+          imageDto.setImageUrl(imageHelper.getUrl(imageId, ImageSuffix.SQUARE.getSuffix()));
+          return imageDto;
+        })
+        .collect(Collectors.toList()));
+
+    // 投稿タグを設定
+    Map<Integer, CodeValueDto> mPostTagMap = mPostTagRepository.findAllSelectMap();
+    dto.setTagList(Optional.ofNullable(solrPost.getTagIdList())
+        .orElse(Lists.newArrayList())
+        .stream()
+        .map((tagId) -> {
+          FrontPostTagDto tagDto = new FrontPostTagDto();
+          tagDto.setTagId(tagId);
+          tagDto.setTagName(mPostTagMap.get(tagId).getText());
+          return tagDto;
+        })
+        .collect(Collectors.toList()));
 
     dto.setRegistTimeYYYYMMDD(
         DateUtils.format(solrPost.getRegistTime(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
@@ -153,30 +167,30 @@ public class PostService extends BaseTransactionalService {
     var dto = ObjectMapperUtils.map(tPostRepositoryDto, FrontPostDto.class);
 
     // 画像のパスを設定
-    List<FrontPostImageDto> imageList = Lists.newArrayList();
-    if (tPostRepositoryDto.getTPostImageList() != null) {
-      for (TPostImage tPostImage : tPostRepositoryDto.getTPostImageList()) {
-        FrontPostImageDto imageDto = new FrontPostImageDto();
-        imageDto.setImageId(tPostImage.getImageId());
-        imageDto.setImageUrl(
-            imageHelper.getUrl(tPostImage.getImageId(), ImageSuffix.SQUARE.getSuffix()));
-        imageList.add(imageDto);
-      }
-    }
-    dto.setImageList(imageList);
+    dto.setImageList(Optional.ofNullable(tPostRepositoryDto.getTPostImageList())
+        .orElse(Lists.newArrayList())
+        .stream()
+        .map((tPostImage) -> {
+          FrontPostImageDto imageDto = new FrontPostImageDto();
+          imageDto.setImageId(tPostImage.getImageId());
+          imageDto.setImageUrl(
+              imageHelper.getUrl(tPostImage.getImageId(), ImageSuffix.SQUARE.getSuffix()));
+          return imageDto;
+        })
+        .collect(Collectors.toList()));
 
     // 投稿タグを設定
     Map<Integer, CodeValueDto> mPostTagMap = mPostTagRepository.findAllSelectMap();
-    List<FrontPostTagDto> tagList = Lists.newArrayList();
-    if (tPostRepositoryDto.getTPostTagList() != null) {
-      for (TPostTag tPostTag : tPostRepositoryDto.getTPostTagList()) {
-        FrontPostTagDto tagDto = new FrontPostTagDto();
-        tagDto.setTagId(tPostTag.getPostTagId());
-        tagDto.setTagName(mPostTagMap.get(tPostTag.getPostTagId()).getText());
-        tagList.add(tagDto);
-      }
-    }
-    dto.setTagList(tagList);
+    dto.setTagList(Optional.ofNullable(tPostRepositoryDto.getTPostTagList())
+        .orElse(Lists.newArrayList())
+        .stream()
+        .map((tPostTag) -> {
+          FrontPostTagDto tagDto = new FrontPostTagDto();
+          tagDto.setTagId(tPostTag.getPostTagId());
+          tagDto.setTagName(mPostTagMap.get(tPostTag.getPostTagId()).getText());
+          return tagDto;
+        })
+        .collect(Collectors.toList()));
 
     dto.setRegistTimeYYYYMMDD(DateUtils
         .format(tPostRepositoryDto.getRegistTime(), DateTimeFormatter.ofPattern("yyyy/MM/dd")));
@@ -201,16 +215,30 @@ public class PostService extends BaseTransactionalService {
     for (TPostRepositoryDto postDto : postDtoPage.getData()) {
       var dto = ObjectMapperUtils.map(postDto, FrontPostDto.class);
 
-      dto.setImageList(Lists.newArrayList());
-      if (postDto.getTPostImageList() != null) {
-        for (TPostImage tPostImage : postDto.getTPostImageList()) {
-          FrontPostImageDto imageDto = new FrontPostImageDto();
-          imageDto.setImageId(tPostImage.getImageId());
-          imageDto.setImageUrl(
-              imageHelper.getUrl(tPostImage.getImageId(), ImageSuffix.SQUARE.getSuffix()));
-          dto.getImageList().add(imageDto);
-        }
-      }
+      dto.setImageList(Optional.ofNullable(postDto.getTPostImageList())
+          .orElse(Lists.newArrayList())
+          .stream()
+          .map((tPostImage) -> {
+            FrontPostImageDto imageDto = new FrontPostImageDto();
+            imageDto.setImageId(tPostImage.getImageId());
+            imageDto.setImageUrl(
+                imageHelper.getUrl(tPostImage.getImageId(), ImageSuffix.SQUARE.getSuffix()));
+            return imageDto;
+          })
+          .collect(Collectors.toList()));
+
+      // 投稿タグを設定
+      Map<Integer, CodeValueDto> mPostTagMap = mPostTagRepository.findAllSelectMap();
+      dto.setTagList(Optional.ofNullable(postDto.getTPostTagList())
+          .orElse(Lists.newArrayList())
+          .stream()
+          .map((tPostTag) -> {
+            FrontPostTagDto tagDto = new FrontPostTagDto();
+            tagDto.setTagId(tPostTag.getPostTagId());
+            tagDto.setTagName(mPostTagMap.get(tPostTag.getPostTagId()).getText());
+            return tagDto;
+          })
+          .collect(Collectors.toList()));
 
       list.add(dto);
     }
